@@ -204,8 +204,8 @@
   function back() { if (stack.length > 1) stack.pop(); render(); }
   function home() { stack = [{ v: 'home' }]; render(); }
   let open = false;
-  /* 面板尺寸跟着可用空间走：宽屏 430×760，窄屏贴满（四周各留 12px），内部组件按实际宽高自适应 */
-  const MAX = [430, 760], MIN_H = 460;
+  /* 面板尺寸跟着可用空间走：宽屏 344×720，窄屏贴满（四周各留 12px），内部组件按实际宽高自适应 */
+  const MAX = [344, 720], MIN_H = 460;
   function fitPhone() { const w = Math.min(MAX[0], innerWidth - 24), h = Math.max(Math.min(MIN_H, innerHeight - 24), Math.min(MAX[1], innerHeight - 24)); phone.style.setProperty('--pw', Math.round(w) + 'px'); phone.style.setProperty('--ph', Math.round(h) + 'px'); }
   addEventListener('resize', () => { if (open) fitPhone(); });
   function setOpen(o) { open = o; phone.hidden = !o; mini.hidden = o; $('#lbp').classList.toggle('open', o); if (o) fitPhone(); else navToggle(false); if (o && cur().v === 'lock') { /* 保持锁屏 */ } render(); }
@@ -222,7 +222,7 @@
   const drafts = {};
 
   /* ---------- 渲染 ---------- */
-  function onState() { renderMini(); if (open) render(); }
+  function onState() { renderMini(); if (!open) return; if (mapBusy && cur().v === 'map') { mapPending = true; return; } render(); }
   function renderMini() {
     $('#lbp-mini-t').textContent = clock();
     mini.style.setProperty('--w1', WX[wxKind()].c1); mini.style.setProperty('--w2', WX[wxKind()].c2);
@@ -419,10 +419,10 @@
     cls: 'qq qq-card', bar: '#fff',
     html(c) {
       const id = c.id, ca = CAST[id];
-      if (id === 'ai') return `<div class="ap-top" style="position:absolute;left:0;right:0;z-index:2;background:transparent;border:0;color:#fff"><button type="button" class="bk" data-act="back" aria-label="返回">${ICON.back}</button><h2></h2><span class="ac"></span></div><div class="ap-body"><div class="hero" style="--c:${ca.c};--ax:${ca.ax}"><img src="${ca.sprite}" alt="" style="mix-blend-mode:multiply">${av(id)}</div><div class="who"><b>${esc(ca.nick)}</b><p>${esc(ca.sig)}</p></div><div class="rows"><div><span>好感</span><b>？？？</b></div><div><span>关系</span><b>？？？</b></div><div><span>位置</span><b>观测者剧场</b></div></div><div class="acts"><button type="button" data-act="msg">发消息</button></div></div>`;
+      if (id === 'ai') return `<div class="ap-top" style="position:absolute;left:0;right:0;z-index:2;background:transparent;border:0;color:#fff"><button type="button" class="bk" data-act="back" aria-label="返回">${ICON.back}</button><h2></h2><span class="ac"></span></div><div class="ap-body"><div class="hero" style="--c:${ca.c};--ax:${ca.ax}"><div class="bg"><img src="${ca.sprite}" alt="" style="mix-blend-mode:multiply"></div>${av(id)}</div><div class="who"><b>${esc(ca.nick)}</b><p>${esc(ca.sig)}</p></div><div class="rows"><div><span>好感</span><b>？？？</b></div><div><span>关系</span><b>？？？</b></div><div><span>位置</span><b>观测者剧场</b></div></div><div class="acts"><button type="button" data-act="msg">发消息</button></div></div>`;
       const gi = girl(id); const love = Math.max(0, Math.min(100, +gi.love || 0)); const ready = gi.in && love >= ROUTE_AT && g('plot.phase') !== 'route';
       return `<div class="ap-top" style="position:absolute;left:0;right:0;z-index:2;background:transparent;border:0;color:#fff"><button type="button" class="bk" data-act="back" aria-label="返回">${ICON.back}</button><h2></h2><span class="ac"></span></div>
-      <div class="ap-body"><div class="hero" style="--c:${ca.c};--ax:${ca.ax}"><img src="${ca.sprite}" alt="">${av(id)}</div>
+      <div class="ap-body"><div class="hero" style="--c:${ca.c};--ax:${ca.ax}"><div class="bg"><img src="${ca.sprite}" alt=""></div>${av(id)}</div>
       <div class="who"><b>${esc(ca.nick)}<em>${esc(ca.name)}</em></b><p>${esc(ca.sig)}</p></div>
       <div class="rows"><div><span>好感</span><span class="love"><span class="bar" style="--c:${ca.c};--p:${love}%"><i></i></span><b>${love}</b></span></div><div><span>关系</span><b>${esc(gi.in ? gi.rel || '—' : '未入住')}</b></div><div><span>位置</span><b>${esc(locOf(id))}</b></div></div>
       ${ready ? `<button type="button" class="route-cta" data-act="route" style="--c:${ca.c}">♥ 前往${esc(ca.name)}的角色剧情</button>` : ''}
@@ -526,7 +526,6 @@
     const yz = MAP.water.yangtze.map(p => proj(p[0], p[1]).map(v => v.toFixed(1)).join(' ')).join(' L');
     const rings = MAP.rings.map(r => { const [cx, cy] = proj(r.cx, r.cy); const rx = r.rx / (MAP.bbox.lon1 - MAP.bbox.lon0) * W, ry = r.ry / (MAP.bbox.lat1 - MAP.bbox.lat0) * Hh; return `<ellipse class="ring" cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" rx="${rx.toFixed(1)}" ry="${ry.toFixed(1)}"/>`; }).join('');
     const parks = MAP.parks.map(p => { const [x, y] = proj(p.lon, p.lat); return `<circle class="park" cx="${x}" cy="${y}" r="${(p.r / (MAP.bbox.lon1 - MAP.bbox.lon0) * W).toFixed(1)}"/>`; }).join('');
-    const metro = MAP.metro.map(m => `<path class="metro" d="${path(m.pts)}" stroke="${m.c}"/>`).join('');
     const dn = MAP.districts.map(d => { const [x, y] = proj(d.lon, d.lat); return `<text class="dname" x="${x.toFixed(1)}" y="${y.toFixed(1)}">${esc(d.name)}</text>`; }).join('');
     const pts = MAP.points.map(p => {
       const [x, y] = proj(p.lon, p.lat); const c = (MAP.cats[p.cat] || {}).c || '#888';
@@ -552,12 +551,14 @@
       <defs>${defs}<pattern id="lbp-grid" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M20 0H0V20" fill="none" stroke="#e3e9df" stroke-width=".6"/></pattern></defs>
       <rect class="land" x="-200" y="-200" width="${W + 400}" height="${Hh + 400}"/><rect x="-200" y="-200" width="${W + 400}" height="${Hh + 400}" fill="url(#lbp-grid)"/>
       <path class="sea" d="M${yz} Z"/>${parks}
-      ${rings}${metro}${river(MAP.water.suzhou, 2.4)}${river(MAP.water.huangpu, 5)}
+      ${rings}${river(MAP.water.suzhou, 2.4)}${river(MAP.water.huangpu, 5)}
       <text class="wname" x="${proj(121.60, 31.40)[0]}" y="${proj(121.60, 31.40)[1]}">长江口</text>
       <text class="wname sm" transform="translate(${proj(121.488, 31.10)[0]} ${proj(121.488, 31.10)[1]}) rotate(-70)">黄浦江</text>
       ${dn}<g class="pts">${pts}</g><g class="ppl">${ppl}</g></svg>`;
   }
-  let mapVB = null;
+  let mapVB = null, mapBusy = false, mapPending = false;
+  /* 拖地图时如果来了新的会话状态，先不重绘，松手后再补 */
+  function mapIdle() { mapBusy = false; if (mapPending) { mapPending = false; if (open) render(); } }
   VIEWS.map = {
     cls: 'mp', bar: '#3f3328',
     html() {
@@ -572,25 +573,57 @@
       const [W, Hh] = MAP.size;
       const homeP = proj(121.43, 31.10);
       if (!mapVB) mapVB = [homeP[0] - 120, homeP[1] - 150, 240, 280];
-      const setVB = () => { svg.setAttribute('viewBox', mapVB.map(v => v.toFixed(1)).join(' ')); svg.dataset.z = W / mapVB[2] >= 2.2 ? 'hi' : 'lo'; };
-      const clampVB = () => { const w = Math.max(60, Math.min(W * 1.1, mapVB[2])), h = w * (mapVB[3] / mapVB[2]); const cx = mapVB[0] + mapVB[2] / 2, cy = mapVB[1] + mapVB[3] / 2; mapVB = [Math.max(-40, Math.min(W + 40 - w, cx - w / 2)), Math.max(-40, Math.min(Hh + 40 - h, cy - h / 2)), w, h]; };
-      const fit = () => { const r = svg.getBoundingClientRect(); if (!r.width) return; const ar = r.height / r.width; mapVB[3] = mapVB[2] * ar; clampVB(); setVB(); };
+      const setVB = () => { svg.setAttribute('viewBox', mapVB.map(v => v.toFixed(1)).join(' ')); svg.dataset.lv = W / mapVB[2] >= 2.2 ? 'hi' : 'lo'; };
+      /* 视口限制：缩放 60～1.3 倍全图宽；中心点不出地图范围（不会出现拖着拖着突然被弹回的跳动） */
+      const clampVB = () => { const ar = mapVB[3] / mapVB[2]; const w = Math.max(60, Math.min(W * 1.3, mapVB[2])), h = w * ar; const cx = Math.max(0, Math.min(W, mapVB[0] + mapVB[2] / 2)), cy = Math.max(0, Math.min(Hh, mapVB[1] + mapVB[3] / 2)); mapVB = [cx - w / 2, cy - h / 2, w, h]; };
+      let raf = 0; const paint = () => { if (raf) return; raf = requestAnimationFrame(() => { raf = 0; setVB(); }); };
+      const fit = () => { const r = svg.getBoundingClientRect(); if (!r.width) return; const ar = r.height / r.width; const cx = mapVB[0] + mapVB[2] / 2, cy = mapVB[1] + mapVB[3] / 2; mapVB = [cx - mapVB[2] / 2, cy - mapVB[2] * ar / 2, mapVB[2], mapVB[2] * ar]; clampVB(); setVB(); };
       fit();
-      const zoom = (f, cx, cy) => { cx = cx ?? mapVB[0] + mapVB[2] / 2; cy = cy ?? mapVB[1] + mapVB[3] / 2; const w = mapVB[2] / f, h = mapVB[3] / f; mapVB = [cx - (cx - mapVB[0]) / f, cy - (cy - mapVB[1]) / f, w, h]; clampVB(); setVB(); };
-      view.querySelectorAll('[data-z]').forEach(b => b.onclick = () => { const z = b.dataset.z; if (z === 'home') { mapVB = [homeP[0] - 120, homeP[1] - 150, 240, 280]; fit(); } else if (z === 'all') { mapVB = [-10, -10, W + 20, Hh + 20]; fit(); } else zoom(+z); });
-      const toSvg = (e) => { const r = svg.getBoundingClientRect(); return [mapVB[0] + (e.clientX - r.left) / r.width * mapVB[2], mapVB[1] + (e.clientY - r.top) / r.height * mapVB[3]]; };
-      svg.addEventListener('wheel', e => { e.preventDefault(); const [x, y] = toSvg(e); zoom(e.deltaY < 0 ? 1.2 : 1 / 1.2, x, y); }, { passive: false });
-      let drag = null, moved = false; const ptrs = new Map();
-      svg.addEventListener('pointerdown', e => { ptrs.set(e.pointerId, e); if (ptrs.size === 1) { drag = { x: e.clientX, y: e.clientY, vb: mapVB.slice() }; moved = false; } else drag = null; });
-      svg.addEventListener('pointermove', e => {
-        if (!ptrs.has(e.pointerId)) return; const prev = ptrs.get(e.pointerId); ptrs.set(e.pointerId, e);
-        if (ptrs.size === 2) { const [a, b] = [...ptrs.values()]; const d1 = Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY); const pa = prev, other = [...ptrs.values()].find(p => p.pointerId !== e.pointerId); const d0 = Math.hypot(pa.clientX - other.clientX, pa.clientY - other.clientY); if (d0 > 0) { const [mx, my] = toSvg({ clientX: (a.clientX + b.clientX) / 2, clientY: (a.clientY + b.clientY) / 2 }); zoom(d1 / d0, mx, my); } moved = true; return; }
-        if (!drag) return; const r = svg.getBoundingClientRect(); const dx = (e.clientX - drag.x) / r.width * drag.vb[2], dy = (e.clientY - drag.y) / r.height * drag.vb[3];
-        if (Math.abs(e.clientX - drag.x) + Math.abs(e.clientY - drag.y) > 4) { moved = true; svg.setPointerCapture && svg.setPointerCapture(e.pointerId); }
-        if (moved) { mapVB = [drag.vb[0] - dx, drag.vb[1] - dy, drag.vb[2], drag.vb[3]]; clampVB(); setVB(); }
+      const zoom = (f, cx, cy) => { cx = cx ?? mapVB[0] + mapVB[2] / 2; cy = cy ?? mapVB[1] + mapVB[3] / 2; const w0 = mapVB[2]; const w = Math.max(60, Math.min(W * 1.3, w0 / f)); f = w0 / w; mapVB = [cx - (cx - mapVB[0]) / f, cy - (cy - mapVB[1]) / f, w, mapVB[3] / f]; clampVB(); paint(); };
+      /* 按钮缩放带一点过渡 */
+      const animTo = (target, ms = 260) => { const from = mapVB.slice(), t0 = performance.now(); const step = t => { const k = Math.min(1, (t - t0) / ms), e = 1 - Math.pow(1 - k, 3); mapVB = from.map((v, i) => v + (target[i] - v) * e); setVB(); if (k < 1) requestAnimationFrame(step); else { clampVB(); setVB(); } }; requestAnimationFrame(step); };
+      const zoomAnim = f => { const w = Math.max(60, Math.min(W * 1.3, mapVB[2] / f)); const ar = mapVB[3] / mapVB[2]; const cx = mapVB[0] + mapVB[2] / 2, cy = mapVB[1] + mapVB[3] / 2; animTo([cx - w / 2, cy - w * ar / 2, w, w * ar]); };
+      const viewOf = (cx, cy, w) => { const ar = mapVB[3] / mapVB[2]; return [cx - w / 2, cy - w * ar / 2, w, w * ar]; };
+      view.querySelectorAll('.mp-zoom [data-z]').forEach(b => b.onclick = () => { const z = b.dataset.z; if (z === 'home') animTo(viewOf(homeP[0], homeP[1] - 20, 240)); else if (z === 'all') animTo(viewOf(W / 2, Hh / 2, W * 1.05)); else zoomAnim(+z); });
+      const toSvg = (cx, cy) => { const r = svg.getBoundingClientRect(); return [mapVB[0] + (cx - r.left) / r.width * mapVB[2], mapVB[1] + (cy - r.top) / r.height * mapVB[3]]; };
+      svg.addEventListener('wheel', e => { e.preventDefault(); const [x, y] = toSvg(e.clientX, e.clientY); zoom(Math.exp(-Math.max(-120, Math.min(120, e.deltaY)) * 0.0022), x, y); }, { passive: false });
+      svg.addEventListener('dblclick', e => { e.preventDefault(); const [x, y] = toSvg(e.clientX, e.clientY); const w = Math.max(60, mapVB[2] / 1.8); const ar = mapVB[3] / mapVB[2]; const f = mapVB[2] / w; animTo([x - (x - mapVB[0]) / f, y - (y - mapVB[1]) / f, w, w * ar]); });
+      /* 拖动：按下即记录起点；移动超过 5px 才算拖动（之后松手不触发点击）；一指平移、两指捏合，松手带一点惯性 */
+      const ptrs = new Map(); let pan = null, pinch = null, moved = false, downEl = null, vel = [0, 0], lastT = 0, glide = 0;
+      const startPan = () => { const [p] = [...ptrs.values()]; pan = { x: p.x, y: p.y, vb: mapVB.slice() }; pinch = null; };
+      const startPinch = () => { const [a, b] = [...ptrs.values()]; pinch = { d: Math.hypot(a.x - b.x, a.y - b.y) || 1, mid: toSvg((a.x + b.x) / 2, (a.y + b.y) / 2), vb: mapVB.slice() }; pan = null; };
+      svg.addEventListener('pointerdown', e => {
+        if (e.button > 0) return; cancelAnimationFrame(glide); mapBusy = true;
+        ptrs.set(e.pointerId, { x: e.clientX, y: e.clientY }); try { svg.setPointerCapture(e.pointerId); } catch (_) { }
+        if (ptrs.size === 1) { moved = false; downEl = e.target; vel = [0, 0]; lastT = performance.now(); startPan(); } else if (ptrs.size === 2) { moved = true; startPinch(); }
       });
-      const up = e => { ptrs.delete(e.pointerId); if (!ptrs.size) drag = null; };
-      svg.addEventListener('pointerup', up); svg.addEventListener('pointercancel', up);
+      svg.addEventListener('pointermove', e => {
+        const p = ptrs.get(e.pointerId); if (!p) return; const px = p.x, py = p.y; p.x = e.clientX; p.y = e.clientY;
+        const r = svg.getBoundingClientRect(); const sx = mapVB[2] / r.width, sy = mapVB[3] / r.height;
+        if (pinch && ptrs.size >= 2) {
+          const [a, b] = [...ptrs.values()]; const f = Math.hypot(a.x - b.x, a.y - b.y) / pinch.d; const w = Math.max(60, Math.min(W * 1.3, pinch.vb[2] / f)); const k = pinch.vb[2] / w;
+          const [mx, my] = pinch.mid; const mcx = (a.x + b.x) / 2 - r.left, mcy = (a.y + b.y) / 2 - r.top;
+          mapVB = [mx - mcx / r.width * w, my - mcy / r.height * (pinch.vb[3] / k), w, pinch.vb[3] / k]; clampVB(); paint(); return;
+        }
+        if (!pan) return;
+        if (!moved && Math.abs(e.clientX - pan.x) + Math.abs(e.clientY - pan.y) < 5) return;
+        moved = true; svg.classList.add('dragging');
+        const now = performance.now(), dt = Math.max(1, now - lastT); vel = [(e.clientX - px) / dt, (e.clientY - py) / dt]; lastT = now;
+        mapVB = [pan.vb[0] - (e.clientX - pan.x) * sx, pan.vb[1] - (e.clientY - pan.y) * sy, pan.vb[2], pan.vb[3]]; clampVB(); paint();
+      });
+      const up = e => {
+        if (!ptrs.has(e.pointerId)) return; ptrs.delete(e.pointerId);
+        if (ptrs.size === 1) { startPan(); return; } if (ptrs.size) return;
+        svg.classList.remove('dragging'); const wasPinch = !!pinch; pan = pinch = null;
+        if (e.type === 'pointerup' && !moved) { tap(downEl); }
+        else if (moved && !wasPinch && performance.now() - lastT < 80 && Math.hypot(vel[0], vel[1]) > .15) {
+          const r = svg.getBoundingClientRect(); let [vx, vy] = [vel[0] * mapVB[2] / r.width, vel[1] * mapVB[3] / r.height]; let t0 = performance.now();
+          const step = t => { const dt = t - t0; t0 = t; mapVB = [mapVB[0] - vx * dt, mapVB[1] - vy * dt, mapVB[2], mapVB[3]]; clampVB(); setVB(); vx *= Math.pow(.92, dt / 16); vy *= Math.pow(.92, dt / 16); if (Math.hypot(vx, vy) * 16 > .05) glide = requestAnimationFrame(step); else mapIdle(); };
+          glide = requestAnimationFrame(step); return;
+        }
+        mapIdle();
+      };
+      svg.addEventListener('pointerup', up); svg.addEventListener('pointercancel', up); svg.addEventListener('lostpointercapture', up);
       const showCard = id => {
         const p = MAP.points.find(x => x.id === id); if (!p) return; const cat = MAP.cats[p.cat] || {};
         svg.querySelectorAll('.pt').forEach(x => x.classList.toggle('sel', x.dataset.pt === id));
@@ -601,7 +634,7 @@
         card.querySelector('[data-act="go"]').onclick = () => insert(p.go);
         const f = card.querySelector('[data-act="floor"]'); if (f) f.onclick = () => go('floor');
       };
-      svg.addEventListener('click', e => { if (moved) { moved = false; return; } const w = e.target.closest('.who'); if (w) { go('card', { id: w.dataset.card }); return; } const p = e.target.closest('.pt'); if (p) showCard(p.dataset.pt); });
+      function tap(el) { mapIdle(); if (!el || !el.closest) return; const w = el.closest('.who'); if (w) { go('card', { id: w.dataset.card }); return; } const p = el.closest('.pt'); if (p) showCard(p.dataset.pt); }
     }
   };
   VIEWS.floor = {

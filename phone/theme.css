@@ -244,8 +244,9 @@
 .qq-ct .hd{padding:6px 14px;font-size:11.5px;color:var(--qq-sub)}
 
 /* 名片 */
-.qq-card .hero{position:relative;height:150px;background:linear-gradient(160deg,color-mix(in srgb,var(--c) 70%,#fff),var(--c));overflow:hidden}
-.qq-card .hero img{position:absolute;left:50%;top:6%;height:260%;translate:calc(-50% + (0.5 - var(--ax,.5)) * 100%) 0;opacity:.95;filter:drop-shadow(0 6px 10px rgba(0,0,0,.2))}
+.qq-card .hero{position:relative;z-index:1;flex:none;height:150px;background:linear-gradient(160deg,color-mix(in srgb,var(--c) 70%,#fff),var(--c))}
+.qq-card .hero .bg{position:absolute;inset:0;overflow:hidden}
+.qq-card .hero .bg img{position:absolute;left:50%;top:6%;height:260%;translate:calc(-50% + (0.5 - var(--ax,.5)) * 100%) 0;opacity:.95;filter:drop-shadow(0 6px 10px rgba(0,0,0,.2))}
 .qq-card .hero .av{position:absolute;left:14px;bottom:-26px;width:72px;height:72px;border-radius:14px;box-shadow:0 0 0 3px #fff,0 4px 10px rgba(0,0,0,.2)}
 .qq-card .who{padding:32px 14px 10px;background:#fff}
 .qq-card .who b{font-size:19px;font-weight:600}
@@ -339,13 +340,13 @@
 .mp .ap-top h2{font:400 18px var(--hand);color:var(--ink)}
 .mp-wrap{flex:1;min-height:0;position:relative;overflow:hidden;background:#eef1ea}
 .mp-svg{position:absolute;inset:0;width:100%;height:100%;touch-action:none;cursor:grab;user-select:none}
-.mp-svg:active{cursor:grabbing}
+.mp-svg.dragging{cursor:grabbing}
+.mp-svg.dragging .pt,.mp-svg.dragging .who{pointer-events:none}
 .mp-svg .land{fill:#f4f2ea}
 .mp-svg .sea{fill:#a9d3ea}
 .mp-svg .riv{fill:none;stroke:#a9d3ea;stroke-linecap:round;stroke-linejoin:round}
 .mp-svg .park{fill:#cfe8c4}
 .mp-svg .ring{fill:none;stroke:#f6d79a;stroke-width:1.6;opacity:.55}
-.mp-svg .metro{fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;opacity:.55}
 .mp-svg .dname{font:400 7.5px var(--hand);fill:#a9b4a6;text-anchor:middle;letter-spacing:.2em;pointer-events:none}
 .mp-svg .wname{font:400 9px var(--hand);fill:#5b8fb0;text-anchor:middle;letter-spacing:.3em;pointer-events:none}
 .mp-svg .wname.sm{font-size:6px}
@@ -354,7 +355,7 @@
 .mp-svg .pt .ic *{fill:none;stroke:#fff;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
 .mp-svg .pt .lab{font:500 5.6px var(--sys);fill:#3f3328;paint-order:stroke;stroke:#fff;stroke-width:2px;stroke-linejoin:round;pointer-events:none;opacity:0;transition:opacity .2s}
 .mp-svg .pt.major .lab,.mp-svg .pt.sel .lab,.mp-svg .pt.here .lab{opacity:1}
-.mp-svg[data-z="hi"] .pt .lab{opacity:1}
+.mp-svg[data-lv="hi"] .pt .lab{opacity:1}
 .mp-svg .pt:hover .pin,.mp-svg .pt.sel .pin{transform:scale(1.25)}
 .mp-svg .pt.done .pin{stroke:#ffd34d;stroke-width:1.6}
 .mp-svg .pt .stamp{font:400 6px var(--hand);fill:#c84f26;pointer-events:none}
