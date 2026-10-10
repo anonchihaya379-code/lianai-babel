@@ -396,7 +396,7 @@
 @media (max-width:700px){
   .ph-root{right:0;bottom:0;left:0}
   .ph-mini{position:absolute;right:12px;bottom:12px;width:56px;height:108px}
-  .ph-phone{width:100%;height:min(var(--H),calc(100dvh - 10px));max-height:none;margin:0 auto;border-radius:30px 30px 0 0;padding:8px 8px 0;box-shadow:0 -10px 40px rgba(0,0,0,.4)}
+  .ph-phone{width:100%;max-width:430px;height:min(var(--H),calc(100dvh - 10px));max-height:none;margin:0 auto;border-radius:30px 30px 0 0;padding:8px 8px 0;box-shadow:0 -10px 40px rgba(0,0,0,.4)}
   .ph-screen{border-radius:22px 22px 0 0}
   .ph-close{right:8px;top:-14px}
 }
