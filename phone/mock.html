@@ -1,0 +1,26 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>手机 · 本地模拟</title>
+<style>html,body{margin:0;min-height:100%;background:#2a2a30;font:14px sans-serif;color:#ddd}.fake{padding:24px;max-width:720px;margin:0 auto}.fake p{line-height:1.8;margin:0 0 12px;opacity:.6}.ctl{position:fixed;left:12px;top:12px;display:flex;flex-direction:column;gap:6px;z-index:9}.ctl button{background:#444;color:#fff;border:0;padding:6px 10px;border-radius:6px;cursor:pointer}#log{position:fixed;left:12px;bottom:12px;max-width:40%;background:#111;color:#9f9;font:11px/1.5 monospace;padding:8px;border-radius:6px;white-space:pre-wrap;max-height:40vh;overflow:auto}</style></head>
+<body>
+<div class="fake"><p>（这里模拟火狐的对话页。右下角是悬浮手机。）</p><p>窗外的雷声轰鸣，客厅里却安静得可怕。陈霜月抱着双臂坐在沙发上，视线冷冷地扫过我刚买回来的泡面堆……</p><p>“这就是你所谓的独立生活规划？”</p></div>
+<div class="ctl"><button data-s="sample">样例状态</button><button data-s="empty">初始状态</button><button data-s="none">空对象 {}</button><button data-s="long">超长文本</button></div>
+<pre id="log">insertInput 记录：</pre>
+<script>
+const subs=new Set();
+window.huohu={chat:{user:'林默',userAvatar:''},state:{},stateReady:Promise.resolve(),
+  subscribeState(fn){subs.add(fn);return()=>subs.delete(fn)},
+  insertInput(t){document.getElementById('log').textContent+='\n---\n'+t},
+  html:{open(){},replace(){},back(){},forward(){}}};
+async function setState(name){
+  let s={};
+  if(name==='sample')s=await fetch('data/sample-state.json').then(r=>r.json());
+  else if(name==='empty')s=await fetch('data/state.json').then(r=>r.json());
+  else if(name==='long'){s=await fetch('data/sample-state.json').then(r=>r.json());const L='这是一条非常非常长的消息用来测试气泡换行是否正常以及列表预览是否会被截断成省略号而不会把整个手机撑宽'.repeat(3);s.qq.chats.h1.push({s:'h1',t:L,at:'22:00'});s.qq.group.push({s:'h4',t:L,at:'22:01'});s.qq.moments.push({s:'h2',t:L,img:'',at:'22:02',likes:[],comments:[{s:'h1',t:L}]});s.girls.h1.thought='（'+L+'）';s.scene.place='一个名字特别特别特别长的地方 · 某某某某某某某某某某室'}
+  window.huohu.state=s;subs.forEach(f=>f(s));
+}
+document.querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>setState(b.dataset.s));
+const q=new URLSearchParams(location.search);setState(q.get('s')||'sample');
+window.LBP_RESOURCE_BASES=['./'];
+</script>
+<div id="lbp-mount" data-huohu-floating></div>
+<link rel="stylesheet" href="theme.css"><script src="app.js"></script>
+</body></html>

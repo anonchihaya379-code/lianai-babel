@@ -1,0 +1,83 @@
+{
+  "time": {
+    "date": "2025.07.01",
+    "week": "Mon",
+    "clock": "14:20",
+    "slot": "白天",
+    "weather": "酷热"
+  },
+  "scene": {
+    "place": "锦绣云湾 2001 · 201 客厅",
+    "present": [
+      "h1"
+    ]
+  },
+  "girls": {
+    "h1": {
+      "name": "陈霜月",
+      "love": 20,
+      "rel": "监护人",
+      "in": true
+    },
+    "h2": {
+      "name": "江澜",
+      "love": 0,
+      "rel": "陌生人",
+      "in": false
+    },
+    "h3": {
+      "name": "周莹春",
+      "love": 0,
+      "rel": "陌生人",
+      "in": false
+    },
+    "h4": {
+      "name": "柳轻飏",
+      "love": 0,
+      "rel": "陌生人",
+      "in": false
+    },
+    "h5": {
+      "name": "东方遇晓",
+      "love": 0,
+      "rel": "陌生人",
+      "in": false
+    },
+    "h6": {
+      "name": "叶潇雨",
+      "love": 0,
+      "rel": "陌生人",
+      "in": false
+    }
+  },
+  "me": {
+    "visual": "满头大汗",
+    "wear": "汗湿的白色T恤 + 运动长裤",
+    "inventory": [
+      "智能手机 (电量 85%)",
+      "公寓钥匙",
+      "行李箱"
+    ]
+  },
+  "plot": {
+    "phase": "common",
+    "events": [],
+    "tokens": [],
+    "loop": 1,
+    "badend": 0
+  },
+  "qq": {
+    "chats": {
+      "h1": [],
+      "h2": [],
+      "h3": [],
+      "h4": [],
+      "h5": [],
+      "h6": []
+    },
+    "group": [],
+    "moments": [],
+    "unread": {},
+    "call": {}
+  }
+}

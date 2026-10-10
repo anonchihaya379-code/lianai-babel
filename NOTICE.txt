@@ -1,0 +1,7 @@
+恋爱巴别塔 · 主角的手机（火狐悬浮组件）外置资源
+
+字体（经 ZeoSeven FontsAPI 加载，SIL Open Font License 1.1）：
+- 荆南圆体 けいなん丸ポップ体 KeinannMaruPOP © Yattyann https://yattyann.booth.pm/
+- 悠哉字体 Yozai © LXGW https://github.com/lxgw/yozai-font
+
+本目录只含界面代码、CG 解锁表与公开地点资料，不含聊天记录或会话状态。
