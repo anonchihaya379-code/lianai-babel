@@ -385,7 +385,7 @@
     }).join('');
   }
   function chatInput(key, ph) {
-    return `<div class="qq-input"><textarea id="lbp-in" rows="1" maxlength="300" placeholder="${esc(ph)}">${esc(drafts[key] || '')}</textarea><button type="button" data-act="send">发送</button></div><div class="qq-hint">发送=填进对话输入框，由你确认后发出</div>`;
+    return `<div class="qq-input"><textarea id="lbp-in" rows="1" maxlength="300" placeholder="${esc(ph)}">${esc(drafts[key] || '')}</textarea><button type="button" data-act="send">发送</button></div>`;
   }
   function wireChat(key, build) {
     const ta = view.querySelector('#lbp-in'); const body = view.querySelector('.ap-body'); if (body) body.scrollTop = body.scrollHeight;
