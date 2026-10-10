@@ -179,12 +179,10 @@
     <button type="button" class="ph-mini" id="lbp-mini" data-huohu-draggable aria-label="打开手机（可拖动）"><b id="lbp-mini-t"></b><span class="dot" id="lbp-mini-dot" hidden></span></button>
     <div class="ph-phone" id="lbp-phone" hidden>
       <div class="ph-screen" id="lbp-screen">
-        <div class="ph-island" data-huohu-draggable title="按住拖动"></div>
+        <div class="ph-grip" data-huohu-draggable title="按住拖动"></div>
         <div class="ph-bar" id="lbp-bar"></div>
         <div class="ph-view" id="lbp-view"></div>
         <div class="ph-toast" id="lbp-toast" role="status" aria-live="polite"></div>
-      </div>
-      <div class="ph-chin">
         <div class="ph-nav" id="lbp-nav" hidden>
           <button type="button" data-nav="home"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="7"/></svg><span>主屏</span></button>
           <button type="button" data-nav="lock"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><span>锁屏</span></button>
@@ -206,9 +204,9 @@
   function back() { if (stack.length > 1) stack.pop(); render(); }
   function home() { stack = [{ v: 'home' }]; render(); }
   let open = false;
-  /* 手机按固定设计尺寸排版，再整体缩放到可用空间：外壳、屏幕、所有组件同比例变化 */
-  const DESIGN = [360, 724];
-  function fitPhone() { const z = Math.min(1, (innerHeight - 20) / DESIGN[1], (innerWidth - 16) / DESIGN[0]); phone.style.zoom = Math.max(.5, z).toFixed(3); }
+  /* 面板尺寸跟着可用空间走：宽屏 430×760，窄屏贴满（四周各留 12px），内部组件按实际宽高自适应 */
+  const MAX = [430, 760], MIN_H = 460;
+  function fitPhone() { const w = Math.min(MAX[0], innerWidth - 24), h = Math.max(Math.min(MIN_H, innerHeight - 24), Math.min(MAX[1], innerHeight - 24)); phone.style.setProperty('--pw', Math.round(w) + 'px'); phone.style.setProperty('--ph', Math.round(h) + 'px'); }
   addEventListener('resize', () => { if (open) fitPhone(); });
   function setOpen(o) { open = o; phone.hidden = !o; mini.hidden = o; $('#lbp').classList.toggle('open', o); if (o) fitPhone(); else navToggle(false); if (o && cur().v === 'lock') { /* 保持锁屏 */ } render(); }
   mini.addEventListener('click', () => setOpen(true));

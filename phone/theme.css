@@ -10,7 +10,7 @@
   --qq:#12b7f5;--qq-dark:#0f9ad8;--qq-bg:#f2f3f5;--qq-line:#e6e8eb;--qq-text:#1a1a1a;--qq-sub:#8a8f99;--qq-me:#1b8cff;
   --hand:"Yozai","Kaiti SC","KaiTi",cursive;--pop:"KeinannMaruPOP","PingFang SC","Microsoft YaHei",sans-serif;
   --sys:-apple-system,"PingFang SC","Microsoft YaHei","Noto Sans SC",sans-serif;
-  position:absolute;right:16px;bottom:16px;z-index:50;font-family:var(--sys);color:var(--qq-text);font-size:14px;line-height:1.45;
+  position:absolute;right:12px;bottom:12px;z-index:50;font-family:var(--sys);color:var(--qq-text);font-size:14px;line-height:1.45;
   -webkit-font-smoothing:antialiased;
 }
 .ph-root *{box-sizing:border-box;margin:0;padding:0}
@@ -27,23 +27,23 @@
 .ph-mini b{font:400 15px/1 var(--pop);letter-spacing:.02em;white-space:nowrap;font-variant-numeric:tabular-nums}
 .ph-mini .dot{position:absolute;right:-5px;top:-6px;min-width:16px;height:16px;padding:0 4px;border-radius:8px;background:#f5222d;color:#fff;font:700 10px/16px var(--sys);text-align:center;box-shadow:0 0 0 2px #1c1d22}
 
-/* ---------- 展开：整部手机（固定设计尺寸 360×724，由脚本用 zoom 整体等比缩放） ---------- */
-.ph-phone{position:relative;display:flex;flex-direction:column;width:360px;height:724px;border-radius:38px;background:#15161a;padding:10px 10px 0;box-shadow:0 0 0 2px #35363d,0 24px 48px rgba(0,0,0,.45)}
-.ph-screen{position:relative;flex:1;min-height:0;width:100%;border-radius:28px;overflow:hidden;background:#000;display:flex;flex-direction:column;isolation:isolate}
-.ph-island{position:absolute;left:50%;top:9px;z-index:40;width:92px;height:22px;border-radius:11px;background:#000;translate:-50% 0;cursor:grab}
-.ph-island:active{cursor:grabbing}
+/* ---------- 展开：无外壳的手机面板（尺寸由脚本按可用空间写入 --pw/--ph） ---------- */
+.ph-phone{position:relative;width:var(--pw,430px);height:var(--ph,760px);border-radius:22px;overflow:hidden;background:#000;box-shadow:0 0 0 1px rgba(0,0,0,.1),0 18px 44px rgba(0,0,0,.3)}
+.ph-screen{position:absolute;inset:0;overflow:hidden;background:#000;display:flex;flex-direction:column;isolation:isolate}
+.ph-grip{position:absolute;left:50%;top:0;z-index:41;width:140px;height:28px;translate:-50% 0;cursor:grab;touch-action:none}
+.ph-grip::before{content:"";position:absolute;left:50%;top:8px;width:38px;height:4px;border-radius:2px;translate:-50% 0;background:rgba(128,128,128,.5)}
+.ph-grip:active{cursor:grabbing}
 .ph-bar{position:absolute;left:0;right:0;top:0;z-index:30;height:40px;padding:10px 22px 0;display:flex;justify-content:space-between;align-items:center;font:600 13px/1 var(--sys);color:var(--bar,#111);pointer-events:none}
-.ph-view{position:absolute;inset:0;display:flex;flex-direction:column;background:var(--qq-bg);overflow:hidden}
+.ph-view{position:absolute;inset:0;display:flex;flex-direction:column;background:var(--qq-bg);overflow:hidden;padding-bottom:16px}
 .ph-view[hidden]{display:none}
 .ph-toast{position:absolute;left:50%;bottom:110px;z-index:50;max-width:84%;padding:8px 14px;border-radius:18px;background:rgba(20,20,24,.86);color:#fff;font-size:12.5px;text-align:center;translate:-50% 8px;opacity:0;transition:opacity .25s,translate .25s;pointer-events:none}
 .ph-toast.on{opacity:1;translate:-50% 0}
 
-/* ---------- 下巴：横条，点一下呼出/收起快捷面板 ---------- */
-.ph-chin{position:relative;flex:none;height:30px;display:flex;align-items:center;justify-content:center}
-.ph-handle{width:120px;height:22px;display:grid;place-items:center;border-radius:11px}
-.ph-handle i{display:block;width:96px;height:5px;border-radius:3px;background:#5a5b63;transition:background .2s,width .2s}
-.ph-handle:hover i,.ph-handle[aria-expanded="true"] i{background:#c9cad1;width:110px}
-.ph-nav{position:absolute;left:50%;bottom:32px;z-index:60;translate:-50% 0;display:flex;gap:6px;padding:7px;border-radius:20px;background:rgba(28,29,34,.86);backdrop-filter:blur(12px);box-shadow:0 8px 22px rgba(0,0,0,.4);animation:nav-in .18s ease-out}
+/* ---------- 底部横条：点一下呼出/收起快捷面板 ---------- */
+.ph-root .ph-handle{position:absolute;left:50%;bottom:0;z-index:55;width:150px;height:16px;translate:-50% 0;display:grid;place-items:center}
+.ph-handle i{display:block;width:110px;height:5px;border-radius:3px;background:rgba(60,60,67,.45);box-shadow:0 0 0 1px rgba(255,255,255,.35);transition:background .2s,width .2s}
+.ph-handle:hover i,.ph-handle[aria-expanded="true"] i{background:rgba(60,60,67,.75);width:126px}
+.ph-nav{position:absolute;left:50%;bottom:24px;z-index:60;translate:-50% 0;display:flex;gap:6px;padding:7px;border-radius:20px;background:rgba(28,29,34,.86);backdrop-filter:blur(12px);box-shadow:0 8px 22px rgba(0,0,0,.4);animation:nav-in .18s ease-out}
 @keyframes nav-in{from{opacity:0;translate:-50% 8px}}
 .ph-nav button{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:66px;padding:8px 6px 7px;border-radius:14px;color:#fff;font-size:11.5px;white-space:nowrap}
 .ph-nav button:hover{background:rgba(255,255,255,.12)}
@@ -407,7 +407,4 @@
 
 /* ---------- 动效减弱 / 窄屏 ---------- */
 @media (prefers-reduced-motion:reduce){.ph-root *,.ph-root *::before,.ph-root *::after{animation:none!important;transition:none!important}}
-@media (max-width:700px){
-  .ph-root{right:8px;bottom:8px}
-}
 }
