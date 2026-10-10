@@ -11,7 +11,7 @@
   --hand:"Yozai","Kaiti SC","KaiTi",cursive;--pop:"KeinannMaruPOP","PingFang SC","Microsoft YaHei",sans-serif;
   --sys:-apple-system,"PingFang SC","Microsoft YaHei","Noto Sans SC",sans-serif;
   --W:340px;--H:690px;
-  position:fixed;right:16px;bottom:16px;z-index:50;font-family:var(--sys);color:var(--qq-text);font-size:14px;line-height:1.45;
+  position:absolute;right:16px;bottom:16px;z-index:50;font-family:var(--sys);color:var(--qq-text);font-size:14px;line-height:1.45;
   -webkit-font-smoothing:antialiased;
 }
 .ph-root *{box-sizing:border-box;margin:0;padding:0}
@@ -394,8 +394,10 @@
 /* ---------- 动效减弱 / 窄屏 ---------- */
 @media (prefers-reduced-motion:reduce){.ph-root *,.ph-root *::before,.ph-root *::after{animation:none!important;transition:none!important}}
 @media (max-width:700px){
-  .ph-root{right:0;bottom:0;left:0}
-  .ph-mini{position:absolute;right:12px;bottom:12px;width:56px;height:108px}
+  /* 收起时外层只包住小手机；展开时才铺满底部。外层不能被撑成 0 高，平台靠它的尺寸决定显示区域 */
+  .ph-root{right:12px;bottom:12px}
+  .ph-root.open{left:0;right:0;bottom:0;width:min(100%,430px);margin:0 auto}
+  .ph-mini{width:56px;height:108px}
   .ph-phone{width:100%;max-width:430px;height:min(var(--H),calc(100dvh - 10px));max-height:none;margin:0 auto;border-radius:30px 30px 0 0;padding:8px 8px 0;box-shadow:0 -10px 40px rgba(0,0,0,.4)}
   .ph-screen{border-radius:22px 22px 0 0}
   .ph-close{right:8px;top:-14px}

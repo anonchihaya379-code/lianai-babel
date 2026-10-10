@@ -201,7 +201,7 @@
   function back() { if (stack.length > 1) stack.pop(); render(); }
   function home() { stack = [{ v: 'home' }]; render(); }
   let open = false;
-  function setOpen(o) { open = o; phone.hidden = !o; mini.hidden = o; if (o && cur().v === 'lock') { /* 保持锁屏 */ } render(); }
+  function setOpen(o) { open = o; phone.hidden = !o; mini.hidden = o; $('#lbp').classList.toggle('open', o); if (o && cur().v === 'lock') { /* 保持锁屏 */ } render(); }
   mini.addEventListener('click', e => { if (e.target.closest('[data-huohu-draggable]')) return; setOpen(true); });
   $('#lbp-close').addEventListener('click', () => setOpen(false));
   $('#lbp-homeind').addEventListener('click', () => { if (cur().v !== 'lock') home(); });
