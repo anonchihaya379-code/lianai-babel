@@ -54,7 +54,7 @@
   /* 游戏内时间：全部来自会话变量 time.*，不读现实时钟 */
   const WEEK_CN = { Mon: '星期一', Tue: '星期二', Wed: '星期三', Thu: '星期四', Fri: '星期五', Sat: '星期六', Sun: '星期日' };
   function ymd() {
-    const m = String(g('time.date', '')).match(/(\d{4})\D+(\d{1,2})\D+(\d{1,2})/);
+    const m = String(g('time.date', '') || chat.date || '').match(/(\d{4})\D+(\d{1,2})\D+(\d{1,2})/);
     return m ? { y: +m[1], m: +m[2], d: +m[3] } : null;
   }
   function weekCN() {
@@ -63,7 +63,8 @@
     const t = ymd(); if (!t) return '';
     return ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'][new Date(t.y, t.m - 1, t.d).getDay()];
   }
-  const clock = () => { const c = String(g('time.clock', '')).match(/(\d{1,2})\D(\d{2})/); return c ? c[1].padStart(2, '0') + ':' + c[2] : '--:--'; };
+  /* 会话变量里还没有时间时，退回平台提供的当前时间，避免显示 --:-- */
+  const clock = () => { const c = String(g('time.clock', '') || chat.time || '').match(/(\d{1,2})\D(\d{2})/); return c ? c[1].padStart(2, '0') + ':' + c[2] : '--:--'; };
   const dateCN = () => { const t = ymd(); return t ? `${t.y}年${t.m}月${t.d}日` : ''; };
 
   /* 节假日：法定假日按国务院公布的放假安排（2025、2026 年）；其余年份只标固定日期的节日 */
