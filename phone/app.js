@@ -9,13 +9,13 @@
   const IMG = 'https://img.huohu.ai/library/5562991478/images/';
   const SLOTS = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'];
   const CAST = {
-    h1: { name: '陈霜月', nick: '霜月', sig: '请说重点。', c: '#6f9fdc', sprite: IMG + '1152827677463.webp', face: [.37, .11], ax: .5, school: 'fudan', room: '202', dialect: '北京话' },
-    h2: { name: '江澜', nick: '澜子', sig: '今天也要练！', c: '#f2683c', sprite: IMG + '9775495391960.webp', face: [.45, .125], ax: .515, school: 'sus', room: '101', dialect: '四川话' },
-    h3: { name: '周莹春', nick: 'yc_0314', sig: '∑ 1/n² = π²/6', c: '#e8a33a', sprite: IMG + '6501736655754.webp', face: [.27, .16], ax: .31, school: 'fudan', room: '102', dialect: '河南话' },
-    h4: { name: '柳轻飏', nick: '飏飏飏', sig: '嗦粉第一名', c: '#2db3a0', sprite: IMG + '6484478934390.webp', face: [.39, .13], ax: .47, school: 'sta', room: '101', dialect: '广西普通话' },
-    h5: { name: '东方遇晓', nick: '晓晓不是小小', sig: '洋泾浜退散', c: '#f07ea8', sprite: IMG + '3633698951087.webp', face: [.25, .13], ax: .335, school: 'sjtu', room: '203', dialect: '上海话' },
-    h6: { name: '叶潇雨', nick: '潇潇雨歇', sig: '直播中 勿扰', c: '#8a86f0', sprite: IMG + '4074715116402.webp', face: [.51, .155], ax: .6, school: null, room: '103', dialect: '粤语' },
-    ai: { name: '宇智波爱', nick: '观测者', sig: '杂鱼主角今天也翻车了吗', c: '#e07ab8', sprite: IMG + '9636094724211.webp', face: [.53, .36, 5], ax: .5, egg: true }
+    h1: { name: '陈霜月', ar: 0.381, nick: '霜月', sig: '请说重点。', c: '#6f9fdc', sprite: IMG + '1152827677463.webp', face: [.37, .11], ax: .5, school: 'fudan', room: '202', dialect: '北京话' },
+    h2: { name: '江澜', ar: 0.368, nick: '澜子', sig: '今天也要练！', c: '#f2683c', sprite: IMG + '9775495391960.webp', face: [.45, .125], ax: .515, school: 'sus', room: '101', dialect: '四川话' },
+    h3: { name: '周莹春', ar: 0.481, nick: 'yc_0314', sig: '∑ 1/n² = π²/6', c: '#e8a33a', sprite: IMG + '6501736655754.webp', face: [.27, .16], ax: .31, school: 'fudan', room: '102', dialect: '河南话' },
+    h4: { name: '柳轻飏', ar: 0.488, nick: '飏飏飏', sig: '嗦粉第一名', c: '#2db3a0', sprite: IMG + '6484478934390.webp', face: [.39, .13], ax: .47, school: 'sta', room: '101', dialect: '广西普通话' },
+    h5: { name: '东方遇晓', ar: 0.515, nick: '晓晓不是小小', sig: '洋泾浜退散', c: '#f07ea8', sprite: IMG + '3633698951087.webp', face: [.25, .13], ax: .335, school: 'sjtu', room: '203', dialect: '上海话' },
+    h6: { name: '叶潇雨', ar: 0.395, nick: '潇潇雨歇', sig: '直播中 勿扰', c: '#8a86f0', sprite: IMG + '4074715116402.webp', face: [.51, .155], ax: .6, school: null, room: '103', dialect: '粤语' },
+    ai: { name: '宇智波爱', ar: 0.667, nick: '观测者', sig: '杂鱼主角今天也翻车了吗', c: '#e07ab8', sprite: IMG + '9636094724211.webp', face: [.53, .36, 5], ax: .5, egg: true }
   };
   const GROUP = '锦绣云湾2001';
 
@@ -179,13 +179,18 @@
     <button type="button" class="ph-mini" id="lbp-mini" aria-label="打开手机"><span class="notch" data-huohu-draggable></span><span class="scr"><b id="lbp-mini-t"></b><small id="lbp-mini-s"></small></span><span class="dot" id="lbp-mini-dot" hidden></span></button>
     <div class="ph-phone" id="lbp-phone" hidden>
       <button type="button" class="ph-close" id="lbp-close" aria-label="收起手机">×</button>
-      <button type="button" class="ph-key power" id="lbp-power" aria-label="锁屏" title="锁屏"></button>
-      <button type="button" class="ph-key vol" aria-hidden="true" tabindex="-1"></button>
       <div class="ph-screen" id="lbp-screen">
         <div class="ph-island" data-huohu-draggable title="按住拖动"></div>
         <div class="ph-bar" id="lbp-bar"></div>
         <div class="ph-view" id="lbp-view"></div>
-        <button type="button" class="ph-home-ind" id="lbp-homeind" aria-label="回到主屏"></button>
+        <div class="ph-at" id="lbp-at">
+          <div class="ph-at-menu" id="lbp-at-menu" hidden>
+            <button type="button" data-nav="back" aria-label="返回"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg><span>返回</span></button>
+            <button type="button" data-nav="home" aria-label="主屏"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="7"/></svg><span>主屏</span></button>
+            <button type="button" data-nav="lock" aria-label="锁屏"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><span>锁屏</span></button>
+          </div>
+          <button type="button" class="ph-at-ball" id="lbp-at-ball" aria-label="快捷按键" aria-expanded="false"><i></i></button>
+        </div>
         <div class="ph-toast" id="lbp-toast" role="status" aria-live="polite"></div>
       </div>
     </div>
@@ -205,21 +210,32 @@
   function setOpen(o) { open = o; phone.hidden = !o; mini.hidden = o; $('#lbp').classList.toggle('open', o); if (o && cur().v === 'lock') { /* 保持锁屏 */ } render(); }
   mini.addEventListener('click', e => { if (e.target.closest('[data-huohu-draggable]')) return; setOpen(true); });
   $('#lbp-close').addEventListener('click', () => setOpen(false));
-  $('#lbp-homeind').addEventListener('click', () => { if (cur().v !== 'lock') home(); });
-  $('#lbp-power').addEventListener('click', () => { stack = [{ v: 'lock' }]; render(); toast('已锁屏'); });
+  /* 悬浮快捷球：点一下展开 返回 / 主屏 / 锁屏，再点收起 */
+  const atBall = $('#lbp-at-ball'), atMenu = $('#lbp-at-menu');
+  function atToggle(o) { o = o ?? atMenu.hidden; atMenu.hidden = !o; atBall.setAttribute('aria-expanded', o); $('#lbp-at').classList.toggle('on', o); }
+  atBall.addEventListener('click', () => atToggle());
+  atMenu.addEventListener('click', e => {
+    const b = e.target.closest('[data-nav]'); if (!b) return;
+    const n = b.dataset.nav; atToggle(false);
+    if (n === 'back') { if (stack.length > 1) back(); else if (cur().v !== 'home' && cur().v !== 'lock') home(); }
+    else if (n === 'home') home();
+    else { stack = [{ v: 'lock' }]; render(); }
+  });
   const drafts = {};
 
   /* ---------- 渲染 ---------- */
   function onState() { renderMini(); if (open) render(); }
   function renderMini() {
     $('#lbp-mini-t').textContent = clock();
-    $('#lbp-mini-s').textContent = g('time.weather', '') || '';
+    $('#lbp-mini-s').textContent = wxText();
     mini.style.setProperty('--w1', WX[wxKind()].c1); mini.style.setProperty('--w2', WX[wxKind()].c2);
     const n = unreadAll() + newCgs().length;
     const d = $('#lbp-mini-dot'); d.hidden = !n; d.textContent = n > 99 ? '99+' : n;
   }
-  function renderBar(onLock) {
-    bar.innerHTML = onLock ? '' : `<span></span><span class="wxs">${wxIcon()}<span>${esc(g('time.weather', ''))}</span></span>`;
+  /* 状态栏：左上常驻时间，右侧天气图标 + 文字（变量为空时显示天气类别名） */
+  const wxText = () => g('time.weather', '') || WX[wxKind()].k;
+  function renderBar() {
+    bar.innerHTML = `<span class="clk">${clock()}</span><span class="wxs">${wxIcon()}<span>${esc(wxText())}</span></span>`;
   }
   function render() {
     renderMini();
@@ -232,9 +248,11 @@
     const wk = WX[wxKind()]; const root = $('#lbp');
     root.style.setProperty('--w1', wk.c1); root.style.setProperty('--w2', wk.c2); root.style.setProperty('--wink', wk.ink);
     root.dataset.wx = wxKind();
-    renderBar(c.v === 'lock');
+    renderBar();
     bar.style.setProperty('--bar', R.bar || '#111');
-    $('#lbp-homeind').hidden = c.v === 'lock' || c.v === 'call' || c.v === 'viewer';
+    bar.classList.toggle('on-photo', ['lock', 'home', 'call', 'viewer', 'card', 'ai'].includes(c.v));
+    $('#lbp-at').hidden = c.v === 'lock';
+    if (c.v === 'lock') atToggle(false);
     if (R.after) R.after(c);
   }
   const ICON = {
@@ -289,7 +307,7 @@
       const notes = latestNotes(); const tag = todayTag();
       const cal = c.cal;
       return `<div class="wall" style="${wallCss()}">${WALL ? '' : `<div class="pol" style="--r:-5deg;left:14%;top:40%;width:44%"><div class="pic"></div><div class="cap">锦绣云湾 2001</div></div><div class="pol" style="--r:6deg;left:52%;top:47%;width:32%"><div class="pic"></div><div class="cap">${esc(g('time.date', ''))}</div></div>`}</div>
-        <div class="lk-top"><button type="button" class="date" data-act="cal">${esc(dateCN())} ${esc(weekCN())}${tag ? `<em>${esc(tag)}</em>` : ''}</button><b class="time">${clock()}</b><span class="wx">${wxIcon(null, 'wx-big')}<span>${esc(g('time.weather', ''))}${g('time.slot') ? ' · ' + esc(g('time.slot')) : ''}</span></span><span class="place">${esc(g('scene.place', ''))}</span></div>
+        <div class="lk-top"><button type="button" class="date" data-act="cal">${esc(dateCN())} ${esc(weekCN())}${tag ? `<em>${esc(tag)}</em>` : ''}</button><b class="time">${clock()}</b><span class="wx">${wxIcon(null, 'wx-big')}<span>${esc(wxText())}${g('time.slot') ? ' · ' + esc(g('time.slot')) : ''}</span></span><span class="place">${esc(g('scene.place', ''))}</span></div>
         <div class="notif">${notes.slice(0, 4).map((n, i) => `<button type="button" class="n" data-note="${i}"><span class="ic ${n.ic}">${n.ic === 'qq' ? ICON.qq : ICON.album}</span><div><b>${esc(n.t)}<small>${esc(n.at)}</small></b><p>${esc(n.p)}</p></div></button>`).join('')}</div>
         <button type="button" class="unlock" data-act="unlock">${ICON.lock}<span>点这里解锁</span></button>
         ${cal ? `<div class="cal" role="dialog" aria-label="日历"><div class="cal-in">${calendar(cal.y, cal.m)}<button type="button" class="cal-x" data-act="calx">关闭</button></div></div>` : ''}`;
@@ -482,53 +500,112 @@
   /* ---------- 地图 ---------- */
   function whereIs(id) {
     const gi = girl(id); if (!gi.in) return null;
+    if (present().includes(id)) { const here = MAP && MAP.points.find(p => (g('scene.place', '') || '').includes(p.name.slice(0, 2))); if (here) return here.id; }
     const slot = g('time.slot', '白天');
     if (slot === '白天' && CAST[id].school) return CAST[id].school;
     return 'home';
   }
+  /* 地图：按经纬度投影到 SVG 坐标；可拖动、缩放 */
+  const proj = (lon, lat) => { const b = MAP.bbox, [W, Hh] = MAP.size; return [(lon - b.lon0) / (b.lon1 - b.lon0) * W, (b.lat1 - lat) / (b.lat1 - b.lat0) * Hh]; };
+  const path = pts => pts.map((p, i) => { const [x, y] = proj(p[0], p[1]); return (i ? 'L' : 'M') + x.toFixed(1) + ' ' + y.toFixed(1); }).join(' ');
+  const smooth = pts => { const P = pts.map(p => proj(p[0], p[1])); let d = `M${P[0][0].toFixed(1)} ${P[0][1].toFixed(1)}`; for (let i = 1; i < P.length - 1; i++) { const mx = (P[i][0] + P[i + 1][0]) / 2, my = (P[i][1] + P[i + 1][1]) / 2; d += ` Q${P[i][0].toFixed(1)} ${P[i][1].toFixed(1)} ${mx.toFixed(1)} ${my.toFixed(1)}`; } const L = P[P.length - 1]; return d + ` L${L[0].toFixed(1)} ${L[1].toFixed(1)}`; };
+  /* 分类图标（16×16，白色线条，画在彩色圆点里） */
+  const CAT_ICON = {
+    home: '<path d="M3 8l5-4 5 4M4.5 7v5h7V7"/>',
+    uni: '<path d="M2 6.5L8 4l6 2.5L8 9z"/><path d="M4.5 8v2.5c2 1.3 5 1.3 7 0V8"/>',
+    shop: '<path d="M4 6h8l-.7 7H4.7z"/><path d="M6 6V5a2 2 0 0 1 4 0v1"/>',
+    food: '<path d="M3 8h10a5 4 0 0 1-10 0z"/><path d="M6 3.5v2M8 3v2.5M10 3.5v2"/>',
+    sight: '<path d="M8 2.5v11M5.5 13.5h5"/><circle cx="8" cy="6" r="1.6"/><circle cx="8" cy="10" r="1.1"/>',
+    park: '<path d="M8 13.5V9"/><path d="M8 2.8l3.6 4.4H9.8l2 2.6H4.2l2-2.6H4.4z"/>',
+    fun: '<path d="M8 2.8l1.5 3.2 3.4.4-2.5 2.3.7 3.4L8 10.4l-3.1 1.7.7-3.4L3.1 6.4l3.4-.4z"/>',
+    bar: '<path d="M4 3.5h8L8 8.5zM8 8.5v4M5.5 12.5h5"/>',
+    store: '<rect x="3.5" y="5.5" width="9" height="7.5" rx="1"/><path d="M3 5.5l1.2-2.5h7.6L13 5.5M7 13v-3h2v3"/>',
+    train: '<rect x="4.5" y="2.8" width="7" height="8.4" rx="2"/><path d="M4.5 7.5h7M6 13.5l1-2.3M10 13.5l-1-2.3"/>',
+    hosp: '<path d="M8 4v8M4 8h8"/>'
+  };
   function svgMap() {
     if (!MAP) return '';
-    const pts = MAP.points.map(p => { const done = p.event && events().includes(p.event); const here = (g('scene.place', '') || '').includes(p.name.slice(0, 2)); return `<g class="pt ${done ? 'done' : ''} ${here ? 'here' : ''}" data-pt="${p.id}" style="--c:${p.c}"><circle cx="${p.x}" cy="${p.y}" r="6"/><text x="${p.x + 9}" y="${p.y + 4}">${esc(p.name)}</text>${done ? `<text class="stamp" x="${p.x - 14}" y="${p.y - 10}">已去过</text>` : ''}</g>`; }).join('');
-    return `<svg class="mp-svg" viewBox="${MAP.view}" preserveAspectRatio="xMidYMid meet" aria-label="上海地图">
-      <rect class="land" x="0" y="0" width="400" height="520"/>
-      <path class="water" d="M285 0 C300 60 250 120 262 190 C270 240 300 270 300 330 C300 400 340 450 360 520 L400 520 L400 0 Z" opacity=".9"/>
-      <path class="water" d="M300 330 C300 400 340 450 360 520 L330 520 C320 450 280 400 285 330 Z"/>
-      <path class="water" d="M0 500 Q120 470 260 505 L260 520 L0 520 Z" opacity=".7"/>
-      <path class="dist" d="M110 230 L200 150 M200 150 L260 120 M110 230 L120 330 M120 330 L200 300 M200 300 L250 320 M200 150 L230 230 L250 320 M60 400 L200 380"/>
-      <path class="road" d="M40 300 C120 290 180 330 250 300 C300 280 330 230 300 150 M150 520 C160 440 140 380 170 300 C190 240 180 180 230 120"/>
-      <path class="metro" stroke="#e0397a" d="M118 440 C130 400 180 360 220 330 C250 300 262 260 268 232 C275 200 300 160 318 150"/>
-      <path class="metro" stroke="#8fc31f" d="M62 290 C120 280 180 300 230 260 C250 240 270 240 292 110"/>
-      ${MAP.districts.map(d => `<text class="dname" x="${d.x}" y="${d.y}">${esc(d.name)}</text>`).join('')}
-      ${pts}</svg>`;
+    const [W, Hh] = MAP.size; const ev = events(); const place = g('scene.place', '') || '';
+    const river = (pts, w) => `<path class="riv" d="${smooth(pts)}" stroke-width="${w}"/>`;
+    const yz = MAP.water.yangtze.map(p => proj(p[0], p[1]).map(v => v.toFixed(1)).join(' ')).join(' L');
+    const rings = MAP.rings.map(r => { const [cx, cy] = proj(r.cx, r.cy); const rx = r.rx / (MAP.bbox.lon1 - MAP.bbox.lon0) * W, ry = r.ry / (MAP.bbox.lat1 - MAP.bbox.lat0) * Hh; return `<ellipse class="ring" cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" rx="${rx.toFixed(1)}" ry="${ry.toFixed(1)}"/>`; }).join('');
+    const parks = MAP.parks.map(p => { const [x, y] = proj(p.lon, p.lat); return `<circle class="park" cx="${x}" cy="${y}" r="${(p.r / (MAP.bbox.lon1 - MAP.bbox.lon0) * W).toFixed(1)}"/>`; }).join('');
+    const metro = MAP.metro.map(m => `<path class="metro" d="${path(m.pts)}" stroke="${m.c}"/>`).join('');
+    const dn = MAP.districts.map(d => { const [x, y] = proj(d.lon, d.lat); return `<text class="dname" x="${x.toFixed(1)}" y="${y.toFixed(1)}">${esc(d.name)}</text>`; }).join('');
+    const pts = MAP.points.map(p => {
+      const [x, y] = proj(p.lon, p.lat); const c = (MAP.cats[p.cat] || {}).c || '#888';
+      const done = p.event && ev.includes(p.event); const here = place.includes(p.name.slice(0, 2));
+      return `<g class="pt ${p.major ? 'major' : ''} ${done ? 'done' : ''} ${here ? 'here' : ''}" data-pt="${p.id}" transform="translate(${x.toFixed(1)} ${y.toFixed(1)})">
+        ${here ? '<circle class="ping" r="9"/>' : ''}<path class="pin" d="M0 0 C-3.5 -5 -7 -7.5 -7 -11.5 A7 7 0 1 1 7 -11.5 C7 -7.5 3.5 -5 0 0z" fill="${c}"/>
+        <g class="ic" transform="translate(-5 -16.5) scale(.625)">${CAT_ICON[p.cat] || ''}</g>
+        <text class="lab" x="8.5" y="-8">${esc(p.name)}</text>${done ? '<text class="stamp" x="-6" y="-22">已去过</text>' : ''}</g>`;
+    }).join('');
+    /* 人物头像：圆形裁切的立绘头像，钉在她现在所在的地点上方 */
+    const at = {}; SLOTS.forEach(id => { const w = whereIs(id); if (w) (at[w] = at[w] || []).push(id); });
+    let defs = ''; let ppl = '';
+    Object.entries(at).forEach(([pid, ids]) => {
+      const p = MAP.points.find(x => x.id === pid); if (!p) return; const [x, y] = proj(p.lon, p.lat);
+      ids.forEach((id, k) => {
+        const c = CAST[id]; const ox = (k - (ids.length - 1) / 2) * 13; const cy = y - 30;
+        const H2 = 18 * (c.face[2] || 7); /* 头像框直径 18，立绘高 = 框 × fz，与 QQ 头像同一套裁切 */
+        defs += `<clipPath id="lbp-cp-${id}"><circle cx="${(x + ox).toFixed(1)}" cy="${cy.toFixed(1)}" r="9"/></clipPath>`;
+        ppl += `<g class="who" data-card="${id}"><circle cx="${(x + ox).toFixed(1)}" cy="${cy.toFixed(1)}" r="10.5" fill="${c.c}"/><circle cx="${(x + ox).toFixed(1)}" cy="${cy.toFixed(1)}" r="9" fill="#fff"/><image href="${c.sprite}" clip-path="url(#lbp-cp-${id})" x="${(x + ox - c.face[0] * H2 * (c.ar || .45)).toFixed(1)}" y="${(cy - c.face[1] * H2).toFixed(1)}" height="${H2}" width="${(H2 * (c.ar || .45)).toFixed(1)}" preserveAspectRatio="none"/></g>`;
+      });
+    });
+    return `<svg class="mp-svg" id="lbp-map" viewBox="0 0 ${W} ${Hh}" aria-label="上海地图">
+      <defs>${defs}<pattern id="lbp-grid" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M20 0H0V20" fill="none" stroke="#e3e9df" stroke-width=".6"/></pattern></defs>
+      <rect class="land" x="-200" y="-200" width="${W + 400}" height="${Hh + 400}"/><rect x="-200" y="-200" width="${W + 400}" height="${Hh + 400}" fill="url(#lbp-grid)"/>
+      <path class="sea" d="M${yz} Z"/>${parks}
+      ${rings}${metro}${river(MAP.water.suzhou, 2.4)}${river(MAP.water.huangpu, 5)}
+      <text class="wname" x="${proj(121.60, 31.40)[0]}" y="${proj(121.60, 31.40)[1]}">长江口</text>
+      <text class="wname sm" transform="translate(${proj(121.488, 31.10)[0]} ${proj(121.488, 31.10)[1]}) rotate(-70)">黄浦江</text>
+      ${dn}<g class="pts">${pts}</g><g class="ppl">${ppl}</g></svg>`;
   }
+  let mapVB = null;
   VIEWS.map = {
     cls: 'mp', bar: '#3f3328',
     html() {
-      return `${topbar('上海 · 她们在哪', '', '', true)}<div class="mp-wrap">${svgMap()}<div class="mp-ppl" id="lbp-ppl"></div><div class="mp-legend"><i style="background:#fff;box-shadow:0 0 0 2px #6f9fdc"></i>地点　<i style="background:#e8a33a"></i>去过　<i style="background:#fff;box-shadow:0 0 0 2px #2db3a0;animation:mp-ping 1.6s infinite"></i>现在</div><div class="mp-card" id="lbp-card" hidden></div></div>`;
+      const cats = MAP ? Object.entries(MAP.cats).map(([k, v]) => `<span><i style="background:${v.c}"><svg viewBox="0 0 16 16">${CAT_ICON[k]}</svg></i>${esc(v.name)}</span>`).join('') : '';
+      return `${topbar('上海 · 她们在哪', '', '', true)}<div class="mp-wrap">${svgMap()}
+        <div class="mp-zoom"><button type="button" data-z="1.5" aria-label="放大">＋</button><button type="button" data-z="0.667" aria-label="缩小">－</button><button type="button" data-z="home" aria-label="回到公寓">⌂</button><button type="button" data-z="all" aria-label="全图">⤢</button></div>
+        <details class="mp-legend"><summary>图例</summary><div>${cats}</div></details>
+        <div class="mp-card" id="lbp-card" hidden></div></div>`;
     },
     after() {
-      const svg = view.querySelector('.mp-svg'); const card = view.querySelector('#lbp-card'); const ppl = view.querySelector('#lbp-ppl');
-      if (!svg) return;
-      const place = () => {
-        const wrap = view.querySelector('.mp-wrap'); if (!svg.isConnected || !wrap) { ro && ro.disconnect(); return; }
-        const vb = MAP.view.split(' ').map(Number); const r = svg.getBoundingClientRect(); const wr = wrap.getBoundingClientRect();
-        const sc = Math.min(r.width / vb[2], r.height / vb[3]); const ox = r.left - wr.left + (r.width - vb[2] * sc) / 2, oy = r.top - wr.top + (r.height - vb[3] * sc) / 2;
-        const at = {}; SLOTS.forEach(id => { const w = whereIs(id); if (w) (at[w] = at[w] || []).push(id); });
-        ppl.innerHTML = Object.entries(at).map(([pid, ids]) => { const p = MAP.points.find(x => x.id === pid); if (!p) return ''; return ids.map((id, k) => `<span class="p" data-card="${id}" style="--c:${CAST[id].c};left:${ox + (p.x + (k - (ids.length - 1) / 2) * 24) * sc}px;top:${oy + (p.y - 8 - (k % 2 ? 0 : 22)) * sc}px">${av(id, 'round')}</span>`).join(''); }).join('');
-        ppl.querySelectorAll('[data-card]').forEach(b => b.onclick = () => go('card', { id: b.dataset.card }));
-      };
-      let ro = null; place(); ro = new ResizeObserver(place); ro.observe(svg);
+      const svg = view.querySelector('#lbp-map'); const card = view.querySelector('#lbp-card'); if (!svg || !MAP) return;
+      const [W, Hh] = MAP.size;
+      const homeP = proj(121.43, 31.10);
+      if (!mapVB) mapVB = [homeP[0] - 120, homeP[1] - 150, 240, 280];
+      const setVB = () => { svg.setAttribute('viewBox', mapVB.map(v => v.toFixed(1)).join(' ')); svg.dataset.z = W / mapVB[2] >= 2.2 ? 'hi' : 'lo'; };
+      const clampVB = () => { const w = Math.max(60, Math.min(W * 1.1, mapVB[2])), h = w * (mapVB[3] / mapVB[2]); const cx = mapVB[0] + mapVB[2] / 2, cy = mapVB[1] + mapVB[3] / 2; mapVB = [Math.max(-40, Math.min(W + 40 - w, cx - w / 2)), Math.max(-40, Math.min(Hh + 40 - h, cy - h / 2)), w, h]; };
+      const fit = () => { const r = svg.getBoundingClientRect(); if (!r.width) return; const ar = r.height / r.width; mapVB[3] = mapVB[2] * ar; clampVB(); setVB(); };
+      fit();
+      const zoom = (f, cx, cy) => { cx = cx ?? mapVB[0] + mapVB[2] / 2; cy = cy ?? mapVB[1] + mapVB[3] / 2; const w = mapVB[2] / f, h = mapVB[3] / f; mapVB = [cx - (cx - mapVB[0]) / f, cy - (cy - mapVB[1]) / f, w, h]; clampVB(); setVB(); };
+      view.querySelectorAll('[data-z]').forEach(b => b.onclick = () => { const z = b.dataset.z; if (z === 'home') { mapVB = [homeP[0] - 120, homeP[1] - 150, 240, 280]; fit(); } else if (z === 'all') { mapVB = [-10, -10, W + 20, Hh + 20]; fit(); } else zoom(+z); });
+      const toSvg = (e) => { const r = svg.getBoundingClientRect(); return [mapVB[0] + (e.clientX - r.left) / r.width * mapVB[2], mapVB[1] + (e.clientY - r.top) / r.height * mapVB[3]]; };
+      svg.addEventListener('wheel', e => { e.preventDefault(); const [x, y] = toSvg(e); zoom(e.deltaY < 0 ? 1.2 : 1 / 1.2, x, y); }, { passive: false });
+      let drag = null, moved = false; const ptrs = new Map();
+      svg.addEventListener('pointerdown', e => { ptrs.set(e.pointerId, e); if (ptrs.size === 1) { drag = { x: e.clientX, y: e.clientY, vb: mapVB.slice() }; moved = false; } else drag = null; });
+      svg.addEventListener('pointermove', e => {
+        if (!ptrs.has(e.pointerId)) return; const prev = ptrs.get(e.pointerId); ptrs.set(e.pointerId, e);
+        if (ptrs.size === 2) { const [a, b] = [...ptrs.values()]; const d1 = Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY); const pa = prev, other = [...ptrs.values()].find(p => p.pointerId !== e.pointerId); const d0 = Math.hypot(pa.clientX - other.clientX, pa.clientY - other.clientY); if (d0 > 0) { const [mx, my] = toSvg({ clientX: (a.clientX + b.clientX) / 2, clientY: (a.clientY + b.clientY) / 2 }); zoom(d1 / d0, mx, my); } moved = true; return; }
+        if (!drag) return; const r = svg.getBoundingClientRect(); const dx = (e.clientX - drag.x) / r.width * drag.vb[2], dy = (e.clientY - drag.y) / r.height * drag.vb[3];
+        if (Math.abs(e.clientX - drag.x) + Math.abs(e.clientY - drag.y) > 4) { moved = true; svg.setPointerCapture && svg.setPointerCapture(e.pointerId); }
+        if (moved) { mapVB = [drag.vb[0] - dx, drag.vb[1] - dy, drag.vb[2], drag.vb[3]]; clampVB(); setVB(); }
+      });
+      const up = e => { ptrs.delete(e.pointerId); if (!ptrs.size) drag = null; };
+      svg.addEventListener('pointerup', up); svg.addEventListener('pointercancel', up);
       const showCard = id => {
-        const p = MAP.points.find(x => x.id === id); if (!p) return;
+        const p = MAP.points.find(x => x.id === id); if (!p) return; const cat = MAP.cats[p.cat] || {};
         svg.querySelectorAll('.pt').forEach(x => x.classList.toggle('sel', x.dataset.pt === id));
-        const who = p.who === 'home' ? SLOTS.filter(x => whereIs(x) === 'home') : (Array.isArray(p.who) ? p.who.filter(x => x !== 'me' && girl(x).in) : []);
-        card.innerHTML = `<button type="button" class="x" data-act="x" aria-label="关闭">×</button><b>${esc(p.name)}<em>${esc(p.area)}</em></b><p>${esc(p.desc)}</p>${who.length ? `<div class="who">现在在这：${who.map(x => av(x)).join('')}</div>` : ''}<div class="row">${p.floor ? `<button type="button" class="sec" data-act="floor">看平面图</button>` : ''}<button type="button" data-act="go">${esc(p.go)}</button></div>`;
+        const who = SLOTS.filter(x => whereIs(x) === id);
+        card.innerHTML = `<button type="button" class="x" data-act="x" aria-label="关闭">×</button><b>${esc(p.name)}<em style="background:${cat.c}">${esc(cat.name || '')}</em></b><p>${esc(p.desc)}</p>${who.length ? `<div class="who">现在在这：${who.map(x => av(x)).join('')}</div>` : ''}<div class="row">${p.floor ? `<button type="button" class="sec" data-act="floor">看平面图</button>` : ''}<button type="button" data-act="go">${esc(p.go)}</button></div>`;
         card.hidden = false;
         card.querySelector('[data-act="x"]').onclick = () => { card.hidden = true; svg.querySelectorAll('.pt').forEach(x => x.classList.remove('sel')); };
         card.querySelector('[data-act="go"]').onclick = () => insert(p.go);
         const f = card.querySelector('[data-act="floor"]'); if (f) f.onclick = () => go('floor');
       };
-      svg.querySelectorAll('.pt').forEach(p => p.addEventListener('click', () => showCard(p.dataset.pt)));
+      svg.addEventListener('click', e => { if (moved) { moved = false; return; } const w = e.target.closest('.who'); if (w) { go('card', { id: w.dataset.card }); return; } const p = e.target.closest('.pt'); if (p) showCard(p.dataset.pt); });
     }
   };
   VIEWS.floor = {
