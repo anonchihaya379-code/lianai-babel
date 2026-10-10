@@ -10,7 +10,6 @@
   --qq:#12b7f5;--qq-dark:#0f9ad8;--qq-bg:#f2f3f5;--qq-line:#e6e8eb;--qq-text:#1a1a1a;--qq-sub:#8a8f99;--qq-me:#1b8cff;
   --hand:"Yozai","Kaiti SC","KaiTi",cursive;--pop:"KeinannMaruPOP","PingFang SC","Microsoft YaHei",sans-serif;
   --sys:-apple-system,"PingFang SC","Microsoft YaHei","Noto Sans SC",sans-serif;
-  --W:340px;--H:690px;
   position:absolute;right:16px;bottom:16px;z-index:50;font-family:var(--sys);color:var(--qq-text);font-size:14px;line-height:1.45;
   -webkit-font-smoothing:antialiased;
 }
@@ -21,44 +20,42 @@
 .ph-root [hidden]{display:none!important}
 .ph-root ul{list-style:none}
 
-/* ---------- 收起：桌角的小手机 ---------- */
-.ph-mini{position:relative;width:64px;height:124px;border-radius:14px;background:#1c1d22;box-shadow:0 0 0 2px #3a3b42,0 8px 20px rgba(0,0,0,.35);padding:7px 5px;cursor:pointer;transition:transform .2s}
-.ph-mini:hover{transform:translateY(-3px)}
-.ph-mini .scr{position:relative;width:100%;height:100%;border-radius:9px;overflow:hidden;background:linear-gradient(160deg,#fde4ec,#cfe3fb);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;color:#2b2b33}
-.ph-mini .scr b{font:400 16px/1 var(--pop);white-space:nowrap}
-.ph-mini .scr small{font-size:9px;letter-spacing:.04em;opacity:.8;max-width:100%;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;padding:0 4px}
-.ph-mini .dot{position:absolute;right:-4px;top:-4px;min-width:16px;height:16px;padding:0 4px;border-radius:8px;background:#f5222d;color:#fff;font:700 10px/16px var(--sys);text-align:center;box-shadow:0 0 0 2px #1c1d22}
-.ph-mini .notch{position:absolute;left:50%;top:9px;width:18px;height:4px;border-radius:2px;background:#000;translate:-50% 0}
+/* ---------- 收起：只显示时间的小胶囊（整个可拖动，点一下打开） ---------- */
+.ph-root .ph-mini{position:relative;display:flex;align-items:center;justify-content:center;gap:7px;height:34px;padding:0 14px 0 12px;border-radius:17px;background:#1c1d22;color:#fff;box-shadow:0 0 0 1.5px #3a3b42,0 6px 16px rgba(0,0,0,.3);cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none}
+.ph-mini:active{cursor:grabbing}
+.ph-mini::before{content:"";width:8px;height:8px;border-radius:50%;background:linear-gradient(135deg,var(--w1),var(--w2));box-shadow:0 0 6px var(--w1)}
+.ph-mini b{font:400 15px/1 var(--pop);letter-spacing:.02em;white-space:nowrap;font-variant-numeric:tabular-nums}
+.ph-mini .dot{position:absolute;right:-5px;top:-6px;min-width:16px;height:16px;padding:0 4px;border-radius:8px;background:#f5222d;color:#fff;font:700 10px/16px var(--sys);text-align:center;box-shadow:0 0 0 2px #1c1d22}
 
-/* ---------- 展开：整部手机 ---------- */
-.ph-phone{position:relative;--h:min(690px,calc(100dvh - 28px));height:var(--h);width:min(340px,calc(var(--h) * .493),calc(100vw - 24px));border-radius:34px;background:#15161a;padding:10px;box-shadow:0 0 0 2px #35363d,0 24px 48px rgba(0,0,0,.45)}
-.ph-screen{position:relative;width:100%;height:100%;border-radius:26px;overflow:hidden;background:#000;display:flex;flex-direction:column}
+/* ---------- 展开：整部手机（固定设计尺寸 360×724，由脚本用 zoom 整体等比缩放） ---------- */
+.ph-phone{position:relative;display:flex;flex-direction:column;width:360px;height:724px;border-radius:38px;background:#15161a;padding:10px 10px 0;box-shadow:0 0 0 2px #35363d,0 24px 48px rgba(0,0,0,.45)}
+.ph-screen{position:relative;flex:1;min-height:0;width:100%;border-radius:28px;overflow:hidden;background:#000;display:flex;flex-direction:column;isolation:isolate}
 .ph-island{position:absolute;left:50%;top:9px;z-index:40;width:92px;height:22px;border-radius:11px;background:#000;translate:-50% 0;cursor:grab}
 .ph-island:active{cursor:grabbing}
 .ph-bar{position:absolute;left:0;right:0;top:0;z-index:30;height:40px;padding:10px 22px 0;display:flex;justify-content:space-between;align-items:center;font:600 13px/1 var(--sys);color:var(--bar,#111);pointer-events:none}
-.ph-view{position:absolute;inset:0;display:flex;flex-direction:column;background:var(--qq-bg)}
+.ph-view{position:absolute;inset:0;display:flex;flex-direction:column;background:var(--qq-bg);overflow:hidden}
 .ph-view[hidden]{display:none}
-.ph-view.dark .ph-close{position:absolute;right:-8px;top:-8px;z-index:60;width:30px;height:30px;border-radius:50%;background:#fff;color:#222;font-size:18px;line-height:30px;text-align:center;box-shadow:0 0 0 2px #35363d,0 2px 8px rgba(0,0,0,.4)}
-.ph-toast{position:absolute;left:50%;bottom:128px;z-index:50;max-width:84%;padding:8px 14px;border-radius:18px;background:rgba(20,20,24,.86);color:#fff;font-size:12.5px;text-align:center;translate:-50% 8px;opacity:0;transition:opacity .25s,translate .25s;pointer-events:none}
+.ph-toast{position:absolute;left:50%;bottom:110px;z-index:50;max-width:84%;padding:8px 14px;border-radius:18px;background:rgba(20,20,24,.86);color:#fff;font-size:12.5px;text-align:center;translate:-50% 8px;opacity:0;transition:opacity .25s,translate .25s;pointer-events:none}
 .ph-toast.on{opacity:1;translate:-50% 0}
 
-.ph-at{position:absolute;right:10px;bottom:110px;z-index:45;display:flex;flex-direction:column;align-items:flex-end;gap:8px}
-.ph-at-ball{width:42px;height:42px;border-radius:13px;background:rgba(30,30,36,.42);backdrop-filter:blur(8px);display:grid;place-items:center;box-shadow:0 3px 10px rgba(0,0,0,.25);opacity:.75;transition:opacity .2s,transform .2s}
-.ph-at-ball:hover,.ph-at.on .ph-at-ball{opacity:1}
-.ph-at-ball i{width:22px;height:22px;border-radius:50%;background:rgba(255,255,255,.85);box-shadow:0 0 0 4px rgba(255,255,255,.28),0 0 0 8px rgba(255,255,255,.12)}
-.ph-at.on .ph-at-ball{transform:rotate(45deg)}
-.ph-at-menu{display:flex;flex-direction:column;gap:6px;padding:8px;border-radius:16px;background:rgba(30,30,36,.78);backdrop-filter:blur(10px);box-shadow:0 6px 18px rgba(0,0,0,.35);animation:at-in .18s ease-out}
-@keyframes at-in{from{opacity:0;translate:0 8px;scale:.9}}
-.ph-at-menu button{display:flex;align-items:center;gap:8px;padding:7px 12px 7px 8px;border-radius:10px;color:#fff;font-size:13px;white-space:nowrap}
-.ph-at-menu button:hover{background:rgba(255,255,255,.14)}
-.ph-at-menu svg{width:20px;height:20px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+/* ---------- 下巴：横条，点一下呼出/收起快捷面板 ---------- */
+.ph-chin{position:relative;flex:none;height:30px;display:flex;align-items:center;justify-content:center}
+.ph-handle{width:120px;height:22px;display:grid;place-items:center;border-radius:11px}
+.ph-handle i{display:block;width:96px;height:5px;border-radius:3px;background:#5a5b63;transition:background .2s,width .2s}
+.ph-handle:hover i,.ph-handle[aria-expanded="true"] i{background:#c9cad1;width:110px}
+.ph-nav{position:absolute;left:50%;bottom:32px;z-index:60;translate:-50% 0;display:flex;gap:6px;padding:7px;border-radius:20px;background:rgba(28,29,34,.86);backdrop-filter:blur(12px);box-shadow:0 8px 22px rgba(0,0,0,.4);animation:nav-in .18s ease-out}
+@keyframes nav-in{from{opacity:0;translate:-50% 8px}}
+.ph-nav button{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:66px;padding:8px 6px 7px;border-radius:14px;color:#fff;font-size:11.5px;white-space:nowrap}
+.ph-nav button:hover{background:rgba(255,255,255,.12)}
+.ph-nav svg{width:22px;height:22px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.ph-nav button[data-nav="close"]{color:#ffb3b3}
+.ph-nav button[data-nav="close"] svg{stroke:#ffb3b3}
 
 /* ---------- 天气主题：--w1/--w2 由天气决定，--wink 是对应深色 ---------- */
 .ph-root{--w1:#ffb547;--w2:#ff7a45;--wink:#7a3d12}
 .wxs{display:flex;align-items:center;gap:4px}
 .wx-ic{width:18px;height:18px}
 .wx-big{width:30px;height:30px}
-.ph-mini .scr{background:linear-gradient(160deg,color-mix(in srgb,var(--w1) 35%,#fff),color-mix(in srgb,var(--w2) 30%,#fff))}
 
 
 /* ---------- 壁纸（锁屏与主屏共用） ---------- */
@@ -411,11 +408,6 @@
 /* ---------- 动效减弱 / 窄屏 ---------- */
 @media (prefers-reduced-motion:reduce){.ph-root *,.ph-root *::before,.ph-root *::after{animation:none!important;transition:none!important}}
 @media (max-width:700px){
-  /* 外层不能被撑成 0 高：平台按悬浮容器一级子元素的尺寸决定显示区域 */
-  .ph-root{right:10px;bottom:10px}
-  .ph-mini{width:56px;height:108px}
-  .ph-mini .scr b{font-size:13px;letter-spacing:-.02em}
-  .ph-phone{--h:min(640px,calc(100dvh - 24px));border-radius:30px;padding:8px}
-  .ph-screen{border-radius:23px}
-  .ph-close{right:-6px;top:-6px}
+  .ph-root{right:8px;bottom:8px}
+}
 }

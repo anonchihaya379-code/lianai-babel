@@ -176,22 +176,21 @@
 
   /* ---------- DOM 骨架 ---------- */
   mount.innerHTML = `<div class="ph-root" id="lbp">
-    <button type="button" class="ph-mini" id="lbp-mini" aria-label="打开手机"><span class="notch" data-huohu-draggable></span><span class="scr"><b id="lbp-mini-t"></b><small id="lbp-mini-s"></small></span><span class="dot" id="lbp-mini-dot" hidden></span></button>
+    <button type="button" class="ph-mini" id="lbp-mini" data-huohu-draggable aria-label="打开手机（可拖动）"><b id="lbp-mini-t"></b><span class="dot" id="lbp-mini-dot" hidden></span></button>
     <div class="ph-phone" id="lbp-phone" hidden>
-      <button type="button" class="ph-close" id="lbp-close" aria-label="收起手机">×</button>
       <div class="ph-screen" id="lbp-screen">
         <div class="ph-island" data-huohu-draggable title="按住拖动"></div>
         <div class="ph-bar" id="lbp-bar"></div>
         <div class="ph-view" id="lbp-view"></div>
-        <div class="ph-at" id="lbp-at">
-          <div class="ph-at-menu" id="lbp-at-menu" hidden>
-            <button type="button" data-nav="back" aria-label="返回"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg><span>返回</span></button>
-            <button type="button" data-nav="home" aria-label="主屏"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="7"/></svg><span>主屏</span></button>
-            <button type="button" data-nav="lock" aria-label="锁屏"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><span>锁屏</span></button>
-          </div>
-          <button type="button" class="ph-at-ball" id="lbp-at-ball" aria-label="快捷按键" aria-expanded="false"><i></i></button>
-        </div>
         <div class="ph-toast" id="lbp-toast" role="status" aria-live="polite"></div>
+      </div>
+      <div class="ph-chin">
+        <div class="ph-nav" id="lbp-nav" hidden>
+          <button type="button" data-nav="home"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="7"/></svg><span>主屏</span></button>
+          <button type="button" data-nav="lock"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg><span>锁屏</span></button>
+          <button type="button" data-nav="close"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg><span>关闭手机</span></button>
+        </div>
+        <button type="button" class="ph-handle" id="lbp-handle" aria-label="快捷键" aria-expanded="false"><i></i></button>
       </div>
     </div>
   </div>`;
@@ -207,19 +206,20 @@
   function back() { if (stack.length > 1) stack.pop(); render(); }
   function home() { stack = [{ v: 'home' }]; render(); }
   let open = false;
-  function setOpen(o) { open = o; phone.hidden = !o; mini.hidden = o; $('#lbp').classList.toggle('open', o); if (o && cur().v === 'lock') { /* 保持锁屏 */ } render(); }
-  mini.addEventListener('click', e => { if (e.target.closest('[data-huohu-draggable]')) return; setOpen(true); });
-  $('#lbp-close').addEventListener('click', () => setOpen(false));
-  /* 悬浮快捷球：点一下展开 返回 / 主屏 / 锁屏，再点收起 */
-  const atBall = $('#lbp-at-ball'), atMenu = $('#lbp-at-menu');
-  function atToggle(o) { o = o ?? atMenu.hidden; atMenu.hidden = !o; atBall.setAttribute('aria-expanded', o); $('#lbp-at').classList.toggle('on', o); }
-  atBall.addEventListener('click', () => atToggle());
-  atMenu.addEventListener('click', e => {
-    const b = e.target.closest('[data-nav]'); if (!b) return;
-    const n = b.dataset.nav; atToggle(false);
-    if (n === 'back') { if (stack.length > 1) back(); else if (cur().v !== 'home' && cur().v !== 'lock') home(); }
-    else if (n === 'home') home();
-    else { stack = [{ v: 'lock' }]; render(); }
+  /* 手机按固定设计尺寸排版，再整体缩放到可用空间：外壳、屏幕、所有组件同比例变化 */
+  const DESIGN = [360, 724];
+  function fitPhone() { const z = Math.min(1, (innerHeight - 20) / DESIGN[1], (innerWidth - 16) / DESIGN[0]); phone.style.zoom = Math.max(.5, z).toFixed(3); }
+  addEventListener('resize', () => { if (open) fitPhone(); });
+  function setOpen(o) { open = o; phone.hidden = !o; mini.hidden = o; $('#lbp').classList.toggle('open', o); if (o) fitPhone(); else navToggle(false); if (o && cur().v === 'lock') { /* 保持锁屏 */ } render(); }
+  mini.addEventListener('click', () => setOpen(true));
+
+  /* 底部快捷键：点手机下巴上的横条，弹出 主屏 / 锁屏 / 关闭手机，再点收起 */
+  const navP = $('#lbp-nav'), handle = $('#lbp-handle');
+  function navToggle(o) { o = o ?? navP.hidden; navP.hidden = !o; handle.setAttribute('aria-expanded', o); handle.classList.toggle('on', o); }
+  handle.addEventListener('click', () => navToggle());
+  navP.addEventListener('click', e => {
+    const b = e.target.closest('[data-nav]'); if (!b) return; const n = b.dataset.nav; navToggle(false);
+    if (n === 'home') home(); else if (n === 'lock') { stack = [{ v: 'lock' }]; render(); } else setOpen(false);
   });
   const drafts = {};
 
@@ -227,7 +227,6 @@
   function onState() { renderMini(); if (open) render(); }
   function renderMini() {
     $('#lbp-mini-t').textContent = clock();
-    $('#lbp-mini-s').textContent = wxText();
     mini.style.setProperty('--w1', WX[wxKind()].c1); mini.style.setProperty('--w2', WX[wxKind()].c2);
     const n = unreadAll() + newCgs().length;
     const d = $('#lbp-mini-dot'); d.hidden = !n; d.textContent = n > 99 ? '99+' : n;
@@ -251,8 +250,7 @@
     renderBar();
     bar.style.setProperty('--bar', R.bar || '#111');
     bar.classList.toggle('on-photo', ['lock', 'home', 'call', 'viewer', 'card', 'ai'].includes(c.v));
-    $('#lbp-at').hidden = c.v === 'lock';
-    if (c.v === 'lock') atToggle(false);
+    navToggle(false);
     if (R.after) R.after(c);
   }
   const ICON = {
@@ -272,8 +270,8 @@
     bag: '<svg viewBox="0 0 24 24"><path d="M5 8h14l-1 12H6z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>'
   };
   /* 应用根页面左上角是「退出」(回主屏)，子页面是「返回」 */
-  const topbar = (title, right, cls, root) => `<div class="ap-top ${cls || ''}">${root ? `<button type="button" class="bk" data-act="exit" aria-label="退出应用">${ICON.home}</button>` : `<button type="button" class="bk" data-act="back" aria-label="返回">${ICON.back}</button>`}<h2>${esc(title)}</h2>${right || '<span class="ac"></span>'}</div>`;
-  view.addEventListener('click', e => { if (e.target.closest('[data-act="exit"]')) home(); });
+  /* 应用首页左上角不放按钮（回主屏走底部快捷键）；子页面保留「返回」 */
+  const topbar = (title, right, cls, root) => `<div class="ap-top ${cls || ''}">${root ? '<span class="ac"></span>' : `<button type="button" class="bk" data-act="back" aria-label="返回">${ICON.back}</button>`}<h2>${esc(title)}</h2>${right || '<span class="ac"></span>'}</div>`;
 
   const VIEWS = {};
 
