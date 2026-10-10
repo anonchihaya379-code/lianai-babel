@@ -589,16 +589,16 @@
       svg.addEventListener('wheel', e => { e.preventDefault(); const [x, y] = toSvg(e.clientX, e.clientY); zoom(Math.exp(-Math.max(-120, Math.min(120, e.deltaY)) * 0.0022), x, y); }, { passive: false });
       svg.addEventListener('dblclick', e => { e.preventDefault(); const [x, y] = toSvg(e.clientX, e.clientY); const w = Math.max(60, mapVB[2] / 1.8); const ar = mapVB[3] / mapVB[2]; const f = mapVB[2] / w; animTo([x - (x - mapVB[0]) / f, y - (y - mapVB[1]) / f, w, w * ar]); });
       /* 拖动：按下即记录起点；移动超过 5px 才算拖动（之后松手不触发点击）；一指平移、两指捏合，松手带一点惯性 */
-      const ptrs = new Map(); let pan = null, pinch = null, moved = false, downEl = null, vel = [0, 0], lastT = 0, glide = 0;
+      const ptrs = new Map(); let pan = null, pinch = null, moved = false, downEl = null, hist = [], lastT = 0, glide = 0;
       const startPan = () => { const [p] = [...ptrs.values()]; pan = { x: p.x, y: p.y, vb: mapVB.slice() }; pinch = null; };
       const startPinch = () => { const [a, b] = [...ptrs.values()]; pinch = { d: Math.hypot(a.x - b.x, a.y - b.y) || 1, mid: toSvg((a.x + b.x) / 2, (a.y + b.y) / 2), vb: mapVB.slice() }; pan = null; };
       svg.addEventListener('pointerdown', e => {
         if (e.button > 0) return; cancelAnimationFrame(glide); mapBusy = true;
         ptrs.set(e.pointerId, { x: e.clientX, y: e.clientY }); try { svg.setPointerCapture(e.pointerId); } catch (_) { }
-        if (ptrs.size === 1) { moved = false; downEl = e.target; vel = [0, 0]; lastT = performance.now(); startPan(); } else if (ptrs.size === 2) { moved = true; startPinch(); }
+        if (ptrs.size === 1) { moved = false; downEl = e.target; hist = [{ t: performance.now(), x: e.clientX, y: e.clientY }]; lastT = hist[0].t; startPan(); } else if (ptrs.size === 2) { moved = true; startPinch(); }
       });
       svg.addEventListener('pointermove', e => {
-        const p = ptrs.get(e.pointerId); if (!p) return; const px = p.x, py = p.y; p.x = e.clientX; p.y = e.clientY;
+        const p = ptrs.get(e.pointerId); if (!p) return; p.x = e.clientX; p.y = e.clientY;
         const r = svg.getBoundingClientRect(); const sx = mapVB[2] / r.width, sy = mapVB[3] / r.height;
         if (pinch && ptrs.size >= 2) {
           const [a, b] = [...ptrs.values()]; const f = Math.hypot(a.x - b.x, a.y - b.y) / pinch.d; const w = Math.max(60, Math.min(W * 1.3, pinch.vb[2] / f)); const k = pinch.vb[2] / w;
@@ -608,7 +608,7 @@
         if (!pan) return;
         if (!moved && Math.abs(e.clientX - pan.x) + Math.abs(e.clientY - pan.y) < 5) return;
         moved = true; svg.classList.add('dragging');
-        const now = performance.now(), dt = Math.max(1, now - lastT); vel = [(e.clientX - px) / dt, (e.clientY - py) / dt]; lastT = now;
+        const now = performance.now(); lastT = now; hist.push({ t: now, x: e.clientX, y: e.clientY }); while (hist.length > 2 && now - hist[0].t > 100) hist.shift();
         mapVB = [pan.vb[0] - (e.clientX - pan.x) * sx, pan.vb[1] - (e.clientY - pan.y) * sy, pan.vb[2], pan.vb[3]]; clampVB(); paint();
       });
       const up = e => {
@@ -616,9 +616,11 @@
         if (ptrs.size === 1) { startPan(); return; } if (ptrs.size) return;
         svg.classList.remove('dragging'); const wasPinch = !!pinch; pan = pinch = null;
         if (e.type === 'pointerup' && !moved) { tap(downEl); }
-        else if (moved && !wasPinch && performance.now() - lastT < 80 && Math.hypot(vel[0], vel[1]) > .15) {
-          const r = svg.getBoundingClientRect(); let [vx, vy] = [vel[0] * mapVB[2] / r.width, vel[1] * mapVB[3] / r.height]; let t0 = performance.now();
-          const step = t => { const dt = t - t0; t0 = t; mapVB = [mapVB[0] - vx * dt, mapVB[1] - vy * dt, mapVB[2], mapVB[3]]; clampVB(); setVB(); vx *= Math.pow(.92, dt / 16); vy *= Math.pow(.92, dt / 16); if (Math.hypot(vx, vy) * 16 > .05) glide = requestAnimationFrame(step); else mapIdle(); };
+        else if (moved && !wasPinch && performance.now() - lastT < 60 && hist.length >= 3 && hist[hist.length - 1].t - hist[0].t >= 30) {
+          /* 惯性：取最近 100ms 的平均速度，限速 1.2px/ms，避免一下甩出地图 */
+          const a = hist[0], z = hist[hist.length - 1], span = z.t - a.t; let vxp = (z.x - a.x) / span, vyp = (z.y - a.y) / span; const sp = Math.hypot(vxp, vyp); if (sp < .2) { mapIdle(); return; } if (sp > 1.2) { vxp *= 1.2 / sp; vyp *= 1.2 / sp; }
+          const r = svg.getBoundingClientRect(); let [vx, vy] = [vxp * mapVB[2] / r.width, vyp * mapVB[3] / r.height]; let t0 = performance.now();
+          const step = t => { const dt = Math.max(0, Math.min(40, t - t0)); t0 = t; mapVB = [mapVB[0] - vx * dt, mapVB[1] - vy * dt, mapVB[2], mapVB[3]]; clampVB(); setVB(); vx *= Math.pow(.9, Math.max(0, dt) / 16); vy *= Math.pow(.9, Math.max(0, dt) / 16); if (Math.hypot(vx, vy) * 16 > .05) glide = requestAnimationFrame(step); else mapIdle(); };
           glide = requestAnimationFrame(step); return;
         }
         mapIdle();
