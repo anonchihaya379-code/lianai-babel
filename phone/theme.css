@@ -25,7 +25,7 @@
 .ph-mini{position:relative;width:64px;height:124px;border-radius:14px;background:#1c1d22;box-shadow:0 0 0 2px #3a3b42,0 8px 20px rgba(0,0,0,.35);padding:7px 5px;cursor:pointer;transition:transform .2s}
 .ph-mini:hover{transform:translateY(-3px)}
 .ph-mini .scr{position:relative;width:100%;height:100%;border-radius:9px;overflow:hidden;background:linear-gradient(160deg,#fde4ec,#cfe3fb);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;color:#2b2b33}
-.ph-mini .scr b{font:400 20px/1 var(--pop)}
+.ph-mini .scr b{font:400 16px/1 var(--pop);white-space:nowrap}
 .ph-mini .scr small{font-size:9px;letter-spacing:.04em;opacity:.8;max-width:100%;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;padding:0 4px}
 .ph-mini .dot{position:absolute;right:-4px;top:-4px;min-width:16px;height:16px;padding:0 4px;border-radius:8px;background:#f5222d;color:#fff;font:700 10px/16px var(--sys);text-align:center;box-shadow:0 0 0 2px #1c1d22}
 .ph-mini .notch{position:absolute;left:50%;top:9px;width:18px;height:4px;border-radius:2px;background:#000;translate:-50% 0}
@@ -398,7 +398,7 @@
   .ph-root{right:12px;bottom:12px}
   .ph-root.open{left:0;right:0;bottom:0;width:min(100%,430px);margin:0 auto}
   .ph-mini{width:56px;height:108px}
-  .ph-mini .scr b{font-size:16px}
+  .ph-mini .scr b{font-size:13px;letter-spacing:-.02em}
   .ph-phone{width:100%;max-width:430px;height:min(var(--H),calc(100dvh - 10px));max-height:none;margin:0 auto;border-radius:30px 30px 0 0;padding:8px 8px 0;box-shadow:0 -10px 40px rgba(0,0,0,.4)}
   .ph-screen{border-radius:22px 22px 0 0}
   .ph-close{right:8px;top:-14px}
