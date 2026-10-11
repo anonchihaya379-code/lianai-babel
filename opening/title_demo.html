@@ -809,7 +809,7 @@
   };
   const sil=(g,vb)=>{const H=HAIR[g.hair];return `<svg viewBox="${vb||'0 0 120 320'}" aria-hidden="true"><g fill="${g.c}">${H.b}<path d="${BODY}"/><ellipse cx="60" cy="44" rx="20" ry="24"/>${H.f}</g>${H.x||''}</svg>`;};
   const cp=$('#c-page');let cur=0;
-  let eggOpen=false;try{eggOpen=localStorage.getItem('lbt-egg')==='1';}catch(e){}
+  let eggOpen=false;try{localStorage.removeItem('lbt-egg');}catch(e){}
   const shut=g=>g.locked&&!eggOpen;
   const AVK={chen:1,zhou:3};
   const avInner=g=>shut(g)?'<span>？</span>':((g.chibi||[])[AVK[g.k]||0]?`<img class="q" src="${g.chibi[AVK[g.k]||0]}" alt="">`:g.sprite?`<img src="${g.sprite}" alt="" style="--fx:${g.face[0]};--fy:${g.face[1]};--fz:${g.face[2]||7}">`:sil(g,'28 6 64 64'));
@@ -864,7 +864,7 @@
     av.classList.remove('knock');void av.offsetWidth;av.classList.add('knock');
     if(taps===5)av.querySelector('span').textContent='？！';
     if(taps<10)return;
-    taps=0;clearTimeout(tapT);eggOpen=true;try{localStorage.setItem('lbt-egg','1');}catch(e){}
+    taps=0;clearTimeout(tapT);eggOpen=true;
     av.classList.remove('lock','knock');av.setAttribute('aria-label',CAST[i].name);av.innerHTML=avInner(CAST[i]);
     cp.classList.remove('flash');void cp.offsetWidth;cp.classList.add('flash');
     memo('……居然真的点了十次？');
