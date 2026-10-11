@@ -381,6 +381,49 @@
   .s-body{top:64px;left:14px;right:14px;bottom:12px;grid-template-columns:1fr;gap:16px}
 }
 @media (prefers-reduced-motion:reduce){.x-page,.x-page[hidden]{transform:none}}
+
+/* ---------- v2 版式：入场页只留标题 + 三个按钮（居中）；手机端整体降高，各页随之收紧 ---------- */
+#lbt .a-wall,#lbt .a-scrap,#lbt #a-toc-h{display:none}
+#lbt .a-head{left:52.6%;top:16%;width:min(54%,520px);transform:translateX(-50%)}
+#lbt .a-sub{text-align:center;margin:12px 0 0}
+#lbt .a-toc{left:52.6%;right:auto;top:auto;bottom:13%;width:auto;transform:translateX(-50%)}
+#lbt .a-toc ol{align-items:center;gap:clamp(4px,1.4vh,12px)}
+#lbt .a-row{justify-content:center;font-size:clamp(19px,2.3vw,30px)}
+@media (max-width:700px){
+  #lbt .a-stage{aspect-ratio:auto;height:clamp(440px,136vw,540px);min-height:0}
+  #lbt .a-head{left:calc(50% + 13px);top:21%;width:min(80%,320px)}
+  #lbt .a-toc{left:calc(50% + 13px);bottom:17%}
+  #lbt .a-row{font-size:21px}
+  #lbt .a-foot{font-size:11px;bottom:8px}
+  /* 序章 / 系统设定：顶栏收成一行 */
+  #lbt .x-top{flex-wrap:nowrap;top:8px;left:12px;right:12px;gap:8px}
+  #lbt .x-top .c-title{font-size:17px}
+  #lbt .c-back{font-size:14px}
+  #lbt .p-photo{top:44px;bottom:10px;padding:5px}
+  #lbt .p-box{min-height:36%;padding:20px 14px 24px}
+  #lbt .p-text{font-size:14.5px;line-height:1.75}
+  #lbt .p-sheet{padding:16px 14px 12px}
+  #lbt .p-opt{padding:8px 10px;font-size:13.5px}
+  #lbt .s-body{top:44px;bottom:10px;left:12px;right:12px;gap:14px}
+  /* 人物图鉴：上面一行头像，下面左立绘、右资料（资料可滚动） */
+  #lbt .c-page{display:grid;grid-template-columns:42% 1fr;grid-template-rows:auto auto minmax(0,1fr);gap:8px 10px;overflow:hidden;padding:8px 12px 10px}
+  #lbt .c-page[hidden]{display:grid!important}
+  #lbt .c-top{grid-column:1/-1;flex-wrap:wrap;gap:6px 8px;margin:0}
+  #lbt .c-title{order:0;width:auto;margin:0 auto 0 0;font-size:17px}
+  #lbt .c-avs{order:1;width:100%;justify-content:space-between;padding:2px 3px}
+  #lbt .c-av{width:32px}
+  #lbt .c-name{grid-column:1/-1;grid-row:auto;flex-direction:row;align-items:center;padding:6px 12px;gap:10px}
+  #lbt .c-name::before{inset:3px}
+  #lbt .c-name b{flex-direction:row;font-size:22px}
+  #lbt .c-badge{padding:3px 10px;font-size:13px}
+  #lbt .c-fig{grid-column:1;grid-row:auto;height:auto;min-height:0}
+  #lbt .c-info{grid-column:2;grid-row:auto;min-height:0;overflow-y:auto;overflow-x:hidden;gap:10px;padding:4px 2px 6px 0}
+  #lbt .c-card{padding:10px 10px 10px;transform:none}
+  #lbt .c-card dl{gap:3px 8px;font-size:12px}
+  #lbt .c-intro{font-size:12.5px;line-height:1.65}
+  #lbt .c-quote{font-size:14px}
+  #lbt .c-st{width:40px}
+}
 </style>
 
 <div id="lbt" class="intro" data-opening-root>
@@ -415,7 +458,7 @@
       </div>
     </div>
 
-    <nav class="a-toc" aria-labelledby="a-toc-h" data-opening-region="navigation">
+    <nav class="a-toc" aria-label="目录" data-opening-region="navigation">
       <h2 id="a-toc-h" style="--k:0">目录<svg viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true"><path d="M2 6C25 2 60 9 98 4" fill="none" stroke="#f2683c" stroke-width="2.4" stroke-linecap="round"/></svg></h2>
       <ol>
         <li><button type="button" class="a-row" style="--k:1" data-act="start"><span class="t">从头开始</span>__CIRCLE__</button></li>
