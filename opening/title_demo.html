@@ -468,7 +468,7 @@
 #lbt .t-hero{right:-1%;bottom:0;height:100%;width:46%;z-index:3;display:flex;justify-content:center;align-items:flex-end;cursor:pointer;
   transition:opacity .5s,transform .6s cubic-bezier(.3,1.2,.5,1)}
 #lbt .t-hero::before{content:"";position:absolute;left:0;right:0;bottom:-6%;height:92%;border-radius:50% 50% 0 0;background:radial-gradient(closest-side,color-mix(in srgb,var(--hc) 30%,transparent),transparent);transition:background .5s}
-#lbt .t-hero img{position:relative;height:var(--hh,98%);max-width:none;translate:calc((.5 - var(--ax,.5)) * 100%) 0;filter:drop-shadow(0 10px 18px rgba(70,50,30,.22));transition:opacity .35s,transform .45s cubic-bezier(.3,1.2,.5,1)}
+#lbt .t-hero img{position:relative;height:calc(var(--hh,98%) * var(--hs,1));max-width:none;translate:calc((.5 - var(--ax,.5)) * 100%) 0;filter:drop-shadow(0 10px 18px rgba(70,50,30,.22));transition:opacity .35s,transform .45s cubic-bezier(.3,1.2,.5,1)}
 #lbt .t-hero.swap img{opacity:0;transform:translateX(18px)}
 #lbt .t-bubble{right:33%;top:34%;z-index:5;max-width:27%;padding:9px 14px 10px;border-radius:16px;background:#fff;box-shadow:0 0 0 2px var(--hc),0 6px 14px rgba(70,50,30,.16);
   font-family:var(--hand);font-size:clamp(14px,1.6vw,19px);line-height:1.5;color:var(--ink);transition:opacity .3s,transform .4s cubic-bezier(.3,1.6,.5,1);transform-origin:100% 50%}
@@ -502,7 +502,7 @@
   #lbt:not(.splash) .a-toc{left:7%;top:46%}
   #lbt .a-row{font-size:19px}
   #lbt .t-hero{width:58%;right:-6%}
-  #lbt .t-hero img{height:var(--hh,94%)}
+  #lbt .t-hero img{--hh:94%}
   #lbt .t-bubble{right:auto;left:5%;top:29%;max-width:46%;font-size:13.5px;transform-origin:100% 50%}
   #lbt .t-dialect{left:5%;bottom:4%;max-width:56%;padding:6px 10px 6px 6px;gap:8px}
   #lbt .t-peek{width:38px;height:38px}
@@ -1066,7 +1066,7 @@
   function putHero(first){
     const g=HEROES[hi],h=HELLO[g.k]||['',''];
     stage.style.setProperty('--hc',g.c);
-    const draw=()=>{heroEl.innerHTML=`<img src="${g.sprite}" alt="${g.name}" style="--ax:${g.ax||.5}">`;bub.innerHTML=`${h[0]}<small>${h[1]}</small>`;heroEl.classList.remove('swap');bub.classList.remove('swap');};
+    const draw=()=>{const cm=parseInt(((g.card||[]).find(r=>r[0]==='身高')||[])[1])||165;heroEl.innerHTML=`<img src="${g.sprite}" alt="${g.name}" style="--ax:${g.ax||.5};--hs:${Math.max(.8,Math.min(1,cm/180)).toFixed(3)}">`;bub.innerHTML=`${h[0]}<small>${h[1]}</small>`;heroEl.classList.remove('swap');bub.classList.remove('swap');};
     if(first){draw();return;}
     heroEl.classList.add('swap');bub.classList.add('swap');setTimeout(draw,320);
   }
