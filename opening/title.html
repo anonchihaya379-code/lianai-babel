@@ -405,24 +405,17 @@
   #lbt .p-sheet{padding:16px 14px 12px}
   #lbt .p-opt{padding:8px 10px;font-size:13.5px}
   #lbt .s-body{top:44px;bottom:10px;left:12px;right:12px;gap:14px}
-  /* 人物图鉴：上面一行头像，下面左立绘、右资料（资料可滚动） */
-  #lbt .c-page{display:grid;grid-template-columns:42% 1fr;grid-template-rows:auto auto minmax(0,1fr);gap:8px 10px;overflow:hidden;padding:8px 12px 10px}
-  #lbt .c-page[hidden]{display:grid!important}
-  #lbt .c-top{grid-column:1/-1;flex-wrap:wrap;gap:6px 8px;margin:0}
-  #lbt .c-title{order:0;width:auto;margin:0 auto 0 0;font-size:17px}
-  #lbt .c-avs{order:1;width:100%;justify-content:space-between;padding:2px 3px}
-  #lbt .c-av{width:32px}
-  #lbt .c-name{grid-column:1/-1;grid-row:auto;flex-direction:row;align-items:center;padding:6px 12px;gap:10px}
-  #lbt .c-name::before{inset:3px}
-  #lbt .c-name b{flex-direction:row;font-size:22px}
-  #lbt .c-badge{padding:3px 10px;font-size:13px}
-  #lbt .c-fig{grid-column:1;grid-row:auto;height:auto;min-height:0}
-  #lbt .c-info{grid-column:2;grid-row:auto;min-height:0;overflow-y:auto;overflow-x:hidden;gap:10px;padding:4px 2px 6px 0}
-  #lbt .c-card{padding:10px 10px 10px;transform:none}
-  #lbt .c-card dl{gap:3px 8px;font-size:12px}
-  #lbt .c-intro{font-size:12.5px;line-height:1.65}
-  #lbt .c-quote{font-size:14px}
-  #lbt .c-st{width:40px}
+}
+
+/* v3：去掉左侧线圈，内容铺满；头像换 Q 版；对白文字不再提前换行 */
+#lbt .a-spine,#lbt .a-rings{display:none}
+#lbt .c-page,#lbt .x-page{left:0}
+#lbt .a-head,#lbt .a-toc{left:50%}
+#lbt .c-av img.q{left:-18%;top:-6%;width:136%;height:auto;transform:none}
+#lbt .p-text{text-wrap:wrap;text-align:justify}
+@media (max-width:700px){
+  #lbt .c-page,#lbt .x-page{left:0}
+  #lbt .a-head,#lbt .a-toc{left:50%}
 }
 </style>
 
@@ -683,7 +676,8 @@
   const cp=$('#c-page');let cur=0;
   let eggOpen=false;try{eggOpen=localStorage.getItem('lbt-egg')==='1';}catch(e){}
   const shut=g=>g.locked&&!eggOpen;
-  const avInner=g=>shut(g)?'<span>？</span>':(g.sprite?`<img src="${g.sprite}" alt="" style="--fx:${g.face[0]};--fy:${g.face[1]};--fz:${g.face[2]||7}">`:sil(g,'28 6 64 64'));
+  const AVK={chen:1,zhou:3};
+  const avInner=g=>shut(g)?'<span>？</span>':((g.chibi||[])[AVK[g.k]||0]?`<img class="q" src="${g.chibi[AVK[g.k]||0]}" alt="">`:g.sprite?`<img src="${g.sprite}" alt="" style="--fx:${g.face[0]};--fy:${g.face[1]};--fz:${g.face[2]||7}">`:sil(g,'28 6 64 64'));
   $('#c-avs').innerHTML=CAST.map((g,i)=>`<button type="button" class="c-av${shut(g)?' lock':''}" role="tab" aria-selected="false" aria-label="${shut(g)?'？？？':g.name}" data-i="${i}" style="--c:${g.c};--r:${i%2?4:-4}deg">${avInner(g)}</button>`).join('');
   function drawSprite(){
     const g=CAST[cur],sp=$('#c-sprite');const url=g.sprite;
