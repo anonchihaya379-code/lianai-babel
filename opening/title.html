@@ -441,7 +441,7 @@
 #lbt .c-face::before{content:"";position:absolute;left:0;top:0;bottom:0;width:7px;background:var(--c)}
 #lbt .c-face::after{content:"";position:absolute;right:-30px;bottom:-30px;width:110px;height:110px;border-radius:50%;background:radial-gradient(closest-side,color-mix(in srgb,var(--c) 16%,transparent),transparent);pointer-events:none}
 #lbt .c-face.back{transform:rotateY(180deg)}
-#lbt .c-cardhd{display:flex;justify-content:space-between;align-items:baseline;gap:8px;padding-bottom:6px;margin-bottom:8px;border-bottom:1px dashed color-mix(in srgb,var(--c) 35%,#d9cfbf)}
+#lbt .c-cardhd{display:flex;align-items:baseline;gap:8px;margin-bottom:6px}
 #lbt .c-cardhd .logo{font-family:var(--title);font-size:13px;letter-spacing:.08em;color:var(--pencil)}
 #lbt .c-cardhd .no{font-family:var(--hand);font-size:14px;color:var(--c)}
 #lbt .c-cardnm{display:flex;align-items:baseline;gap:8px;margin-bottom:8px}
@@ -741,10 +741,10 @@
     const fig=cp.querySelector('.c-fig');fig.querySelector('.c-quote')?.remove();fig.classList.remove('talk');
     if(g.say)fig.insertAdjacentHTML('beforeend',`<button type="button" class="c-quote" aria-expanded="false">「${g.say}」<span class="hint">译</span><small>${g.tr}</small></button>`);
     $('#c-info').innerHTML=`<div class="c-flip" role="button" tabindex="0" aria-pressed="false" aria-label="${g.name}的名片，点击翻面看介绍"><div class="c-flip-in">
-        <div class="c-face front"><div class="c-cardhd"><span class="logo">锦绣云湾 2001</span><span class="no">No.0${i+1}</span></div>
+        <div class="c-face front">
           <div class="c-cardnm"><b>${g.name}</b>${g.py?`<i>${g.py}</i>`:''}</div>
           <dl>${g.card.map(([a,b])=>`<dt>${a}</dt><dd>${b}</dd>`).join('')}</dl><span class="c-turn">点击翻面 ↻</span></div>
-        <div class="c-face back"><div class="c-cardhd"><span class="logo">关于她</span><span class="no">No.0${i+1}</span></div>
+        <div class="c-face back"><div class="c-cardhd"><span class="logo">关于她</span></div>
           <p class="c-intro">${g.intro}</p><span class="c-turn">再点一下翻回去 ↺</span></div>
       </div></div>`;
   }
