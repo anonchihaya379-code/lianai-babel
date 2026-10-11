@@ -1288,7 +1288,7 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
   $('#t-dn').addEventListener('click',e=>{e.stopPropagation();bi=(bi+1)%BG.length;putBg();});
   /* ---------- 音声 ---------- */
   const AUD={cicada:'https://img.huohu.ai/library/5562991478/audio/4335147646361.mp3',aircon:'https://img.huohu.ai/library/5562991478/audio/5664731812359.mp3',key:'https://img.huohu.ai/library/5562991478/audio/2433492920051.mp3',door:'https://img.huohu.ai/library/5562991478/audio/6232670277305.mp3',sofa:'https://img.huohu.ai/library/5562991478/audio/6720510996859.mp3',shock:'https://img.huohu.ai/library/5562991478/audio/3442482515780.mp3',drag:'https://img.huohu.ai/library/5562991478/audio/5962666134539.mp3',page:'https://img.huohu.ai/library/5562991478/audio/6270568155466.mp3',card:'https://img.huohu.ai/library/5562991478/audio/3612099591032.mp3',click:'https://img.huohu.ai/library/5562991478/audio/9230121416293.mp3',pop:'https://img.huohu.ai/library/5562991478/audio/1408384765221.mp3',shine:'https://img.huohu.ai/library/5562991478/audio/5367827035383.mp3',ding:'https://img.huohu.ai/library/5562991478/audio/4856476310640.mp3',
-    title:'',chen:''};
+    title:'https://img.huohu.ai/library/5562991478/audio/2239484653988.mp3',chen:'https://img.huohu.ai/library/5562991478/audio/3901393348110.mp3'};
   const VB=[0,.2,.4,.65],VS=[0,.3,.55,.85];
   let auOn=false,muted=false;try{muted=localStorage.getItem('lbt-mute')==='1';}catch(e){}
   const tr={bgm:new Audio(),amb:new Audio()};tr.bgm.loop=tr.amb.loop=true;tr.bgm.preload=tr.amb.preload='auto';
