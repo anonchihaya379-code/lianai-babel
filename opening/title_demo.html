@@ -1068,7 +1068,7 @@
 
   const pbg=[$('#p-bg1'),$('#p-bg2')],pfx=$('#p-fx'),psp=$('#p-sprite');let bgi=0,fxT=null;
   const calm=()=>SET.motion==='calm';
-  function putBg(url,instant){const nx=pbg[1-bgi],cu=pbg[bgi];nx.classList.toggle('now',!!instant);cu.classList.toggle('now',!!instant);
+  function putPBg(url,instant){const nx=pbg[1-bgi],cu=pbg[bgi];nx.classList.toggle('now',!!instant);cu.classList.toggle('now',!!instant);
     nx.style.backgroundImage=`url('${url}')`;nx.classList.remove('tilt','push');void nx.offsetWidth;nx.classList.add('on');cu.classList.remove('on');bgi=1-bgi;}
   function placeCard(s){const pl=$('#p-place');$('#p-place-t').textContent=PLACES[s][0];$('#p-place-s').textContent=PLACES[s][1];pl.classList.remove('in');void pl.offsetWidth;pl.classList.add('in');}
   function liftCount(){clearInterval(floorT);const f=$('#p-floor');let n=1;f.textContent=n;f.classList.remove('ding');
@@ -1076,7 +1076,7 @@
   /* 返回值：转场占用的毫秒数，打字等它结束再开始 */
   function setScene(s,tr){
     if(s===curScene)return 0;const first=!curScene;curScene=s;scene.dataset.s=s;clearTimeout(fxT);
-    const go=()=>{putBg(BGS[s],first||tr==='black');placeCard(s);if(s==='lift')liftCount();else clearInterval(floorT);
+    const go=()=>{putPBg(BGS[s],first||tr==='black');placeCard(s);if(s==='lift')liftCount();else clearInterval(floorT);
       scene.classList.toggle('chill',s==='room'&&tr==='flash');};
     if(calm()||first||!tr){go();return first?0:350;}
     if(tr==='black'){pfx.className='p-fx black';void pfx.offsetWidth;pfx.classList.add('on');fxT=setTimeout(()=>{go();pfx.classList.remove('on');},480);return 1050;}
