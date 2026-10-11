@@ -536,6 +536,13 @@
 #lbt .t-credit{position:absolute;right:10px;bottom:6px;z-index:8;font:10px/1 sans-serif;letter-spacing:.04em;color:rgba(60,50,40,.5);pointer-events:none}
 #lbt.night .t-credit{color:rgba(255,255,255,.45)}
 @media (max-width:640px){#lbt.dusk .t-bg::after{background:linear-gradient(90deg,rgba(60,32,30,.7) 0%,rgba(60,32,30,.38) 45%,rgba(60,32,30,0) 70%),linear-gradient(0deg,rgba(60,32,30,.45),rgba(60,32,30,0) 30%)}}
+
+/* desktop: avatars + card bottom-right */
+@media (min-width:701px){
+  #lbt .c-info{justify-content:flex-end;padding:6px 4px 2px}
+  #lbt .c-info > .c-avs{justify-content:flex-end;flex:none;padding:4px 2px 2px}
+  #lbt .c-info > .c-flip{flex:none}
+}
 </style>
 
 <div id="lbt" class="intro splash" data-opening-root>
@@ -1093,4 +1100,8 @@
   $('#t-dn').addEventListener('pointerdown',e=>e.stopPropagation(),true);
   $('#t-dn').addEventListener('click',e=>{e.stopPropagation();bi=(bi+1)%BG.length;putBg();});
 })();
+</script>
+<script>
+(()=>{const r=document.getElementById('lbt')||document;const avs=r.querySelector('#c-avs'),info=r.querySelector('#c-info'),top=r.querySelector('.c-top');if(!avs||!info||!top)return;
+const mq=matchMedia('(min-width:701px)');const place=()=>{if(mq.matches){if(avs.parentNode!==info)info.prepend(avs)}else if(avs.parentNode!==top)top.append(avs)};place();mq.addEventListener('change',place);})();
 </script>
