@@ -255,7 +255,7 @@
 /* 彩蛋页：宇智波爱 */
 .c-av.knock{animation:c-knock .3s}
 @keyframes c-knock{25%{rotate:calc(var(--amp,2deg) * -1)}50%{rotate:var(--amp,2deg)}75%{rotate:calc(var(--amp,2deg) * -.5)}}
-.c-sprite img.egg{mix-blend-mode:normal;filter:drop-shadow(0 14px 18px rgba(120,60,140,.22));margin-bottom:12%;will-change:translate;animation:c-float 4s ease-in-out infinite}
+.c-sprite img.egg{mix-blend-mode:normal;filter:drop-shadow(0 14px 18px rgba(120,60,140,.22));margin-bottom:12%;will-change:translate;-webkit-mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent),linear-gradient(180deg,#000 84%,transparent);-webkit-mask-composite:source-in;mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent),linear-gradient(180deg,#000 84%,transparent);mask-composite:intersect;animation:c-float 4s ease-in-out infinite}
 @keyframes c-float{0%,100%{translate:0 -6px}50%{translate:0 -18px}}
 .c-page.egg .c-badge{color:var(--pencil)}
 .c-page.flash::after{content:"";position:absolute;inset:0;background:#fff;pointer-events:none;animation:c-flash .9s ease-out forwards;z-index:30}
