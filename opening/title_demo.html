@@ -650,6 +650,21 @@
   #lbt .p-text.pop{font-size:32px}
 }
 @media (prefers-reduced-motion:reduce){#lbt .p-bg.on,#lbt .p-sprite.on img{animation:none}}
+
+/* v6.1 选项更紧凑；选择时收起文字框 */
+#lbt .p-scene:has(#p-choose:not([hidden])) .p-box,#lbt .p-scene:has(#p-choose:not([hidden])) .p-place{opacity:0}
+#lbt #p-choose{padding:3% 4%}
+#lbt #p-choose .p-sheet{max-height:100%;overflow:auto;scrollbar-width:thin}
+#lbt #p-choose h3{margin-bottom:10px;font-size:clamp(18px,2vw,24px)}
+#lbt #p-choose .p-opts{gap:clamp(6px,1.2vh,10px)}
+#lbt #p-choose .p-opt{padding:clamp(8px,1.4vh,12px) 14px}
+#lbt .p-own-tg{display:none}
+#lbt #p-choose .p-own{padding:8px 12px;border-style:solid}
+#lbt #p-choose .p-own:not(.open){padding:0;border:0;background:none}
+#lbt #p-choose .p-own:not(.open) > :not(.p-own-tg){display:none}
+#lbt #p-choose .p-own:not(.open) .p-own-tg{display:block;width:100%;padding:8px 14px;border-radius:12px;background:rgba(255,253,248,.18);color:#fff;font-family:var(--hand);font-size:clamp(14px,1.45vw,17px);box-shadow:0 0 0 1.5px rgba(255,255,255,.55) inset;text-align:center}
+#lbt #p-choose .p-own:not(.open) .p-own-tg:hover{background:rgba(255,253,248,.3)}
+#lbt .p-floor[hidden]{display:none}
 </style>
 
 <div id="lbt" class="intro splash" data-opening-root>
@@ -1063,7 +1078,7 @@
   let li=-1,typing=null,full=false,auto=false,autoT=null,floorT=null,pick=null,ownText='',sent=false,curScene='';
   $('#p-sprite').innerHTML=chen.sprite?`<img src="${chen.sprite}" alt="" style="--ax:${chen.ax}">`:'';
   $('#p-opts').innerHTML=CHOICES.map((o,n)=>`<button type="button" class="p-opt" data-o="${n}" style="--oc:${o.c}"><b>${o.tag}</b>${o.show}</button>`).join('')+
-    `<div class="p-own"><label for="p-own">或者，自己写你的回应</label><textarea id="p-own" maxlength="300" placeholder="比如：「你什么时候学会撬锁的？」"></textarea><p class="p-err" id="p-own-err" role="alert"></p><div class="p-row" style="margin:0"><button type="button" class="p-act" data-p="own">就这么回</button></div></div>`;
+    `<div class="p-own" id="p-ownwrap"><button type="button" class="p-own-tg" data-p="ownopen">✎ 都不想选？自己写一句</button><label for="p-own">或者，自己写你的回应</label><textarea id="p-own" maxlength="300" placeholder="比如：「你什么时候学会撬锁的？」"></textarea><p class="p-err" id="p-own-err" role="alert"></p><div class="p-row" style="margin:0"><button type="button" class="p-act" data-p="own">就这么回</button></div></div>`;
   const ownBox=$('#p-own');ownBox.addEventListener('input',()=>{ownText=ownBox.value;$('#p-own-err').textContent='';});
 
   const pbg=[$('#p-bg1'),$('#p-bg2')],pfx=$('#p-fx'),psp=$('#p-sprite');let bgi=0,fxT=null;
@@ -1076,7 +1091,7 @@
   /* 返回值：转场占用的毫秒数，打字等它结束再开始 */
   function setScene(s,tr){
     if(s===curScene)return 0;const first=!curScene;curScene=s;scene.dataset.s=s;clearTimeout(fxT);
-    const go=()=>{putPBg(BGS[s],first||tr==='black');placeCard(s);if(s==='lift')liftCount();else clearInterval(floorT);
+    const go=()=>{putPBg(BGS[s],first||tr==='black');placeCard(s);$('#p-floor').hidden=s!=='lift';if(s==='lift')liftCount();else clearInterval(floorT);
       scene.classList.toggle('chill',s==='room'&&tr==='flash');};
     if(calm()||first||!tr){go();return first?0:350;}
     if(tr==='black'){pfx.className='p-fx black';void pfx.offsetWidth;pfx.classList.add('on');fxT=setTimeout(()=>{go();pfx.classList.remove('on');},480);return 1050;}
@@ -1151,6 +1166,7 @@
       if(a==='auto'){setAuto(!auto);if(auto&&full)advance();}
       else if(a==='skip')skipToEnd();
       else if(a==='hide'){setAuto(false);scene.classList.add('hideui');}
+      else if(a==='ownopen'){$('#p-ownwrap').classList.add('open');ownBox.focus();}
       else if(a==='log'){drawLog();openLayer('log');}
       else if(a==='closelog'){closeLayers();if(li>=SCRIPT.length-1&&full&&pick===null)openLayer('choose');}
       else if(a==='own'){if(!ownText.trim()){$('#p-own-err').textContent='先写点什么吧，一句话也行。';ownBox.focus();return;}pick='own';openReview();}
