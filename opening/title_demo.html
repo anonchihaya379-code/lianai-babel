@@ -539,7 +539,8 @@
 
 /* desktop: avatars + card bottom-right */
 @media (min-width:701px){
-  #lbt .c-info{justify-content:flex-end;padding-bottom:clamp(54px,7.5vw,72px)}
+  #lbt .c-info{grid-column:3;justify-content:flex-end;padding-bottom:clamp(54px,7.5vw,72px)}
+  #lbt .c-top .c-back{margin-left:auto}
   #lbt .c-info > .c-flip{flex:none}
   #lbt .c-page > .c-avs{grid-column:3;grid-row:2;align-self:end;justify-self:end;position:relative;z-index:3;padding:4px 2px 2px}
 }
