@@ -508,6 +508,27 @@
   #lbt .t-peek{width:38px;height:38px}
   #lbt.splash .a-head{top:24%;width:84%}
 }
+
+/* DEMO v2：客厅背景（白天/夜晚按现实时间），去掉招呼语 */
+#lbt .t-bubble{display:none!important}
+#lbt .t-bg{position:absolute;inset:0;z-index:0;background:var(--bgimg) center/cover no-repeat;transition:opacity .8s;animation:t-ken 40s ease-in-out infinite alternate}
+@keyframes t-ken{from{transform:scale(1.04) translateX(0)}to{transform:scale(1.1) translateX(-1.5%)}}
+#lbt .t-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(251,246,234,.82) 0%,rgba(251,246,234,.55) 34%,rgba(251,246,234,0) 62%),linear-gradient(0deg,rgba(251,246,234,.5),rgba(251,246,234,0) 30%)}
+#lbt.night .t-bg::after{background:linear-gradient(90deg,rgba(24,28,52,.78) 0%,rgba(24,28,52,.5) 34%,rgba(24,28,52,0) 62%),linear-gradient(0deg,rgba(24,28,52,.45),rgba(24,28,52,0) 30%)}
+#lbt.splash .t-bg::after{background:rgba(251,246,234,.55)}
+#lbt.splash.night .t-bg::after{background:rgba(24,28,52,.5)}
+#lbt.night .a-row,#lbt.night .t-tap{color:#fff;text-shadow:0 1px 6px rgba(0,0,0,.45)}
+#lbt:not(.night) .a-row{text-shadow:0 0 8px rgba(255,253,248,.9),0 0 2px #fff}
+#lbt .a-stage{background:#e9e0cf}
+#lbt .a-doodle{display:none}
+#lbt .t-motes{z-index:2}
+#lbt .t-dn{position:absolute;right:10px;top:10px;z-index:8;width:34px;height:34px;border-radius:50%;background:rgba(255,253,248,.85);box-shadow:0 2px 6px rgba(0,0,0,.15);display:grid;place-items:center;font-size:17px}
+#lbt.night .t-dn{background:rgba(30,34,60,.8);color:#ffe9a8}
+@media (max-width:700px){
+  #lbt .t-bg{background-position:46% center}
+  #lbt .t-bg::after{background:linear-gradient(90deg,rgba(251,246,234,.8) 0%,rgba(251,246,234,.45) 45%,rgba(251,246,234,0) 70%),linear-gradient(0deg,rgba(251,246,234,.55),rgba(251,246,234,0) 30%)}
+  #lbt.night .t-bg::after{background:linear-gradient(90deg,rgba(24,28,52,.75) 0%,rgba(24,28,52,.4) 45%,rgba(24,28,52,0) 70%),linear-gradient(0deg,rgba(24,28,52,.5),rgba(24,28,52,0) 30%)}
+}
 </style>
 
 <div id="lbt" class="intro splash" data-opening-root>
@@ -653,7 +674,9 @@
         </div>
       </form>
     </section>
+    <div class="t-bg" id="t-bg" aria-hidden="true"></div>
     <div class="t-motes" aria-hidden="true"></div>
+    <button type="button" class="t-dn" id="t-dn" aria-label="切换白天/夜晚">☀</button>
     <div class="t-hero" id="t-hero" role="button" tabindex="0" aria-label="换一位室友"></div>
     <div class="t-bubble" id="t-bubble" role="status" aria-live="polite"></div>
     <div class="t-dialect" id="t-dialect"></div>
@@ -1052,5 +1075,13 @@
   $('.t-motes').innerHTML=Array.from({length:9},(_,k)=>`<i style="--x:${8+Math.random()*84}%;--y:${10+Math.random()*75}%;--s:${10+Math.random()*26}px;--d:${5+Math.random()*5}s;--dl:${-Math.random()*6}s"></i>`).join('');
   /* 点击开始 */
   stage.addEventListener('pointerdown',e=>{if(!root.classList.contains('splash'))return;e.stopPropagation();e.preventDefault();endIntro();root.classList.remove('splash');},{capture:true});
+
+  /* DEMO v2：背景按现实时间切白天/夜晚，右上角可手动切换 */
+  const BG={day:'https://img.huohu.ai/library/5562991478/images/7820734613345.webp',night:'https://img.huohu.ai/library/5562991478/images/6357350130280.webp'};
+  const hr=new Date().getHours();let night=hr<6||hr>=18;
+  function putBg(){root.classList.toggle('night',night);$('#t-bg').style.setProperty('--bgimg',`url('${night?BG.night:BG.day}')`);$('#t-dn').textContent=night?'☾':'☀';}
+  putBg();new Image().src=BG.day;new Image().src=BG.night;
+  $('#t-dn').addEventListener('pointerdown',e=>e.stopPropagation(),true);
+  $('#t-dn').addEventListener('click',e=>{e.stopPropagation();night=!night;putBg();});
 })();
 </script>
