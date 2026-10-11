@@ -677,6 +677,15 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
 #lbt #p-review .a-tape,#lbt #p-log .a-tape{display:none}
 #lbt #p-review .p-sheet,#lbt #p-log .p-sheet{transform:none;border-radius:14px;box-shadow:0 18px 44px rgba(20,14,8,.35)}
 #lbt #p-review,#lbt #p-log{background:rgba(18,14,10,.45)}
+
+/* 音声：静音按钮 */
+#lbt .t-snd{position:absolute;right:52px;top:10px;z-index:8;width:34px;height:34px;border-radius:50%;background:rgba(255,253,248,.85);box-shadow:0 2px 6px rgba(0,0,0,.15);display:grid;place-items:center;color:#6b5e52}
+#lbt.night .t-snd{background:rgba(30,34,60,.8);color:#ffe9a8}
+#lbt .t-snd svg{width:18px;height:18px}
+#lbt .t-snd .x{display:none}
+#lbt .t-snd[aria-pressed="true"] .x{display:inline}
+#lbt .t-snd[aria-pressed="true"] .w{display:none}
+#lbt.splash .t-snd{opacity:.8}
 </style>
 
 <div id="lbt" class="intro splash" data-opening-root>
@@ -813,10 +822,12 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
         <div class="s-card" style="--sc:var(--chen)">
           <span class="a-tape" style="--tc:var(--chen)"></span>
           <h3>阅读设定</h3>
-          <p>只影响这一页里的序章播放。</p>
+          <p>只影响开场这一页。</p>
           <fieldset class="s-item"><legend>文字速度</legend><div class="s-chips" data-k="speed"></div></fieldset>
           <fieldset class="s-item"><legend>自动播放间隔</legend><div class="s-chips" data-k="wait"></div></fieldset>
           <fieldset class="s-item"><legend>动效</legend><div class="s-chips" data-k="motion"></div></fieldset>
+          <fieldset class="s-item"><legend>音乐</legend><div class="s-chips" data-k="bgm"></div></fieldset>
+          <fieldset class="s-item"><legend>音效</legend><div class="s-chips" data-k="se"></div></fieldset>
           <p class="s-hint">序章里点画面或按 Enter / 空格翻页。</p>
         </div>
         <div class="s-foot">
@@ -829,6 +840,7 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
     <div class="t-bg" id="t-bg" aria-hidden="true"></div>
     <div class="t-motes" aria-hidden="true"></div>
     <button type="button" class="t-dn" id="t-dn" aria-label="切换时段">☀</button>
+    <button type="button" class="t-snd" id="t-snd" aria-label="静音" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor"/><path class="w" d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path class="x" d="M16 9l5 6M21 9l-5 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
     <div class="t-credit">背景：みんちりえ</div>
     <div class="t-hero" id="t-hero" role="button" tabindex="0" aria-label="换一位室友"></div>
     <div class="t-bubble" id="t-bubble" role="status" aria-live="polite"></div>
@@ -1001,7 +1013,7 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
     av.classList.remove('knock');void av.offsetWidth;av.classList.add('knock');
     if(taps===5)av.querySelector('span').textContent='？！';
     if(taps<10)return;
-    taps=0;clearTimeout(tapT);eggOpen=true;
+    taps=0;clearTimeout(tapT);eggOpen=true;snd('shine');
     av.classList.remove('lock','knock');av.setAttribute('aria-label',CAST[i].name);av.innerHTML=avInner(CAST[i]);
     cp.classList.remove('flash');void cp.offsetWidth;cp.classList.add('flash');
     memo('……居然真的点了十次？');
@@ -1016,9 +1028,11 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
     focus:[['any','随缘']].concat(CAST.filter(g=>!g.locked).map(g=>[g.k,g.name])),
     speed:[['slow','慢'],['mid','中'],['fast','快'],['now','瞬间']],
     wait:[['short','短'],['mid','中'],['long','长']],
-    motion:[['on','正常'],['calm','减弱']]
+    motion:[['on','正常'],['calm','减弱']],
+    bgm:[['0','关'],['1','小'],['2','中'],['3','大']],
+    se:[['0','关'],['1','小'],['2','中'],['3','大']]
   };
-  const DEF={dialect:'std',pace:'slow',focus:'any',speed:'mid',wait:'mid',motion:reduce?'calm':'on'};
+  const DEF={dialect:'std',pace:'slow',focus:'any',speed:'mid',wait:'mid',motion:reduce?'calm':'on',bgm:'2',se:'2'};
   const KEY='lbt-settings-v1';
   let SET=Object.assign({},DEF);
   try{const s=JSON.parse(localStorage.getItem(KEY)||'{}');for(const k in DEF)if(OPTS[k].some(o=>o[0]===s[k]))SET[k]=s[k];}catch(e){}
@@ -1040,13 +1054,13 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
   sform.addEventListener('submit',e=>e.preventDefault());
   sform.addEventListener('change',e=>{
     const n=e.target.name;if(!n||!n.startsWith('s-'))return;
-    SET[n.slice(2)]=e.target.value;saveSet();applyMotion();
+    SET[n.slice(2)]=e.target.value;saveSet();applyMotion();auApply();if(n==='s-se')snd('click');
     const t=$('#s-saved');t.classList.add('on');clearTimeout(savedT);savedT=setTimeout(()=>t.classList.remove('on'),1200);
   });
   sp.addEventListener('click',e=>{
     const b=e.target.closest('[data-s],[data-act="back"]');if(!b)return;
     if(b.dataset.act==='back'){closePage(sp,'config');return;}
-    if(b.dataset.s==='reset'){SET=Object.assign({},DEF);saveSet();applyMotion();drawSettings();return;}
+    if(b.dataset.s==='reset'){SET=Object.assign({},DEF);saveSet();applyMotion();drawSettings();auApply();return;}
     if(b.dataset.s==='go'){sp.hidden=true;openPrologue();}
   });
 
@@ -1099,7 +1113,7 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
     nx.style.backgroundImage=`url('${url}')`;nx.classList.remove('tilt','push');void nx.offsetWidth;nx.classList.add('on');cu.classList.remove('on');bgi=1-bgi;}
   function placeCard(s){const pl=$('#p-place');$('#p-place-t').textContent=PLACES[s][0];$('#p-place-s').textContent=PLACES[s][1];pl.classList.remove('in');void pl.offsetWidth;pl.classList.add('in');}
   function liftCount(){clearInterval(floorT);const f=$('#p-floor');let n=1;f.textContent=n;f.classList.remove('ding');
-    floorT=setInterval(()=>{n++;f.textContent=n;if(n>=20){clearInterval(floorT);f.classList.add('ding');}},calm()?0:95);}
+    floorT=setInterval(()=>{n++;f.textContent=n;if(n>=20){clearInterval(floorT);f.classList.add('ding');snd('ding',.7);}},calm()?0:95);}
   /* 返回值：转场占用的毫秒数，打字等它结束再开始 */
   function setScene(s,tr){
     if(s===curScene)return 0;const first=!curScene;curScene=s;scene.dataset.s=s;clearTimeout(fxT);
@@ -1112,7 +1126,7 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
   }
   function finishLine(){clearInterval(typing);typing=null;const L=SCRIPT[li];ptext.innerHTML='';ptext.append(L.t);if(L.zh){const s=document.createElement('small');s.textContent=L.zh;ptext.append(s);}full=true;box.classList.add('done');queueAuto();}
   function showLine(i){
-    li=i;const L=SCRIPT[i];const wait=setScene(L.s,L.tr);
+    li=i;const L=SCRIPT[i];const wait=setScene(L.s,L.tr);cue(i,wait);
     const [nm,col]=WHO[L.who];pname.textContent=nm;pname.style.setProperty('--nc',col);box.style.setProperty('--nc',col||'#b8a48c');
     ptext.classList.toggle('n',L.who==='n');ptext.classList.toggle('pop',L.fx==='pop');box.classList.toggle('narr',L.who==='n');
     if(L.show)psp.classList.add('on');
@@ -1149,7 +1163,7 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
   function setAuto(v){auto=v;pp.querySelector('[data-p="auto"]').setAttribute('aria-pressed',v);if(v&&full)queueAuto();else if(!v)clearTimeout(autoT);}
   function skipToEnd(){
     setAuto(false);clearInterval(typing);typing=null;
-    li=SCRIPT.length-1;if(eyeOn)endEye(true);setScene('room');psp.classList.add('on');psp.classList.remove('dim');
+    li=SCRIPT.length-1;if(eyeOn)endEye(true);setScene('room');play('amb','aircon');play('bgm','chen');psp.classList.add('on');psp.classList.remove('dim');
     const L=SCRIPT[li];const [nm,col]=WHO[L.who];pname.textContent=nm;pname.style.setProperty('--nc',col);ptext.classList.remove('n');finishLine();
     openLayer('choose');
   }
@@ -1200,6 +1214,9 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
   let eyeOn=false,eyeT=null;const peye=$('#p-eye');
   function startEye(){if(calm()){showLine(0);return;}eyeOn=true;peye.hidden=false;peye.classList.remove('out');void peye.offsetWidth;peye.classList.add('in');eyeT=setTimeout(()=>endEye(),2900);}
   function endEye(silent){if(!eyeOn)return;eyeOn=false;clearTimeout(eyeT);peye.classList.add('out');setTimeout(()=>{peye.hidden=true;peye.classList.remove('in','out');},600);if(!silent&&li<0)showLine(0);}
+  /* 序章音效提示：按句号下标 */
+  const CUE={0:{amb:'cicada'},1:{se:'drag'},3:{amb:''},5:{se:'key',d:300},6:{se:'door',amb:'aircon'},7:{se:'pop'},8:{se:'sofa',d:700},9:{se:'shock',bgm:'chen'}};
+  function cue(i,wait){const c=CUE[i];if(!c)return;if('amb' in c)play('amb',c.amb);if('bgm' in c)play('bgm',c.bgm);if(c.se)setTimeout(()=>snd(c.se),(c.d||0)+(wait&&c.se!=='door'?wait:0));}
   function openPrologue(){
     openPage(pp,'p-title');
     if(li<0)startEye();
@@ -1208,8 +1225,8 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
   }
 
   /* 页面开合 */
-  function openPage(el,titleId){el.hidden=false;$('#'+titleId).focus({preventScroll:true});}
-  function closePage(el,act){setAuto(false);el.hidden=true;const m=root.querySelector(`[data-act="${act}"]`);if(m)m.focus({preventScroll:true});}
+  function openPage(el,titleId){snd('page',.8);if(el===pp){play('bgm','');}el.hidden=false;$('#'+titleId).focus({preventScroll:true});}
+  function closePage(el,act){setAuto(false);snd('page',.8);if(el===pp){play('amb','');play('bgm','title');}el.hidden=true;const m=root.querySelector(`[data-act="${act}"]`);if(m)m.focus({preventScroll:true});}
 
   /* 进场：点一下跳过 */
   const introT=setTimeout(endIntro,reduce?0:3200);
@@ -1259,7 +1276,7 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
   /* 光斑 */
   $('.t-motes').innerHTML=Array.from({length:9},(_,k)=>`<i style="--x:${8+Math.random()*84}%;--y:${10+Math.random()*75}%;--s:${10+Math.random()*26}px;--d:${5+Math.random()*5}s;--dl:${-Math.random()*6}s"></i>`).join('');
   /* 点击开始 */
-  stage.addEventListener('pointerdown',e=>{if(!root.classList.contains('splash'))return;e.stopPropagation();e.preventDefault();endIntro();root.classList.remove('splash');},{capture:true});
+  stage.addEventListener('pointerdown',e=>{if(!root.classList.contains('splash'))return;e.stopPropagation();e.preventDefault();endIntro();root.classList.remove('splash');auStart();},{capture:true});
 
   /* DEMO v2：背景按现实时间切白天/夜晚，右上角可手动切换 */
   const IMG='https://img.huohu.ai/library/5562991478/images/';
@@ -1269,6 +1286,38 @@ html::-webkit-scrollbar,body::-webkit-scrollbar{display:none}
   putBg();BG.forEach(b=>{new Image().src=b.u});
   $('#t-dn').addEventListener('pointerdown',e=>e.stopPropagation(),true);
   $('#t-dn').addEventListener('click',e=>{e.stopPropagation();bi=(bi+1)%BG.length;putBg();});
+  /* ---------- 音声 ---------- */
+  const AUD={cicada:'https://img.huohu.ai/library/5562991478/audio/4335147646361.mp3',aircon:'https://img.huohu.ai/library/5562991478/audio/5664731812359.mp3',key:'https://img.huohu.ai/library/5562991478/audio/2433492920051.mp3',door:'https://img.huohu.ai/library/5562991478/audio/6232670277305.mp3',sofa:'https://img.huohu.ai/library/5562991478/audio/6720510996859.mp3',shock:'https://img.huohu.ai/library/5562991478/audio/3442482515780.mp3',drag:'https://img.huohu.ai/library/5562991478/audio/5962666134539.mp3',page:'https://img.huohu.ai/library/5562991478/audio/6270568155466.mp3',card:'https://img.huohu.ai/library/5562991478/audio/3612099591032.mp3',click:'https://img.huohu.ai/library/5562991478/audio/9230121416293.mp3',pop:'https://img.huohu.ai/library/5562991478/audio/1408384765221.mp3',shine:'https://img.huohu.ai/library/5562991478/audio/5367827035383.mp3',ding:'https://img.huohu.ai/library/5562991478/audio/4856476310640.mp3',
+    title:'https://img.huohu.ai/library/5562991478/audio/5066108901482.mp3',chen:'https://img.huohu.ai/library/5562991478/audio/3131858449223.mp3'};
+  const VB=[0,.2,.4,.65],VS=[0,.3,.55,.85];
+  let auOn=false,muted=false;try{muted=localStorage.getItem('lbt-mute')==='1';}catch(e){}
+  const tr={bgm:new Audio(),amb:new Audio()};tr.bgm.loop=tr.amb.loop=true;tr.bgm.preload=tr.amb.preload='auto';
+  const want={bgm:'title',amb:''},fadeI={};
+  function vol(ch){if(muted)return 0;return ch==='se'?VS[+SET.se||0]:VB[+SET.bgm||0]*(ch==='amb'?.75:1);}
+  function fadeTo(ch,to,ms,done){const el=tr[ch];clearInterval(fadeI[ch]);const from=el.volume,t0=performance.now();
+    fadeI[ch]=setInterval(()=>{const k=Math.min(1,(performance.now()-t0)/ms);el.volume=Math.max(0,Math.min(1,from+(to-from)*k));if(k>=1){clearInterval(fadeI[ch]);done&&done();}},40);}
+  function play(ch,key){want[ch]=key;if(!auOn)return;const el=tr[ch],url=key&&AUD[key];
+    if(url&&el.dataset.k===key&&!el.paused){fadeTo(ch,vol(ch),500);return;}
+    fadeTo(ch,0,el.paused?0:600,()=>{if(want[ch]!==key)return;if(!url){el.pause();el.dataset.k='';return;}
+      if(el.dataset.k!==key){el.src=url;el.dataset.k=key;}el.volume=0;const p=el.play();if(p)p.catch(()=>{});fadeTo(ch,vol(ch),1100);});}
+  const seCache={};
+  function snd(key,mul){if(!auOn||muted)return;const v=vol('se')*(mul||1);const url=AUD[key];if(!v||!url)return;
+    const base=seCache[key]||(seCache[key]=new Audio(url));const a=base.cloneNode();a.volume=Math.min(1,v);const p=a.play();if(p)p.catch(()=>{});}
+  function auStart(){if(auOn)return;auOn=true;Object.keys(AUD).forEach(k=>{if(AUD[k]&&!['title','chen','cicada','aircon'].includes(k))seCache[k]=new Audio(AUD[k]);});play('bgm',want.bgm);play('amb',want.amb);}
+  function auApply(){const b=$('#t-snd');if(b){b.setAttribute('aria-pressed',muted);b.setAttribute('aria-label',muted?'打开声音':'静音');}
+    if(!auOn)return;['bgm','amb'].forEach(ch=>{if(want[ch]&&tr[ch].paused&&vol(ch))play(ch,want[ch]);else fadeTo(ch,vol(ch),300);});}
+  auApply();
+  $('#t-snd').addEventListener('pointerdown',e=>e.stopPropagation(),true);
+  $('#t-snd').addEventListener('click',e=>{e.stopPropagation();muted=!muted;try{localStorage.setItem('lbt-mute',muted?'1':'0');}catch(e){}if(!auOn)auStart();auApply();});
+  root.addEventListener('pointerdown',()=>{if(!root.classList.contains('splash'))auStart();},true);
+  root.addEventListener('click',e=>{const t=e.target;
+    if(t.closest('.c-flip'))snd('card');
+    else if(t.closest('.c-sprite'))snd('pop',.8);
+    else if(t.closest('.c-av.lock'))snd('click',.6);
+    else if(t.closest('.a-row,.p-act,.p-opt,.p-ctl button,.c-av,.t-dn,.p-own-tg,.p-link'))snd('click');
+  },true);
+  document.addEventListener('visibilitychange',()=>{if(!auOn)return;['bgm','amb'].forEach(ch=>{if(document.hidden)tr[ch].pause();else if(want[ch]&&AUD[want[ch]]){const p=tr[ch].play();if(p)p.catch(()=>{});}});});
+
 })();
 </script>
 <script>
