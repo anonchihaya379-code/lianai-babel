@@ -529,6 +529,13 @@
   #lbt .t-bg::after{background:linear-gradient(90deg,rgba(251,246,234,.8) 0%,rgba(251,246,234,.45) 45%,rgba(251,246,234,0) 70%),linear-gradient(0deg,rgba(251,246,234,.55),rgba(251,246,234,0) 30%)}
   #lbt.night .t-bg::after{background:linear-gradient(90deg,rgba(24,28,52,.75) 0%,rgba(24,28,52,.4) 45%,rgba(24,28,52,0) 70%),linear-gradient(0deg,rgba(24,28,52,.5),rgba(24,28,52,0) 30%)}
 }
+
+/* minchi bg: dusk warm tint, credit */
+#lbt.dusk .t-bg::after{background:linear-gradient(90deg,rgba(60,32,30,.7) 0%,rgba(60,32,30,.42) 34%,rgba(60,32,30,0) 62%),linear-gradient(0deg,rgba(60,32,30,.4),rgba(60,32,30,0) 30%)}
+#lbt.splash.dusk .t-bg::after{background:rgba(60,32,30,.42)}
+#lbt .t-credit{position:absolute;right:10px;bottom:6px;z-index:8;font:10px/1 sans-serif;letter-spacing:.04em;color:rgba(60,50,40,.5);pointer-events:none}
+#lbt.night .t-credit{color:rgba(255,255,255,.45)}
+@media (max-width:640px){#lbt.dusk .t-bg::after{background:linear-gradient(90deg,rgba(60,32,30,.7) 0%,rgba(60,32,30,.38) 45%,rgba(60,32,30,0) 70%),linear-gradient(0deg,rgba(60,32,30,.45),rgba(60,32,30,0) 30%)}}
 </style>
 
 <div id="lbt" class="intro splash" data-opening-root>
@@ -676,7 +683,8 @@
     </section>
     <div class="t-bg" id="t-bg" aria-hidden="true"></div>
     <div class="t-motes" aria-hidden="true"></div>
-    <button type="button" class="t-dn" id="t-dn" aria-label="切换白天/夜晚">☀</button>
+    <button type="button" class="t-dn" id="t-dn" aria-label="切换时段">☀</button>
+    <div class="t-credit">背景：みんちりえ</div>
     <div class="t-hero" id="t-hero" role="button" tabindex="0" aria-label="换一位室友"></div>
     <div class="t-bubble" id="t-bubble" role="status" aria-live="polite"></div>
     <div class="t-dialect" id="t-dialect"></div>
@@ -1077,11 +1085,12 @@
   stage.addEventListener('pointerdown',e=>{if(!root.classList.contains('splash'))return;e.stopPropagation();e.preventDefault();endIntro();root.classList.remove('splash');},{capture:true});
 
   /* DEMO v2：背景按现实时间切白天/夜晚，右上角可手动切换 */
-  const BG={day:'https://img.huohu.ai/library/5562991478/images/7820734613345.webp',night:'https://img.huohu.ai/library/5562991478/images/6357350130280.webp'};
-  const hr=new Date().getHours();let night=hr<6||hr>=18;
-  function putBg(){root.classList.toggle('night',night);$('#t-bg').style.setProperty('--bgimg',`url('${night?BG.night:BG.day}')`);$('#t-dn').textContent=night?'☾':'☀';}
-  putBg();new Image().src=BG.day;new Image().src=BG.night;
+  const IMG='https://img.huohu.ai/library/5562991478/images/';
+  const BG=[{k:'day',u:IMG+'1458214070435.jpg',i:'☀',n:'白天'},{k:'dusk',u:IMG+'3169046034961.jpg',i:'◒',n:'傍晚'},{k:'night',u:IMG+'4176194198170.jpg',i:'☾',n:'夜晚'},{k:'late',u:IMG+'9969579749483.jpg',i:'✧',n:'深夜'}];
+  const hr=new Date().getHours();let bi=hr>=6&&hr<16?0:hr>=16&&hr<19?1:(hr>=19||hr<1)?2:3;
+  function putBg(){const b=BG[bi];root.classList.toggle('night',bi>0);root.classList.toggle('dusk',bi===1);root.classList.toggle('late',bi===3);$('#t-bg').style.setProperty('--bgimg',`url('${b.u}')`);const d=$('#t-dn');d.textContent=b.i;d.setAttribute('aria-label','时段：'+b.n+'（点击切换）');}
+  putBg();BG.forEach(b=>{new Image().src=b.u});
   $('#t-dn').addEventListener('pointerdown',e=>e.stopPropagation(),true);
-  $('#t-dn').addEventListener('click',e=>{e.stopPropagation();night=!night;putBg();});
+  $('#t-dn').addEventListener('click',e=>{e.stopPropagation();bi=(bi+1)%BG.length;putBg();});
 })();
 </script>
