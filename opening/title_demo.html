@@ -539,9 +539,9 @@
 
 /* desktop: avatars + card bottom-right */
 @media (min-width:701px){
-  #lbt .c-info{justify-content:flex-end;padding:6px 4px 2px}
-  #lbt .c-info > .c-avs{justify-content:flex-end;flex:none;padding:4px 2px 2px}
+  #lbt .c-info{justify-content:flex-end;padding-bottom:clamp(54px,7.5vw,72px)}
   #lbt .c-info > .c-flip{flex:none}
+  #lbt .c-page > .c-avs{grid-column:3;grid-row:2;align-self:end;justify-self:end;position:relative;z-index:3;padding:4px 2px 2px}
 }
 </style>
 
@@ -1102,6 +1102,6 @@
 })();
 </script>
 <script>
-(()=>{const r=document.getElementById('lbt')||document;const avs=r.querySelector('#c-avs'),info=r.querySelector('#c-info'),top=r.querySelector('.c-top');if(!avs||!info||!top)return;
-const mq=matchMedia('(min-width:701px)');const place=()=>{if(mq.matches){if(avs.parentNode!==info)info.prepend(avs)}else if(avs.parentNode!==top)top.append(avs)};place();mq.addEventListener('change',place);})();
+(()=>{const r=document.getElementById('lbt')||document;const avs=r.querySelector('#c-avs'),info=r.querySelector('.c-page'),top=r.querySelector('.c-top');if(!avs||!info||!top)return;
+const mq=matchMedia('(min-width:701px)');const place=()=>{if(mq.matches){if(avs.parentNode!==info)info.append(avs)}else if(avs.parentNode!==top)top.append(avs)};place();mq.addEventListener('change',place);})();
 </script>
