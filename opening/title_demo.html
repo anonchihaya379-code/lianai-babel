@@ -665,6 +665,9 @@
 #lbt #p-choose .p-own:not(.open) .p-own-tg{display:block;width:100%;padding:8px 14px;border-radius:12px;background:rgba(255,253,248,.18);color:#fff;font-family:var(--hand);font-size:clamp(14px,1.45vw,17px);box-shadow:0 0 0 1.5px rgba(255,255,255,.55) inset;text-align:center}
 #lbt #p-choose .p-own:not(.open) .p-own-tg:hover{background:rgba(255,253,248,.3)}
 #lbt .p-floor[hidden]{display:none}
+
+@media (max-width:700px){#lbt .p-place.in{animation:p-place .7s cubic-bezier(.2,.9,.3,1) .25s both,p-place-out .6s 4.2s forwards}}
+@keyframes p-place-out{to{opacity:0}}
 </style>
 
 <div id="lbt" class="intro splash" data-opening-root>
