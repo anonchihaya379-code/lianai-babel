@@ -1074,7 +1074,7 @@
   function putHero(first){
     const g=HEROES[hi],h=HELLO[g.k]||['',''];
     stage.style.setProperty('--hc',g.c);
-    const draw=()=>{const cm=parseInt(((g.card||[]).find(r=>r[0]==='身高')||[])[1])||165;heroEl.innerHTML=`<img src="${g.sprite}" alt="${g.name}" style="--ax:${g.ax||.5};--hs:${Math.max(.8,Math.min(1,cm/180)).toFixed(3)}">`;bub.innerHTML=`${h[0]}<small>${h[1]}</small>`;heroEl.classList.remove('swap');bub.classList.remove('swap');};
+    const draw=()=>{const cm=parseInt(((g.card||[]).find(r=>r[0]==='身高')||[])[1])||165;heroEl.innerHTML=`<img src="${g.sprite}" alt="${g.name}" style="--ax:${g.ax||.5};--hs:${(g.k==='liu'?.94:Math.max(.8,Math.min(1,cm/180))).toFixed(3)}">`;bub.innerHTML=`${h[0]}<small>${h[1]}</small>`;heroEl.classList.remove('swap');bub.classList.remove('swap');};
     if(first){draw();return;}
     heroEl.classList.add('swap');bub.classList.add('swap');setTimeout(draw,320);
   }

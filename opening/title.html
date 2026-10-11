@@ -459,9 +459,94 @@
   #lbt .c-top .c-back{order:1;margin-left:auto}
   #lbt .c-top .c-avs{order:2}
 }
+
+/* ===== DEMO：gal 风开始界面（点击开始 / 随机女主 / 今日方言 / 悬停偷看） ===== */
+#lbt .t-hero,#lbt .t-bubble,#lbt .t-dialect,#lbt .t-tap,#lbt .t-motes{position:absolute}
+#lbt .t-motes{inset:0;z-index:1;pointer-events:none;overflow:hidden}
+#lbt .t-motes i{position:absolute;width:var(--s);height:var(--s);border-radius:50%;left:var(--x);top:var(--y);background:radial-gradient(circle,rgba(255,236,190,.9),rgba(255,236,190,0) 70%);animation:t-mote var(--d) ease-in-out infinite;animation-delay:var(--dl)}
+@keyframes t-mote{0%,100%{translate:0 0;opacity:.15}50%{translate:12px -26px;opacity:.85}}
+#lbt .t-hero{right:-1%;bottom:0;height:100%;width:46%;z-index:3;display:flex;justify-content:center;align-items:flex-end;cursor:pointer;
+  transition:opacity .5s,transform .6s cubic-bezier(.3,1.2,.5,1)}
+#lbt .t-hero::before{content:"";position:absolute;left:0;right:0;bottom:-6%;height:92%;border-radius:50% 50% 0 0;background:radial-gradient(closest-side,color-mix(in srgb,var(--hc) 30%,transparent),transparent);transition:background .5s}
+#lbt .t-hero img{position:relative;height:calc(var(--hh,98%) * var(--hs,1));max-width:none;translate:calc((.5 - var(--ax,.5)) * 100%) 0;filter:drop-shadow(0 10px 18px rgba(70,50,30,.22));transition:opacity .35s,transform .45s cubic-bezier(.3,1.2,.5,1)}
+#lbt .t-hero.swap img{opacity:0;transform:translateX(18px)}
+#lbt .t-bubble{right:33%;top:34%;z-index:5;max-width:27%;padding:9px 14px 10px;border-radius:16px;background:#fff;box-shadow:0 0 0 2px var(--hc),0 6px 14px rgba(70,50,30,.16);
+  font-family:var(--hand);font-size:clamp(14px,1.6vw,19px);line-height:1.5;color:var(--ink);transition:opacity .3s,transform .4s cubic-bezier(.3,1.6,.5,1);transform-origin:100% 50%}
+#lbt .t-bubble::after{content:"";position:absolute;right:-7px;top:18px;width:12px;height:12px;background:#fff;rotate:45deg;box-shadow:2px -2px 0 0 var(--hc)}
+#lbt .t-bubble small{display:block;margin-top:3px;font-family:var(--body);font-size:.66em;color:var(--pencil)}
+#lbt .t-bubble.swap{opacity:0;transform:scale(.6)}
+#lbt .t-dialect{left:6%;bottom:6%;z-index:5;display:flex;align-items:center;gap:10px;padding:8px 14px 8px 8px;border-radius:12px;background:rgba(255,253,248,.92);box-shadow:0 0 0 1.5px #ead9bf,0 4px 10px rgba(70,50,30,.12);max-width:44%}
+#lbt .t-dialect b{flex:none;display:grid;place-items:center;min-width:2.4em;height:2.4em;padding:0 6px;border-radius:9px;background:var(--hc);color:#fff;font-family:"KeinannMaruPOP","PingFang SC",sans-serif;font-weight:400;font-size:clamp(15px,1.7vw,20px)}
+#lbt .t-dialect span{font-size:clamp(11.5px,1.15vw,13.5px);line-height:1.45;color:var(--ink)}
+#lbt .t-dialect span em{display:block;font-style:normal;font-family:var(--hand);font-size:.95em;color:var(--pencil)}
+#lbt .t-tap{left:50%;top:72%;z-index:6;translate:-50% 0;font-family:var(--hand);font-size:clamp(16px,1.8vw,22px);letter-spacing:.3em;color:var(--pencil);white-space:nowrap;animation:t-blink 1.6s ease-in-out infinite;pointer-events:none}
+@keyframes t-blink{0%,100%{opacity:.25}50%{opacity:1}}
+/* 标题态布局 */
+#lbt:not(.splash) .a-head{left:6%;top:9%;width:min(44%,440px);transform:none;transition:all .6s cubic-bezier(.3,1,.4,1)}
+#lbt:not(.splash) .a-toc{left:9%;top:52%;bottom:auto;transform:none}
+#lbt:not(.splash) .a-toc ol{align-items:flex-start}
+#lbt .a-foot{display:none}
+/* 点击开始态 */
+#lbt.splash .a-head{left:50%;top:22%;width:min(66%,600px);transform:translateX(-50%)}
+#lbt.splash .a-toc,#lbt.splash .t-hero,#lbt.splash .t-bubble,#lbt.splash .t-dialect{opacity:0;pointer-events:none}
+#lbt.splash .t-hero{transform:translateX(40px)}
+#lbt:not(.splash) .t-tap{display:none}
+#lbt .a-toc,#lbt .t-dialect{transition:opacity .5s .25s}
+/* 悬停偷看 */
+#lbt .a-row{position:relative}
+#lbt .t-peek{position:absolute;left:calc(100% + 6px);top:50%;width:46px;height:46px;border-radius:30%;object-fit:cover;object-position:50% 20%;background:#fff;box-shadow:0 0 0 2.5px #fff,0 3px 8px rgba(70,50,30,.2);
+  opacity:0;transform:translate(-14px,-50%) scale(.3) rotate(-20deg);transition:opacity .2s,transform .35s cubic-bezier(.3,1.8,.5,1);pointer-events:none}
+#lbt .a-row:hover .t-peek,#lbt .a-row:focus-visible .t-peek,#lbt .a-row.peek .t-peek{opacity:1;transform:translate(0,-50%) scale(1) rotate(8deg)}
+@media (max-width:700px){
+  #lbt:not(.splash) .a-head{left:5%;top:6%;width:62%}
+  #lbt:not(.splash) .a-toc{left:7%;top:46%}
+  #lbt .a-row{font-size:19px}
+  #lbt .t-hero{width:58%;right:-6%}
+  #lbt .t-hero img{--hh:94%}
+  #lbt .t-bubble{right:auto;left:5%;top:29%;max-width:46%;font-size:13.5px;transform-origin:100% 50%}
+  #lbt .t-dialect{left:5%;bottom:4%;max-width:56%;padding:6px 10px 6px 6px;gap:8px}
+  #lbt .t-peek{width:38px;height:38px}
+  #lbt.splash .a-head{top:24%;width:84%}
+}
+
+/* DEMO v2：客厅背景（白天/夜晚按现实时间），去掉招呼语 */
+#lbt .t-bubble{display:none!important}
+#lbt .t-bg{position:absolute;inset:0;z-index:0;background:var(--bgimg) center/cover no-repeat;transition:opacity .8s;animation:t-ken 40s ease-in-out infinite alternate}
+@keyframes t-ken{from{transform:scale(1.04) translateX(0)}to{transform:scale(1.1) translateX(-1.5%)}}
+#lbt .t-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(251,246,234,.82) 0%,rgba(251,246,234,.55) 34%,rgba(251,246,234,0) 62%),linear-gradient(0deg,rgba(251,246,234,.5),rgba(251,246,234,0) 30%)}
+#lbt.night .t-bg::after{background:linear-gradient(90deg,rgba(24,28,52,.78) 0%,rgba(24,28,52,.5) 34%,rgba(24,28,52,0) 62%),linear-gradient(0deg,rgba(24,28,52,.45),rgba(24,28,52,0) 30%)}
+#lbt.splash .t-bg::after{background:rgba(251,246,234,.55)}
+#lbt.splash.night .t-bg::after{background:rgba(24,28,52,.5)}
+#lbt.night .a-row,#lbt.night .t-tap{color:#fff;text-shadow:0 1px 6px rgba(0,0,0,.45)}
+#lbt:not(.night) .a-row{text-shadow:0 0 8px rgba(255,253,248,.9),0 0 2px #fff}
+#lbt .a-stage{background:#e9e0cf}
+#lbt .a-doodle{display:none}
+#lbt .t-motes{z-index:2}
+#lbt .t-dn{position:absolute;right:10px;top:10px;z-index:8;width:34px;height:34px;border-radius:50%;background:rgba(255,253,248,.85);box-shadow:0 2px 6px rgba(0,0,0,.15);display:grid;place-items:center;font-size:17px}
+#lbt.night .t-dn{background:rgba(30,34,60,.8);color:#ffe9a8}
+@media (max-width:700px){
+  #lbt .t-bg{background-position:46% center}
+  #lbt .t-bg::after{background:linear-gradient(90deg,rgba(251,246,234,.8) 0%,rgba(251,246,234,.45) 45%,rgba(251,246,234,0) 70%),linear-gradient(0deg,rgba(251,246,234,.55),rgba(251,246,234,0) 30%)}
+  #lbt.night .t-bg::after{background:linear-gradient(90deg,rgba(24,28,52,.75) 0%,rgba(24,28,52,.4) 45%,rgba(24,28,52,0) 70%),linear-gradient(0deg,rgba(24,28,52,.5),rgba(24,28,52,0) 30%)}
+}
+
+/* minchi bg: dusk warm tint, credit */
+#lbt.dusk .t-bg::after{background:linear-gradient(90deg,rgba(60,32,30,.7) 0%,rgba(60,32,30,.42) 34%,rgba(60,32,30,0) 62%),linear-gradient(0deg,rgba(60,32,30,.4),rgba(60,32,30,0) 30%)}
+#lbt.splash.dusk .t-bg::after{background:rgba(60,32,30,.42)}
+#lbt .t-credit{position:absolute;right:10px;bottom:6px;z-index:8;font:10px/1 sans-serif;letter-spacing:.04em;color:rgba(60,50,40,.5);pointer-events:none}
+#lbt.night .t-credit{color:rgba(255,255,255,.45)}
+@media (max-width:640px){#lbt.dusk .t-bg::after{background:linear-gradient(90deg,rgba(60,32,30,.7) 0%,rgba(60,32,30,.38) 45%,rgba(60,32,30,0) 70%),linear-gradient(0deg,rgba(60,32,30,.45),rgba(60,32,30,0) 30%)}}
+
+/* desktop: avatars + card bottom-right */
+@media (min-width:701px){
+  #lbt .c-info{grid-column:3;justify-content:flex-end;padding-bottom:clamp(54px,7.5vw,72px)}
+  #lbt .c-top .c-back{margin-left:auto}
+  #lbt .c-info > .c-flip{flex:none}
+  #lbt .c-page > .c-avs{grid-column:3;grid-row:2;align-self:end;justify-self:end;position:relative;z-index:3;padding:4px 2px 2px}
+}
 </style>
 
-<div id="lbt" class="intro" data-opening-root>
+<div id="lbt" class="intro splash" data-opening-root>
   <div class="a-stage" id="a-stage">
     <div class="a-spine" aria-hidden="true"></div>
     <div class="a-rings" id="a-rings" aria-hidden="true"></div>
@@ -604,6 +689,14 @@
         </div>
       </form>
     </section>
+    <div class="t-bg" id="t-bg" aria-hidden="true"></div>
+    <div class="t-motes" aria-hidden="true"></div>
+    <button type="button" class="t-dn" id="t-dn" aria-label="切换时段">☀</button>
+    <div class="t-credit">背景：みんちりえ</div>
+    <div class="t-hero" id="t-hero" role="button" tabindex="0" aria-label="换一位室友"></div>
+    <div class="t-bubble" id="t-bubble" role="status" aria-live="polite"></div>
+    <div class="t-dialect" id="t-dialect"></div>
+    <div class="t-tap" aria-hidden="true">— TOUCH TO START —</div>
     <div class="a-memo" id="a-memo" role="status" aria-live="polite"></div>
   </div>
   <noscript><p style="padding:16px">恋爱巴别塔：和方言少女们的同居日常。在下方输入框打字，开始故事。</p></noscript>
@@ -716,7 +809,7 @@
   };
   const sil=(g,vb)=>{const H=HAIR[g.hair];return `<svg viewBox="${vb||'0 0 120 320'}" aria-hidden="true"><g fill="${g.c}">${H.b}<path d="${BODY}"/><ellipse cx="60" cy="44" rx="20" ry="24"/>${H.f}</g>${H.x||''}</svg>`;};
   const cp=$('#c-page');let cur=0;
-  let eggOpen=false;try{eggOpen=localStorage.getItem('lbt-egg')==='1';}catch(e){}
+  let eggOpen=false;try{localStorage.removeItem('lbt-egg');}catch(e){}
   const shut=g=>g.locked&&!eggOpen;
   const AVK={chen:1,zhou:3};
   const avInner=g=>shut(g)?'<span>？</span>':((g.chibi||[])[AVK[g.k]||0]?`<img class="q" src="${g.chibi[AVK[g.k]||0]}" alt="">`:g.sprite?`<img src="${g.sprite}" alt="" style="--fx:${g.face[0]};--fy:${g.face[1]};--fz:${g.face[2]||7}">`:sil(g,'28 6 64 64'));
@@ -771,7 +864,7 @@
     av.classList.remove('knock');void av.offsetWidth;av.classList.add('knock');
     if(taps===5)av.querySelector('span').textContent='？！';
     if(taps<10)return;
-    taps=0;clearTimeout(tapT);eggOpen=true;try{localStorage.setItem('lbt-egg','1');}catch(e){}
+    taps=0;clearTimeout(tapT);eggOpen=true;
     av.classList.remove('lock','knock');av.setAttribute('aria-label',CAST[i].name);av.innerHTML=avInner(CAST[i]);
     cp.classList.remove('flash');void cp.offsetWidth;cp.classList.add('flash');
     memo('……居然真的点了十次？');
@@ -963,5 +1056,53 @@
     if(b.dataset.act==='start'){openPrologue();return;}
     if(b.dataset.act==='config')openPage(sp,'s-title');
   });
+
+  /* ===== DEMO：gal 风开始界面 ===== */
+  const HELLO={chen:['「嚯，又来了？今儿个可别再赖床了啊。」','（你又来了？今天可别再赖床了。）'],
+    jiang:['「来都来了，巴适得板！走嘛，开整噻！」','（来都来了，舒服得很！走吧，开始吧！）'],
+    dong:['「侬总算来了，阿拉等老久了。」','（你总算来了，我们等好久了。）'],
+    ye:['「嚟咗啊？坐低先，饮啖汤再讲。」','（来了啊？先坐下，喝口汤再说。）'],
+    zhou:['「中！你、你来啦……俺正想喊你嘞。」','（好！你、你来啦……我正想叫你呢。）'],
+    liu:['「哇你来咯！今天也要开开心心捏～」','（哇你来啦！今天也要开开心心哦～）']};
+  const WORDS=[['嚯','北京话','表示惊讶，也常带点调侃'],['得嘞','北京话','好的、没问题'],['巴适','四川话','舒服、好、地道'],['嗦','四川话','句尾语气，带点反问'],
+    ['侬','上海话','你'],['阿拉','上海话','我、我们'],['饮啖汤','粤语','喝口汤'],['靓','粤语','漂亮、好看'],['中','河南话','行、好、可以'],['俺','河南话','我'],
+    ['捏','广西普通话','句尾语气词，软软的'],['好鬼','广西 / 粤语','非常、特别']];
+  const HEROES=CAST.filter(g=>!g.egg&&g.sprite);
+  const DIALECT_C={'北京话':'#6f9fdc','四川话':'#f2683c','上海话':'#f07ea8','粤语':'#8a86f0','河南话':'#e8a33a','广西普通话':'#2db3a0','广西 / 粤语':'#2db3a0'};
+  const heroEl=$('#t-hero'),bub=$('#t-bubble'),dia=$('#t-dialect'),stage=$('#a-stage');
+  let hi=Math.floor(Math.random()*HEROES.length);
+  function putHero(first){
+    const g=HEROES[hi],h=HELLO[g.k]||['',''];
+    stage.style.setProperty('--hc',g.c);
+    const draw=()=>{const cm=parseInt(((g.card||[]).find(r=>r[0]==='身高')||[])[1])||165;heroEl.innerHTML=`<img src="${g.sprite}" alt="${g.name}" style="--ax:${g.ax||.5};--hs:${(g.k==='liu'?.94:Math.max(.8,Math.min(1,cm/180))).toFixed(3)}">`;bub.innerHTML=`${h[0]}<small>${h[1]}</small>`;heroEl.classList.remove('swap');bub.classList.remove('swap');};
+    if(first){draw();return;}
+    heroEl.classList.add('swap');bub.classList.add('swap');setTimeout(draw,320);
+  }
+  function putWord(){const w=WORDS[Math.floor(Math.random()*WORDS.length)];dia.style.setProperty('--hc',DIALECT_C[w[1]]||'#9a6a3c');dia.innerHTML=`<b>${w[0]}</b><span><em>今日方言 · ${w[1]}</em>${w[2]}</span>`;}
+  putHero(true);putWord();
+  heroEl.addEventListener('click',()=>{if(root.classList.contains('splash'))return;hi=(hi+1)%HEROES.length;putHero();});
+  heroEl.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();heroEl.click();}});
+  dia.addEventListener('click',putWord);
+  /* 悬停偷看：每个菜单项配一张 Q 版 */
+  const PEEK={start:['jiang',0],extra:['liu',0],config:['ye',0]};
+  root.querySelectorAll('.a-row').forEach(b=>{const p=PEEK[b.dataset.act];const g=p&&CAST.find(c=>c.k===p[0]);const u=g&&(g.chibi||[])[p[1]];if(u)b.insertAdjacentHTML('beforeend',`<img class="t-peek" src="${u}" alt="">`);
+    b.addEventListener('touchstart',()=>{b.classList.add('peek');setTimeout(()=>b.classList.remove('peek'),900);},{passive:true});});
+  /* 光斑 */
+  $('.t-motes').innerHTML=Array.from({length:9},(_,k)=>`<i style="--x:${8+Math.random()*84}%;--y:${10+Math.random()*75}%;--s:${10+Math.random()*26}px;--d:${5+Math.random()*5}s;--dl:${-Math.random()*6}s"></i>`).join('');
+  /* 点击开始 */
+  stage.addEventListener('pointerdown',e=>{if(!root.classList.contains('splash'))return;e.stopPropagation();e.preventDefault();endIntro();root.classList.remove('splash');},{capture:true});
+
+  /* DEMO v2：背景按现实时间切白天/夜晚，右上角可手动切换 */
+  const IMG='https://img.huohu.ai/library/5562991478/images/';
+  const BG=[{k:'day',u:IMG+'1458214070435.jpg',i:'☀',n:'白天'},{k:'dusk',u:IMG+'3169046034961.jpg',i:'◒',n:'傍晚'},{k:'night',u:IMG+'4176194198170.jpg',i:'☾',n:'夜晚'},{k:'late',u:IMG+'9969579749483.jpg',i:'✧',n:'深夜'}];
+  const hr=new Date().getHours();let bi=hr>=6&&hr<16?0:hr>=16&&hr<19?1:(hr>=19||hr<1)?2:3;
+  function putBg(){const b=BG[bi];root.classList.toggle('night',bi>0);root.classList.toggle('dusk',bi===1);root.classList.toggle('late',bi===3);$('#t-bg').style.setProperty('--bgimg',`url('${b.u}')`);const d=$('#t-dn');d.textContent=b.i;d.setAttribute('aria-label','时段：'+b.n+'（点击切换）');}
+  putBg();BG.forEach(b=>{new Image().src=b.u});
+  $('#t-dn').addEventListener('pointerdown',e=>e.stopPropagation(),true);
+  $('#t-dn').addEventListener('click',e=>{e.stopPropagation();bi=(bi+1)%BG.length;putBg();});
 })();
+</script>
+<script>
+(()=>{const r=document.getElementById('lbt')||document;const avs=r.querySelector('#c-avs'),info=r.querySelector('.c-page'),top=r.querySelector('.c-top');if(!avs||!info||!top)return;
+const mq=matchMedia('(min-width:701px)');const place=()=>{if(mq.matches){if(avs.parentNode!==info)info.append(avs)}else if(avs.parentNode!==top)top.append(avs)};place();mq.addEventListener('change',place);})();
 </script>
