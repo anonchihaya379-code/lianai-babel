@@ -255,7 +255,7 @@
 /* 彩蛋页：宇智波爱 */
 .c-av.knock{animation:c-knock .3s}
 @keyframes c-knock{25%{rotate:calc(var(--amp,2deg) * -1)}50%{rotate:var(--amp,2deg)}75%{rotate:calc(var(--amp,2deg) * -.5)}}
-.c-sprite img.egg{mix-blend-mode:normal;filter:drop-shadow(0 14px 18px rgba(120,60,140,.22));margin-bottom:12%;will-change:translate;-webkit-mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent),linear-gradient(180deg,#000 84%,transparent);-webkit-mask-composite:source-in;mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent),linear-gradient(180deg,#000 84%,transparent);mask-composite:intersect;animation:c-float 4s ease-in-out infinite}
+.c-sprite img.egg{mix-blend-mode:normal;filter:drop-shadow(0 14px 18px rgba(120,60,140,.22));margin-bottom:3%;will-change:translate;-webkit-mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent),linear-gradient(180deg,#000 84%,transparent);-webkit-mask-composite:source-in;mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent),linear-gradient(180deg,#000 84%,transparent);mask-composite:intersect;animation:c-float 4s ease-in-out infinite}
 @keyframes c-float{0%,100%{translate:0 -6px}50%{translate:0 -18px}}
 .c-page.egg .c-badge{color:var(--pencil)}
 .c-page.flash::after{content:"";position:absolute;inset:0;background:#fff;pointer-events:none;animation:c-flash .9s ease-out forwards;z-index:30}
@@ -422,8 +422,16 @@
 #lbt .c-top .c-title{order:0;margin:0 auto 0 4px}
 #lbt .c-top .c-avs{order:1}
 #lbt .c-top .c-back{order:2;margin-left:8px}
-#lbt .c-fig .c-quote{position:relative;z-index:3;align-self:center;flex:none;margin:10px 0 2px;border-radius:14px;text-align:center;max-width:92%}
-#lbt .c-fig .c-quote::before{content:"";position:absolute;left:50%;top:-7px;width:12px;height:12px;background:#fff;translate:-50% 0;rotate:45deg;box-shadow:-2px -2px 0 0 var(--c)}
+#lbt .c-sprite{cursor:pointer}
+#lbt .c-fig .c-quote{position:absolute;z-index:4;right:1%;top:16%;max-width:47%;margin:0;border-radius:14px;text-align:left;
+  opacity:0;pointer-events:none;transform:scale(.5) translateX(-10px);transform-origin:0 20%;transition:opacity .25s,transform .35s cubic-bezier(.3,1.6,.5,1)}
+#lbt .c-fig .c-quote::before{content:"";position:absolute;left:-7px;top:14px;width:12px;height:12px;background:#fff;rotate:45deg;box-shadow:-2px 2px 0 0 var(--c)}
+#lbt .c-fig.talk .c-quote{opacity:1;pointer-events:auto;transform:none}
+#lbt .c-chibi .c-st{transition:opacity .25s,transform .3s cubic-bezier(.3,1.8,.5,1)}
+#lbt .c-fig.talk .c-chibi .c-st{animation:none;opacity:0;transform:scale(.4);pointer-events:none}
+#lbt .c-fig::after{content:"点立绘 · 听她说";position:absolute;right:4px;bottom:2px;z-index:3;font-family:var(--hand);font-size:12px;color:color-mix(in srgb,var(--c) 70%,#6b5e52);opacity:.75;pointer-events:none;transition:opacity .2s}
+#lbt .c-fig.talk::after{content:"再点一下收起";}
+#lbt .c-page.egg .c-fig::after{display:none}
 #lbt .c-flip{position:relative;perspective:1400px;cursor:pointer;outline:none;flex:none}
 #lbt .c-flip:focus-visible .c-face{outline:2px solid var(--c);outline-offset:3px}
 #lbt .c-flip-in{display:grid;transform-style:preserve-3d;transition:transform .7s cubic-bezier(.3,.9,.3,1)}
@@ -693,7 +701,7 @@
     {k:'secret',locked:true,egg:true,name:'宇智波爱',py:'',c:'#e07ab8',hair:'long',dialect:'？？？',
      card:[['年龄','？？？'],['学校','？？？'],['身高','？？？'],['房间','？？？'],['出身','？？？']],
      intro:'这栋公寓、这本相册，还有你——都是她写出来的。自称《锦绣云湾》的创作者，一个懒得写完美结局、却埋了一地 Bad End 的蹩脚神明。粉色长发不讲道理地飘着，右眼写轮眼，左眼轮回眼，手里那把团扇比她人还大。照理说，日常里你是见不到她的。……能翻到这一页，说明你真的连点了十次。真闲啊，杂鱼主角。',
-     say:'',tr:'',ax:.5,hs:.66,face:[.53,.3,5],sprite:'https://img.huohu.ai/library/5562991478/images/3926235520282.webp',chibi:[]}
+     say:'',tr:'',ax:.5,hs:.84,face:[.53,.3,5],sprite:'https://img.huohu.ai/library/5562991478/images/3926235520282.webp',chibi:[]}
   ];
   const STICK=[{x:3,y:6,r:-8},{x:75,y:14,r:7},{x:1,y:44,r:6},{x:77,y:52,r:-6}];
   const BODY='M54 62L66 62L67 80L53 80Z M24 96C26 84 40 80 53 78L67 78C80 80 94 84 96 96L98 150C99 175 95 200 93 225L100 320L20 320L27 225C25 200 21 175 22 150Z M24 96C16 120 14 170 17 225L27 226C27 185 29 140 33 110Z M96 96C104 120 106 170 103 225L93 226C93 185 91 140 87 110Z';
@@ -730,7 +738,7 @@
     $('#c-name').innerHTML=`<div class="row"><b>${stack(g.name)}</b>${g.py?`<i>${g.py}</i>`:''}</div><span class="c-badge"><em>方言</em>${stack(g.dialect)}</span>`;
     drawSprite();
     const blur='<span class="c-blur"></span>';
-    const fig=cp.querySelector('.c-fig');fig.querySelector('.c-quote')?.remove();
+    const fig=cp.querySelector('.c-fig');fig.querySelector('.c-quote')?.remove();fig.classList.remove('talk');
     if(g.say)fig.insertAdjacentHTML('beforeend',`<button type="button" class="c-quote" aria-expanded="false">「${g.say}」<span class="hint">译</span><small>${g.tr}</small></button>`);
     $('#c-info').innerHTML=`<div class="c-flip" role="button" tabindex="0" aria-pressed="false" aria-label="${g.name}的名片，点击翻面看介绍"><div class="c-flip-in">
         <div class="c-face front"><div class="c-cardhd"><span class="logo">锦绣云湾 2001</span><span class="no">No.0${i+1}</span></div>
@@ -746,6 +754,7 @@
     const av=e.target.closest('.c-av');if(av){const i=+av.dataset.i;if(shut(CAST[i]))knock(av,i);else{taps=0;show(i);}return;}
     const st=e.target.closest('.c-st');if(st){st.classList.remove('boing');void st.offsetWidth;st.classList.add('boing');return;}
     const q=e.target.closest('.c-quote');if(q){q.setAttribute('aria-expanded',q.getAttribute('aria-expanded')!=='true');return;}
+    const sp=e.target.closest('.c-sprite');if(sp){const f=sp.closest('.c-fig');if(f.querySelector('.c-quote')){f.classList.toggle('talk');}return;}
     const fc=e.target.closest('.c-flip');if(fc){const on=!fc.classList.contains('on');fc.classList.toggle('on',on);fc.setAttribute('aria-pressed',on);return;}
     if(e.target.closest('[data-act="back"]'))closeChara();
   });
