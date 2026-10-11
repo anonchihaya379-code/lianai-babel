@@ -544,6 +544,112 @@
   #lbt .c-info > .c-flip{flex:none}
   #lbt .c-page > .c-avs{grid-column:3;grid-row:2;align-self:end;justify-self:end;position:relative;z-index:3;padding:4px 2px 2px}
 }
+
+/* ================= v6 ADV 演出 ================= */
+#lbt .p-photo{left:0;right:0;top:0;bottom:0;padding:0;background:#1d1a17;box-shadow:none;transform:none;border-radius:inherit;overflow:hidden}
+#lbt .p-photo > .a-tape,#lbt .p-stamp{display:none}
+#lbt #p-page .x-top{top:10px;left:12px;right:12px;z-index:9;pointer-events:none}
+#lbt #p-page .x-top > *{pointer-events:auto}
+#lbt #p-page .c-back{padding:3px 12px 4px;border-radius:999px;background:rgba(255,253,248,.82);box-shadow:0 2px 8px rgba(0,0,0,.18);font-size:clamp(13px,1.3vw,16px)}
+#lbt #p-page .c-title{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+#lbt .p-scene{--bg:#1d1a17;background:#1d1a17}
+#lbt .p-scene::before,#lbt .p-scene::after{content:none}
+#lbt .p-scene[data-s="lift"]::after{content:none}
+/* 背景双层交叉淡入 */
+#lbt .p-bg{position:absolute;inset:-3%;background:center/cover no-repeat;opacity:0;transition:opacity .8s ease;will-change:opacity,transform}
+#lbt .p-bg.now{transition:none}
+#lbt .p-bg.on{opacity:1;animation:p-drift 26s ease-in-out infinite alternate}
+@keyframes p-drift{from{transform:scale(1.02) translate(0,0)}to{transform:scale(1.06) translate(-1.2%,-.6%)}}
+#lbt .p-bg.tilt{animation:p-tilt 3.2s cubic-bezier(.4,0,.2,1) both;background-size:cover}
+@keyframes p-tilt{from{transform:scale(1.28) translateY(9%)}to{transform:scale(1.06) translateY(-1%)}}
+#lbt .p-bg.push{animation:p-push 2.4s cubic-bezier(.3,.6,.2,1) both}
+@keyframes p-push{from{transform:scale(1.03)}to{transform:scale(1.13) translate(-3%,-2%)}}
+/* 场景氛围：楼下热浪、客厅冷气 */
+#lbt .p-scene[data-s="street"] .p-bg.on{filter:saturate(1.08) brightness(1.04) sepia(.12)}
+#lbt .p-scene[data-s="street"]::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(70% 55% at 80% 8%,rgba(255,236,190,.55),transparent 60%),linear-gradient(0deg,rgba(255,170,90,.18),transparent 45%);mix-blend-mode:screen;animation:p-heat2 4s ease-in-out infinite}
+@keyframes p-heat2{50%{opacity:.7}}
+#lbt .p-scene.chill::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(180deg,rgba(170,215,255,.5),rgba(200,235,255,.15));animation:p-chill 2.6s ease-out both}
+@keyframes p-chill{from{opacity:1}to{opacity:0}}
+/* 转场层 */
+#lbt .p-fx{position:absolute;inset:0;z-index:7;pointer-events:none;opacity:0}
+#lbt .p-fx.black{background:#0e0c0b;transition:opacity .45s ease}
+#lbt .p-fx.flash{background:#fff;transition:opacity .9s ease-out}
+#lbt .p-fx.on{opacity:1}
+#lbt .p-fx.flash.on{transition:none}
+/* 地点卡 */
+#lbt .p-place{left:auto;right:12px;top:12px;z-index:4;display:flex;flex-direction:column;align-items:flex-end;gap:2px;padding:7px 14px 8px 18px;background:linear-gradient(90deg,rgba(255,253,248,0),rgba(255,253,248,.9) 22%);transform:none;box-shadow:none;border-right:3px solid var(--jiang);opacity:0}
+#lbt .p-place b{font-weight:400;font-family:var(--title);font-size:clamp(15px,1.7vw,21px);color:var(--ink);letter-spacing:.04em}
+#lbt .p-place i{font-style:normal;font-family:var(--hand);font-size:clamp(12px,1.25vw,15px);color:var(--pencil)}
+#lbt .p-place.in{animation:p-place .7s cubic-bezier(.2,.9,.3,1) .25s both}
+@keyframes p-place{from{opacity:0;translate:24px 0}to{opacity:1;translate:0 0}}
+/* 电梯楼层显示 */
+#lbt .p-floor{left:50%;right:auto;top:9%;translate:-50% 0;z-index:3;font-size:clamp(20px,2.8vw,34px);padding:6px 14px}
+#lbt .p-floor.ding{animation:p-ding .5s ease-out}
+@keyframes p-ding{40%{scale:1.15;box-shadow:inset 0 0 8px rgba(255,180,70,.35),0 0 22px rgba(255,180,70,.7)}}
+/* 立绘演技 */
+#lbt .p-sprite{z-index:2;transition:opacity .7s,transform .8s cubic-bezier(.3,1.2,.5,1),filter .4s}
+#lbt .p-sprite.on img{animation:p-breathe 4.5s ease-in-out infinite}
+@keyframes p-breathe{50%{transform:translateY(.4%) scaleY(1.004)}}
+#lbt .p-sprite.dim{filter:brightness(.8) saturate(.85)}
+#lbt .p-sprite.talk{animation:p-talk .42s cubic-bezier(.3,1.5,.5,1)}
+@keyframes p-talk{35%{transform:translateY(-1.4%)}}
+#lbt .p-sprite.push{transform:scale(1.05)}
+#lbt .p-sprite:not(.on){transform:translateX(5%)}
+/* 文字框：半透明长条 + 角色色名牌 */
+#lbt .p-box{left:2.2%;right:2.2%;bottom:3%;min-height:0;height:clamp(118px,27%,190px);padding:clamp(22px,2.6%,30px) clamp(20px,3.2%,40px) 12px;border-radius:14px;
+  background:linear-gradient(180deg,rgba(255,253,248,.86),rgba(255,250,242,.94));backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  box-shadow:0 0 0 1.5px rgba(255,255,255,.7) inset,0 10px 30px rgba(20,14,8,.28);border-top:3px solid var(--nc,#b8a48c);transition:border-color .3s}
+#lbt .p-box.narr{border-top-color:rgba(184,164,140,.6)}
+#lbt .p-name{top:-17px;left:clamp(16px,2.6%,34px);padding:4px 18px 5px;border-radius:999px;clip-path:none;transform:none;font-size:clamp(15px,1.6vw,20px);box-shadow:0 4px 10px rgba(0,0,0,.18)}
+#lbt .p-text{font-size:clamp(15px,1.62vw,20px);line-height:1.85}
+#lbt .p-text.n{color:#5a4d42}
+#lbt .p-text.pop{font-family:"KeinannMaruPOP",var(--title);font-size:clamp(28px,3.6vw,46px);line-height:1.3;color:var(--jiang);animation:p-pop .45s cubic-bezier(.3,1.8,.5,1)}
+@keyframes p-pop{from{transform:scale(.4);opacity:0}}
+#lbt .p-next{right:20px;bottom:14px}
+#lbt .p-ctl{top:auto;bottom:8px;right:44px;gap:2px}
+#lbt .p-ctl button{padding:2px 8px;background:none;box-shadow:none;font-family:var(--body);font-size:clamp(11px,1.05vw,13px);letter-spacing:.06em;color:rgba(110,95,80,.75)}
+#lbt .p-ctl button:hover,#lbt .p-ctl button:focus-visible{color:var(--ink);box-shadow:none;text-decoration:underline;text-underline-offset:3px}
+#lbt .p-ctl button[aria-pressed="true"]{background:none;color:var(--jiang);box-shadow:none}
+#lbt .p-scene.hideui .p-box,#lbt .p-scene.hideui .p-place{opacity:0;pointer-events:none;transition:opacity .3s}
+#lbt .p-box,#lbt .p-place{transition:opacity .3s}
+/* 章节标题 */
+#lbt .p-eye{position:absolute;inset:0;z-index:10;display:grid;place-items:center;background:#14110f;color:#fff}
+#lbt .p-eye.out{animation:p-eyeout .6s ease both}
+@keyframes p-eyeout{to{opacity:0}}
+#lbt .p-eye-in{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center}
+#lbt .p-eye small{font:600 clamp(11px,1.1vw,13px)/1 var(--body);letter-spacing:.5em;color:rgba(255,255,255,.55)}
+#lbt .p-eye b{font-weight:400;font-family:var(--title);font-size:clamp(40px,6vw,76px);letter-spacing:.2em;line-height:1.1}
+#lbt .p-eye-line{width:0;height:2px;background:var(--jiang);margin:4px 0}
+#lbt .p-eye em{font-style:normal;font-family:var(--hand);font-size:clamp(20px,2.4vw,30px);letter-spacing:.3em}
+#lbt .p-eye i{font-style:normal;font-family:var(--body);font-size:clamp(11px,1.15vw,14px);letter-spacing:.18em;color:rgba(255,255,255,.6);margin-top:6px}
+#lbt .p-eye.in small{animation:p-up .7s .1s both}
+#lbt .p-eye.in b{animation:p-up .8s .25s both}
+#lbt .p-eye.in .p-eye-line{animation:p-line .7s .7s cubic-bezier(.6,0,.2,1) both}
+#lbt .p-eye.in em{animation:p-up .7s .95s both}
+#lbt .p-eye.in i{animation:p-up .7s 1.2s both}
+@keyframes p-up{from{opacity:0;translate:0 12px}}
+@keyframes p-line{to{width:min(220px,40vw)}}
+/* 选项：压暗画面，居中一排排 */
+#lbt #p-choose{background:rgba(18,14,10,.5);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px)}
+#lbt #p-choose .p-sheet{background:none;box-shadow:none;transform:none;width:min(600px,100%);padding:6px}
+#lbt #p-choose .p-sheet > .a-tape{display:none}
+#lbt #p-choose h3{color:#fff;text-align:center;text-shadow:0 2px 8px rgba(0,0,0,.4)}
+#lbt #p-choose h3 small{display:block;margin:4px 0 0;color:rgba(255,255,255,.7)}
+#lbt #p-choose .p-opt{background:rgba(255,253,248,.93);box-shadow:0 6px 18px rgba(0,0,0,.25);border-left:5px solid var(--oc);border-radius:12px;padding:12px 16px;animation:p-opt .45s cubic-bezier(.2,.9,.3,1) both}
+#lbt #p-choose .p-opt:nth-child(2){animation-delay:.08s}
+#lbt #p-choose .p-opt:nth-child(3){animation-delay:.16s}
+#lbt #p-choose .p-opt:hover{transform:translateX(6px);box-shadow:0 8px 22px rgba(0,0,0,.3),0 0 0 2px var(--oc)}
+@keyframes p-opt{from{opacity:0;translate:-26px 0}}
+#lbt #p-choose .p-own{background:rgba(255,253,248,.85);border-color:rgba(255,255,255,.6);animation:p-opt .45s .24s cubic-bezier(.2,.9,.3,1) both}
+@media (max-width:700px){
+  #lbt .p-photo{top:0;bottom:0;padding:0}
+  #lbt .p-box{height:auto;min-height:34%;padding:20px 14px 30px;left:8px;right:8px;bottom:8px}
+  #lbt .p-ctl{right:34px;bottom:6px}
+  #lbt .p-place{top:46px;right:8px;padding:5px 10px 6px 14px}
+  #lbt .p-sprite{top:6%;height:118%}
+  #lbt .p-text.pop{font-size:32px}
+}
+@media (prefers-reduced-motion:reduce){#lbt .p-bg.on,#lbt .p-sprite.on img{animation:none}}
 </style>
 
 <div id="lbt" class="intro splash" data-opening-root>
@@ -614,7 +720,8 @@
       <div class="p-photo">
         <span class="a-tape" style="--tc:var(--dong)"></span>
         <div class="p-scene" id="p-scene" data-s="street">
-          <span class="p-place" id="p-place"></span>
+          <div class="p-bg" id="p-bg1"></div><div class="p-bg" id="p-bg2"></div>
+          <span class="p-place" id="p-place"><b id="p-place-t"></b><i id="p-place-s"></i></span>
           <span class="p-floor" id="p-floor" aria-hidden="true">1</span>
           <span class="p-stamp" aria-hidden="true">'25 7 1</span>
           <div class="p-sprite" id="p-sprite" aria-hidden="true"></div>
@@ -624,10 +731,13 @@
               <button type="button" data-p="log">记录</button>
               <button type="button" data-p="auto" aria-pressed="false">自动</button>
               <button type="button" data-p="skip">跳到选择</button>
+              <button type="button" data-p="hide" aria-label="隐藏文字框">隐藏</button>
             </div>
             <p class="p-text" id="p-text" aria-live="polite"></p>
             <span class="p-next" aria-hidden="true"></span>
           </div>
+          <div class="p-fx" id="p-fx" aria-hidden="true"></div>
+          <div class="p-eye" id="p-eye" hidden aria-hidden="true"><div class="p-eye-in"><small>PROLOGUE</small><b>序章</b><span class="p-eye-line"></span><em>搬家日</em><i>2025.07.01 MON　上海 · 闵行　34℃</i></div></div>
           <div class="p-layer" id="p-choose" hidden>
             <div class="p-sheet" role="dialog" aria-labelledby="p-choose-h">
               <span class="a-tape" style="--tc:var(--chen)"></span>
@@ -917,27 +1027,30 @@
   const chen=CAST[0];
   const ME=(window.huohu&&huohu.chat&&huohu.chat.user)||'我';
   const WHO={n:['',''],me:[ME,'#8a7a6a'],q:['？？？','#9b8d7b'],chen:['陈霜月',chen.c]};
-  const PLACES={street:'上海 · 闵行　锦绣云湾楼下　酷热',lift:'电梯 · 上行中',room:'锦绣云湾 2001 · 客厅　冷气开着'};
-  /* who：n 旁白 / me 主角 / q 未露面 / chen 陈霜月；show：此句起立绘出现 */
+  const PIMG='https://img.huohu.ai/library/5562991478/images/';
+  const BGS={street:PIMG+'4636200774192.jpg',lift:PIMG+'1984686950768.jpg',hall:PIMG+'5053796110564.jpg',room:PIMG+'1458214070435.jpg'};
+  const PLACES={street:['锦绣云湾 · 楼下','14:20　酷热 34℃'],lift:['锦绣云湾 · 电梯厅','上行中'],hall:['锦绣云湾 · 20F','2001 室门口'],room:['锦绣云湾 2001 · 客厅','冷气开着']};
+  /* who：n 旁白 / me 主角 / q 未露面 / chen 陈霜月；show：此句起立绘出现；tr：转场 black 黑场 / flash 白闪；fx：pop 大字 / tilt 镜头上摇 / push 镜头推近 */
   const SCRIPT=[
     {s:'street',who:'n',t:'汗水顺着脖颈滑进衣领，黏糊糊地贴在背上。上海的夏天，简直就是个巨型蒸笼。'},
-    {s:'street',who:'n',t:'我拖着沉重的行李箱站在锦绣云湾楼下，仰头看着这栋要收留我四年的大楼。'},
+    {s:'street',who:'n',t:'我拖着沉重的行李箱站在锦绣云湾楼下，仰头看着这栋要收留我四年的大楼。',fx:'tilt'},
     {s:'street',who:'n',t:'20 层，顶楼，复式。老头子嘴上说着“赶快滚”，到底没忍住那股暴发户式的关怀。'},
-    {s:'lift',who:'n',t:'再见了，北京的大院。再见了，出门都要被盘问三遍的窒息生活。'},
+    {s:'lift',tr:'black',who:'n',t:'再见了，北京的大院。再见了，出门都要被盘问三遍的窒息生活。'},
     {s:'lift',who:'n',t:'从今天起，我要睡到自然醒，吃泡面打游戏，偶尔去上上课——过上梦寐以求的、平凡的堕落大学生活！'},
-    {s:'room',who:'n',t:'钥匙插进锁孔，咔哒一声。门一推开，凉爽的冷气扑面而来。'},
-    {s:'room',who:'me',t:'「爽！」'},
+    {s:'hall',tr:'black',who:'n',t:'走廊尽头，2001。钥匙插进锁孔，咔哒一声。'},
+    {s:'room',tr:'flash',who:'n',t:'门一推开，凉爽的冷气扑面而来。'},
+    {s:'room',who:'me',t:'「爽！」',fx:'pop'},
     {s:'room',who:'n',t:'我把行李箱往玄关一扔，鞋也不换，大步流星地扑向那张看起来就很软的真皮沙发——'},
     {s:'room',who:'q',t:'「——好久不见。看样子，你心情还不错。」',shake:true},
     {s:'room',who:'n',t:'清冷，平稳，像一盆加了冰块的冷水，直接泼在我发热的脑门上。'},
-    {s:'room',who:'n',t:'落地窗边的单人沙发上，黑色长发的少女越过书页的上沿，静静地看着我。',show:true},
+    {s:'room',who:'n',t:'落地窗边的单人沙发上，黑色长发的少女越过书页的上沿，静静地看着我。',show:true,fx:'push'},
     {s:'room',who:'n',t:'陈霜月。我的青梅竹马。那个本该在北京准备家庭旅行的家伙。'},
     {s:'room',who:'me',t:'「……你怎么在这里？」'},
     {s:'room',who:'chen',t:'「伯父给了我备用钥匙。」'},
     {s:'room',who:'chen',t:'「为了防止你把自己饿死或者弄丢，他拜托我报了上海的志愿。顺便，免了我的房租。」'},
     {s:'room',who:'chen',t:'「作为交换，这四年里，我负责——看住你。」'},
     {s:'room',who:'n',t:'完了。我的平凡生活，在开始的第一秒，就宣告结束了。'},
-    {s:'room',who:'chen',t:'「嚯，您这身汗味儿可真够冲的。」',tr:'（你这一身汗味可真重。）'}
+    {s:'room',who:'chen',t:'「嚯，您这身汗味儿可真够冲的。」',zh:'（你这一身汗味可真重。）'}
   ];
   const CHOICES=[
     {tag:'直男',c:'#8fa3b8',show:'我不信，一定是打开方式不对。（关门重开）',act:'我不信，一定是我打开方式不对——我默默退出门外，把门关上，准备重新开一次。'},
@@ -953,23 +1066,45 @@
     `<div class="p-own"><label for="p-own">或者，自己写你的回应</label><textarea id="p-own" maxlength="300" placeholder="比如：「你什么时候学会撬锁的？」"></textarea><p class="p-err" id="p-own-err" role="alert"></p><div class="p-row" style="margin:0"><button type="button" class="p-act" data-p="own">就这么回</button></div></div>`;
   const ownBox=$('#p-own');ownBox.addEventListener('input',()=>{ownText=ownBox.value;$('#p-own-err').textContent='';});
 
-  function setScene(s){
-    if(s===curScene)return;curScene=s;scene.dataset.s=s;$('#p-place').textContent=PLACES[s];
-    clearInterval(floorT);const f=$('#p-floor');
-    if(s==='lift'){let n=1;f.textContent=n;floorT=setInterval(()=>{n++;f.textContent=n;if(n>=20)clearInterval(floorT);},SET.motion==='calm'?0:110);}
+  const pbg=[$('#p-bg1'),$('#p-bg2')],pfx=$('#p-fx'),psp=$('#p-sprite');let bgi=0,fxT=null;
+  const calm=()=>SET.motion==='calm';
+  function putBg(url,instant){const nx=pbg[1-bgi],cu=pbg[bgi];nx.classList.toggle('now',!!instant);cu.classList.toggle('now',!!instant);
+    nx.style.backgroundImage=`url('${url}')`;nx.classList.remove('tilt','push');void nx.offsetWidth;nx.classList.add('on');cu.classList.remove('on');bgi=1-bgi;}
+  function placeCard(s){const pl=$('#p-place');$('#p-place-t').textContent=PLACES[s][0];$('#p-place-s').textContent=PLACES[s][1];pl.classList.remove('in');void pl.offsetWidth;pl.classList.add('in');}
+  function liftCount(){clearInterval(floorT);const f=$('#p-floor');let n=1;f.textContent=n;f.classList.remove('ding');
+    floorT=setInterval(()=>{n++;f.textContent=n;if(n>=20){clearInterval(floorT);f.classList.add('ding');}},calm()?0:95);}
+  /* 返回值：转场占用的毫秒数，打字等它结束再开始 */
+  function setScene(s,tr){
+    if(s===curScene)return 0;const first=!curScene;curScene=s;scene.dataset.s=s;clearTimeout(fxT);
+    const go=()=>{putBg(BGS[s],first||tr==='black');placeCard(s);if(s==='lift')liftCount();else clearInterval(floorT);
+      scene.classList.toggle('chill',s==='room'&&tr==='flash');};
+    if(calm()||first||!tr){go();return first?0:350;}
+    if(tr==='black'){pfx.className='p-fx black';void pfx.offsetWidth;pfx.classList.add('on');fxT=setTimeout(()=>{go();pfx.classList.remove('on');},480);return 1050;}
+    if(tr==='flash'){go();pfx.className='p-fx flash';void pfx.offsetWidth;pfx.classList.add('on');fxT=setTimeout(()=>pfx.classList.remove('on'),60);setTimeout(()=>scene.classList.remove('chill'),2600);return 520;}
+    go();return 350;
   }
-  function finishLine(){clearInterval(typing);typing=null;const L=SCRIPT[li];ptext.innerHTML='';ptext.append(L.t);if(L.tr){const s=document.createElement('small');s.textContent=L.tr;ptext.append(s);}full=true;box.classList.add('done');queueAuto();}
+  function finishLine(){clearInterval(typing);typing=null;const L=SCRIPT[li];ptext.innerHTML='';ptext.append(L.t);if(L.zh){const s=document.createElement('small');s.textContent=L.zh;ptext.append(s);}full=true;box.classList.add('done');queueAuto();}
   function showLine(i){
-    li=i;const L=SCRIPT[i];setScene(L.s);
-    const [nm,col]=WHO[L.who];pname.textContent=nm;pname.style.setProperty('--nc',col);
-    ptext.classList.toggle('n',L.who==='n');
-    if(L.show)$('#p-sprite').classList.add('on');
-    if(L.shake&&SET.motion!=='calm'){scene.classList.remove('shake');void scene.offsetWidth;scene.classList.add('shake');}
-    full=false;box.classList.remove('done');clearInterval(typing);clearTimeout(autoT);
+    li=i;const L=SCRIPT[i];const wait=setScene(L.s,L.tr);
+    const [nm,col]=WHO[L.who];pname.textContent=nm;pname.style.setProperty('--nc',col);box.style.setProperty('--nc',col||'#b8a48c');
+    ptext.classList.toggle('n',L.who==='n');ptext.classList.toggle('pop',L.fx==='pop');box.classList.toggle('narr',L.who==='n');
+    if(L.show)psp.classList.add('on');
+    psp.classList.toggle('dim',L.who!=='chen');
+    if(L.who==='chen'&&!calm()){psp.classList.remove('talk');void psp.offsetWidth;psp.classList.add('talk');}
+    const cur=pbg[bgi];
+    if(L.fx==='tilt'&&!calm())cur.classList.add('tilt');
+    if(L.fx==='push'&&!calm()){cur.classList.add('push');psp.classList.add('push');}
+    if(L.shake&&!calm()){scene.classList.remove('shake');void scene.offsetWidth;scene.classList.add('shake');}
+    full=false;box.classList.remove('done');clearInterval(typing);clearTimeout(autoT);ptext.textContent='';
     const ms=SPEED[SET.speed];
-    if(!ms){finishLine();return;}
-    const chars=[...L.t];let k=0;ptext.textContent='';
-    typing=setInterval(()=>{k++;ptext.textContent=chars.slice(0,k).join('');if(k>=chars.length)finishLine();},ms);
+    const start=()=>{
+      if(!ms){finishLine();return;}
+      const chars=[...L.t];let k=0;
+      const tick=()=>{k++;ptext.textContent=chars.slice(0,k).join('');if(k>=chars.length){finishLine();return;}
+        const c=chars[k-1];const m=/[。！？!?]/.test(c)?7:/[…—]/.test(c)?3:/[，、；：]/.test(c)?3.5:1;typing=setTimeout(tick,ms*m);};
+      typing=setTimeout(tick,ms);
+    };
+    if(wait&&ms){typing=setTimeout(start,wait);}else start();
   }
   function queueAuto(){clearTimeout(autoT);if(auto&&!anyLayer())autoT=setTimeout(advance,WAIT[SET.wait]+SCRIPT[li].t.length*25);}
   const anyLayer=()=>Object.values(layers).some(l=>!l.hidden);
@@ -977,6 +1112,8 @@
     const f=layers[name].querySelector(name==='review'?'[data-opening-submit]':'button,textarea');if(f)f.focus({preventScroll:true});}
   function closeLayers(){Object.values(layers).forEach(l=>l.hidden=true);}
   function advance(){
+    if(eyeOn){endEye();return;}
+    if(scene.classList.contains('hideui')){scene.classList.remove('hideui');return;}
     if(anyLayer())return;
     if(typing){finishLine();return;}
     if(li<SCRIPT.length-1){showLine(li+1);return;}
@@ -985,7 +1122,7 @@
   function setAuto(v){auto=v;pp.querySelector('[data-p="auto"]').setAttribute('aria-pressed',v);if(v&&full)queueAuto();else if(!v)clearTimeout(autoT);}
   function skipToEnd(){
     setAuto(false);clearInterval(typing);typing=null;
-    li=SCRIPT.length-1;setScene('room');$('#p-sprite').classList.add('on');
+    li=SCRIPT.length-1;if(eyeOn)endEye(true);setScene('room');psp.classList.add('on');psp.classList.remove('dim');
     const L=SCRIPT[li];const [nm,col]=WHO[L.who];pname.textContent=nm;pname.style.setProperty('--nc',col);ptext.classList.remove('n');finishLine();
     openLayer('choose');
   }
@@ -993,7 +1130,7 @@
     $('#p-log-list').innerHTML='';
     SCRIPT.slice(0,li+1).forEach(L=>{const li2=document.createElement('li');const [nm,col]=WHO[L.who];
       if(nm){const b=document.createElement('b');b.textContent=nm;b.style.setProperty('--lc',col);li2.append(b);}else li2.className='n';
-      li2.append(L.t+(L.tr?' '+L.tr:''));$('#p-log-list').append(li2);});
+      li2.append(L.t+(L.zh?' '+L.zh:''));$('#p-log-list').append(li2);});
   }
   function payload(){
     const action=pick==='own'?ownText.trim():CHOICES[pick].act;
@@ -1013,6 +1150,7 @@
     if(b){const a=b.dataset.p;
       if(a==='auto'){setAuto(!auto);if(auto&&full)advance();}
       else if(a==='skip')skipToEnd();
+      else if(a==='hide'){setAuto(false);scene.classList.add('hideui');}
       else if(a==='log'){drawLog();openLayer('log');}
       else if(a==='closelog'){closeLayers();if(li>=SCRIPT.length-1&&full&&pick===null)openLayer('choose');}
       else if(a==='own'){if(!ownText.trim()){$('#p-own-err').textContent='先写点什么吧，一句话也行。';ownBox.focus();return;}pick='own';openReview();}
@@ -1031,9 +1169,12 @@
     if(e.key==='Escape'){if(!layers.log.hidden){closeLayers();return;}if(anyLayer())return;closePage(pp,'start');return;}
     if((e.key==='Enter'||e.key===' ')&&!e.target.closest('button,textarea,input')){e.preventDefault();advance();}
   });
+  let eyeOn=false,eyeT=null;const peye=$('#p-eye');
+  function startEye(){if(calm()){showLine(0);return;}eyeOn=true;peye.hidden=false;peye.classList.remove('out');void peye.offsetWidth;peye.classList.add('in');eyeT=setTimeout(()=>endEye(),2900);}
+  function endEye(silent){if(!eyeOn)return;eyeOn=false;clearTimeout(eyeT);peye.classList.add('out');setTimeout(()=>{peye.hidden=true;peye.classList.remove('in','out');},600);if(!silent&&li<0)showLine(0);}
   function openPrologue(){
     openPage(pp,'p-title');
-    if(li<0)showLine(0);
+    if(li<0)startEye();
     else if(li>=SCRIPT.length-1&&full&&!anyLayer())openLayer(pick===null?'choose':'review');
     if(!layers.review.hidden)openReview();
   }
