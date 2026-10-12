@@ -1,63 +1,39 @@
 <!-- lbt-choices -->
-{% case focus %}
-  {% when "h1" %}{% assign who = "陈霜月" %}{% assign face = "https://img.huohu.ai/library/5562991478/images/5362937337028.webp" %}
-  {% when "h2" %}{% assign who = "江澜" %}{% assign face = "https://img.huohu.ai/library/5562991478/images/8078724610663.webp" %}
-  {% when "h3" %}{% assign who = "周莹春" %}{% assign face = "https://img.huohu.ai/library/5562991478/images/3750938924015.webp" %}
-  {% when "h4" %}{% assign who = "柳轻飏" %}{% assign face = "https://img.huohu.ai/library/5562991478/images/6884028647212.webp" %}
-  {% when "h5" %}{% assign who = "东方遇晓" %}{% assign face = "https://img.huohu.ai/library/5562991478/images/6988920711836.webp" %}
-  {% when "h6" %}{% assign who = "叶潇雨" %}{% assign face = "https://img.huohu.ai/library/5562991478/images/6895078086939.webp" %}
-  {% else %}{% assign who = "" %}{% assign face = "" %}
-{% endcase %}
-<section class="lbtc lbtc--{{ focus | default: 'none' }}">
-  <div class="lbtc-deco" aria-hidden="true"></div>
-  <header class="lbtc-top">
-    {% if face != "" %}
-      <div class="lbtc-face"><img src="{{ face }}" alt="{{ who }}"></div>
-    {% else %}
-      <div class="lbtc-face lbtc-face--none" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3l2.6 5.6 6.1.7-4.5 4.2 1.2 6L12 16.6 6.6 19.5l1.2-6L3.3 9.3l6.1-.7z" fill="currentColor"/></svg></div>
-    {% endif %}
-    <div class="lbtc-bubble">
-      <div class="lbtc-meta">
-        {% if who != "" %}<span class="lbtc-who">{{ who }}</span>{% endif %}
-        {% if scene %}<span class="lbtc-scene">{{ scene }}</span>{% endif %}
-      </div>
-      <p class="lbtc-prompt">{{ prompt }}</p>
-    </div>
-    <span class="lbtc-badge" aria-hidden="true">CHOICE</span>
+<section class="lbtc">
+  <span class="lbtc-float lbtc-f1" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 21s-8-5-8-11a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 20 10c0 6-8 11-8 11z"/></svg></span>
+  <span class="lbtc-float lbtc-f2" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2c.6 4.6 2.4 6.4 7 7-4.6.6-6.4 2.4-7 7-.6-4.6-2.4-6.4-7-7 4.6-.6 6.4-2.4 7-7z"/></svg></span>
+  <span class="lbtc-float lbtc-f3" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2c.6 4.6 2.4 6.4 7 7-4.6.6-6.4 2.4-7 7-.6-4.6-2.4-6.4-7-7 4.6-.6 6.4-2.4 7-7z"/></svg></span>
+  <span class="lbtc-float lbtc-f4" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 21s-8-5-8-11a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 20 10c0 6-8 11-8 11z"/></svg></span>
+  <header class="lbtc-head">
+    <div class="lbtc-title">你会怎么做呢</div>
+    {% if prompt %}<p class="lbtc-prompt">{{ prompt }}</p>{% endif %}
   </header>
-  <ol class="lbtc-list">
+  <div class="lbtc-list">
     {% for o in options %}
       {% case o.kind %}
-        {% when "zhinan" %}{% assign tag = "直男" %}{% assign hint = "我行我素" %}
-        {% when "gonglue" %}{% assign tag = "攻略" %}{% assign hint = "接住她" %}
-        {% when "lezi" %}{% assign tag = "乐子人" %}{% assign hint = "整点活" %}
-        {% else %}{% assign tag = "选择" %}{% assign hint = "" %}
+        {% when "zhinan" %}{% assign tag = "直男" %}
+        {% when "gonglue" %}{% assign tag = "攻略" %}
+        {% when "lezi" %}{% assign tag = "乐子人" %}
+        {% else %}{% assign tag = "选择" %}
       {% endcase %}
-      <li class="lbtc-item">
-        <button type="button" class="lbtc-opt is-{{ o.kind }}" data-action-send="【{{ tag }}】{{ o.text | escape }}">
-          <span class="lbtc-no">0{{ forloop.index }}</span>
-          <span class="lbtc-ico" aria-hidden="true">
-            {% case o.kind %}
-              {% when "zhinan" %}<svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M4 10h16M9 5v5M14 10v9" stroke="currentColor" stroke-width="2"/></svg>
-              {% when "gonglue" %}<svg viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z" fill="currentColor"/></svg>
-              {% when "lezi" %}<svg viewBox="0 0 24 24"><path d="M13 2L5 13h6l-1 9 8-11h-6z" fill="currentColor"/></svg>
-              {% else %}<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="5" fill="currentColor"/></svg>
-            {% endcase %}
-          </span>
-          <span class="lbtc-body">
-            <span class="lbtc-kind">{{ tag }}{% if hint != "" %}<i>{{ hint }}</i>{% endif %}</span>
-            <span class="lbtc-text">{{ o.text }}</span>
-          </span>
-          <span class="lbtc-go" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-        </button>
-      </li>
+      <button type="button" class="lbtc-opt is-{{ o.kind }}" data-action-send="【{{ tag }}】{{ o.text | escape }}">
+        <span class="lbtc-tag">
+          {% case o.kind %}
+            {% when "zhinan" %}<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3c3.5 4.6 6 8 6 11a6 6 0 0 1-12 0c0-3 2.5-6.4 6-11z"/></svg>
+            {% when "gonglue" %}<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-8-5-8-11a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 20 10c0 6-8 11-8 11z"/></svg>
+            {% when "lezi" %}<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.9 6.2 6.6.8-4.9 4.6 1.3 6.6L12 16.9l-5.9 3.3 1.3-6.6L2.5 9l6.6-.8z"/></svg>
+            {% else %}<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="6"/></svg>
+          {% endcase %}{{ tag }}
+        </span>
+        <span class="lbtc-text">{{ o.text }}</span>
+      </button>
     {% endfor %}
-  </ol>
+  </div>
   <details class="lbtc-own">
-    <summary><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l4-1 11-11-3-3L5 16z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>都不想选？自己写一句</summary>
+    <summary><span class="lbtc-own-pill">都不想选？自己写一句</span></summary>
     <form class="lbtc-form">
       <input class="lbtc-input" type="text" name="action" data-label="我的行动" placeholder="比如：「你什么时候学会撬锁的？」">
-      <button type="button" class="lbtc-send" data-action-submit>填入</button>
+      <button type="button" class="lbtc-send" data-action-submit>就这么说</button>
     </form>
   </details>
 </section>
