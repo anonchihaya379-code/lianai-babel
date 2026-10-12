@@ -9,12 +9,12 @@
   const IMG = 'https://img.huohu.ai/library/5562991478/images/';
   const SLOTS = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'];
   const CAST = {
-    h1: { name: '陈霜月', ar: 0.381, nick: '霜月', sig: '请说重点。', c: '#6f9fdc', sprite: IMG + '1152827677463.webp', face: [.37, .11], ax: .5, school: 'fudan', room: '202', dialect: '北京话' },
-    h2: { name: '江澜', ar: 0.368, nick: '澜子', sig: '今天也要练！', c: '#f2683c', sprite: IMG + '9775495391960.webp', face: [.45, .125], ax: .515, school: 'sus', room: '101', dialect: '四川话' },
-    h3: { name: '周莹春', ar: 0.481, nick: 'yc_0314', sig: '∑ 1/n² = π²/6', c: '#e8a33a', sprite: IMG + '6501736655754.webp', face: [.27, .16], ax: .31, school: 'fudan', room: '102', dialect: '河南话' },
-    h4: { name: '柳轻飏', ar: 0.488, nick: '飏飏飏', sig: '嗦粉第一名', c: '#2db3a0', sprite: IMG + '6484478934390.webp', face: [.39, .13], ax: .47, school: 'sta', room: '101', dialect: '广西普通话' },
-    h5: { name: '东方遇晓', ar: 0.515, nick: '晓晓不是小小', sig: '洋泾浜退散', c: '#f07ea8', sprite: IMG + '3633698951087.webp', face: [.25, .13], ax: .335, school: 'sjtu', room: '203', dialect: '上海话' },
-    h6: { name: '叶潇雨', ar: 0.395, nick: '潇潇雨歇', sig: '直播中 勿扰', c: '#8a86f0', sprite: IMG + '4074715116402.webp', face: [.51, .155], ax: .6, school: null, room: '103', dialect: '粤语' },
+    h1: { name: '陈霜月', ar: 0.381, nick: '霜月', sig: '请说重点。', c: '#6f9fdc', qa: IMG + '3249781404269.jpg', qbg: IMG + '3436108174556.jpg', sprite: IMG + '1152827677463.webp', face: [.37, .11], ax: .5, school: 'fudan', room: '202', dialect: '北京话' },
+    h2: { name: '江澜', ar: 0.368, nick: '澜子', sig: '今天也要练！', c: '#f2683c', qa: IMG + '6954250942887.jpg', qbg: IMG + '9140235524496.jpg', sprite: IMG + '9775495391960.webp', face: [.45, .125], ax: .515, school: 'sus', room: '101', dialect: '四川话' },
+    h3: { name: '周莹春', ar: 0.481, nick: 'yc_0314', sig: '∑ 1/n² = π²/6', c: '#e8a33a', qa: IMG + '3420602726103.jpg', qbg: IMG + '9629173233530.jpg', sprite: IMG + '6501736655754.webp', face: [.27, .16], ax: .31, school: 'fudan', room: '102', dialect: '河南话' },
+    h4: { name: '柳轻飏', ar: 0.488, nick: '飏飏飏', sig: '嗦粉第一名', c: '#2db3a0', qa: IMG + '8308775462341.jpg', qbg: IMG + '2131781186288.jpg', sprite: IMG + '6484478934390.webp', face: [.39, .13], ax: .47, school: 'sta', room: '101', dialect: '广西普通话' },
+    h5: { name: '东方遇晓', ar: 0.515, nick: '晓晓不是小小', sig: '洋泾浜退散', c: '#f07ea8', qa: IMG + '7397844344817.jpg', qbg: IMG + '8453092222413.jpg', sprite: IMG + '3633698951087.webp', face: [.25, .13], ax: .335, school: 'sjtu', room: '203', dialect: '上海话' },
+    h6: { name: '叶潇雨', ar: 0.395, nick: '潇潇雨歇', sig: '直播中 勿扰', c: '#8a86f0', qa: IMG + '8076287945087.jpg', qbg: IMG + '8561528968382.jpg', sprite: IMG + '4074715116402.webp', face: [.51, .155], ax: .6, school: null, room: '103', dialect: '粤语' },
     ai: { name: '宇智波爱', ar: 0.667, nick: '观测者', sig: '杂鱼主角今天也翻车了吗', c: '#e07ab8', sprite: IMG + '9636094724211.webp', face: [.53, .36, 5], ax: .5, egg: true }
   };
   const GROUP = '锦绣云湾2001';
@@ -148,7 +148,7 @@
     if (!c) return `<span class="av ${cls}"><span class="q">？</span></span>`;
     if (c.egg && !badend()) return `<span class="av ${cls}"><span class="q">？</span></span>`;
     const off = (!c.egg && !online(id)) ? ' off' : '';
-    return `<span class="av ${cls}${off}" style="--c:${c.c}"><img src="${c.sprite}" alt="" style="--fx:${c.face[0]};--fy:${c.face[1]};--fz:${c.face[2] || 7}"></span>`;
+    return `<span class="av ${cls}${off}" style="--c:${c.c}">${c.qa ? `<img class="ph" src="${c.qa}" alt="">` : `<img src="${c.sprite}" alt="" style="--fx:${c.face[0]};--fy:${c.face[1]};--fz:${c.face[2] || 7}">`}</span>`;
   }
 
   /* ---------- 外置数据（解锁表 / 地图） ---------- */
@@ -422,7 +422,7 @@
       if (id === 'ai') return `<div class="ap-top" style="position:absolute;left:0;right:0;z-index:2;background:transparent;border:0;color:#fff"><button type="button" class="bk" data-act="back" aria-label="返回">${ICON.back}</button><h2></h2><span class="ac"></span></div><div class="ap-body"><div class="hero" style="--c:${ca.c};--ax:${ca.ax}"><div class="bg"><img src="${ca.sprite}" alt="" style="mix-blend-mode:multiply"></div>${av(id)}</div><div class="who"><b>${esc(ca.nick)}</b><p>${esc(ca.sig)}</p></div><div class="rows"><div><span>好感</span><b>？？？</b></div><div><span>关系</span><b>？？？</b></div><div><span>位置</span><b>观测者剧场</b></div></div><div class="acts"><button type="button" data-act="msg">发消息</button></div></div>`;
       const gi = girl(id); const love = Math.max(0, Math.min(100, +gi.love || 0)); const ready = gi.in && love >= ROUTE_AT && g('plot.phase') !== 'route';
       return `<div class="ap-top" style="position:absolute;left:0;right:0;z-index:2;background:transparent;border:0;color:#fff"><button type="button" class="bk" data-act="back" aria-label="返回">${ICON.back}</button><h2></h2><span class="ac"></span></div>
-      <div class="ap-body"><div class="hero" style="--c:${ca.c};--ax:${ca.ax}"><div class="bg"><img src="${ca.sprite}" alt=""></div>${av(id)}</div>
+      <div class="ap-body"><div class="hero" style="--c:${ca.c};--ax:${ca.ax}">${ca.qbg ? `<div class="bg ph"><img src="${ca.qbg}" alt=""></div>` : `<div class="bg"><img src="${ca.sprite}" alt=""></div>`}${av(id)}</div>
       <div class="who"><b>${esc(ca.nick)}<em>${esc(ca.name)}</em></b><p>${esc(ca.sig)}</p></div>
       <div class="rows"><div><span>好感</span><span class="love"><span class="bar" style="--c:${ca.c};--p:${love}%"><i></i></span><b>${love}</b></span></div><div><span>关系</span><b>${esc(gi.in ? gi.rel || '—' : '未入住')}</b></div><div><span>位置</span><b>${esc(locOf(id))}</b></div></div>
       ${ready ? `<button type="button" class="route-cta" data-act="route" style="--c:${ca.c}">♥ 前往${esc(ca.name)}的角色剧情</button>` : ''}

@@ -176,6 +176,7 @@
 .av img{position:absolute;left:50%;top:50%;height:calc(var(--fz,7) * 100%);width:auto;max-width:none;transform:translate(calc(var(--fx,.5) * -100%),calc(var(--fy,.12) * -100%))}
 .av.round{border-radius:50%}
 .av .q{position:absolute;inset:0;display:grid;place-items:center;font:400 20px var(--pop);color:#9b8d7b;background:#e9e1d2}
+.av img.ph{position:static;width:100%;height:100%;object-fit:cover;transform:none}
 .av.off img{filter:grayscale(1) brightness(.85)}
 .av .on{position:absolute;right:-1px;bottom:-1px;width:10px;height:10px;border-radius:50%;background:#52c41a;box-shadow:0 0 0 2px #fff}
 .av.me{background:var(--qq)}
@@ -246,6 +247,8 @@
 .qq-card .hero{position:relative;z-index:1;flex:none;height:150px;background:linear-gradient(160deg,color-mix(in srgb,var(--c) 70%,#fff),var(--c))}
 .qq-card .hero .bg{position:absolute;inset:0;overflow:hidden}
 .qq-card .hero .bg img{position:absolute;left:50%;top:6%;height:260%;translate:calc(-50% + (0.5 - var(--ax,.5)) * 100%) 0;opacity:.95;filter:drop-shadow(0 6px 10px rgba(0,0,0,.2))}
+.qq-card .hero .bg.ph img{left:0;top:0;width:100%;height:100%;object-fit:cover;translate:none;filter:none;opacity:1}
+.qq-card .hero .bg.ph::after{content:'';position:absolute;inset:0;background:linear-gradient(rgba(0,0,0,.32),transparent 50%)}
 .qq-card .hero .av{position:absolute;left:14px;bottom:-26px;width:72px;height:72px;border-radius:14px;box-shadow:0 0 0 3px #fff,0 4px 10px rgba(0,0,0,.2)}
 .qq-card .who{padding:32px 14px 10px;background:#fff}
 .qq-card .who b{font-size:19px;font-weight:600}
