@@ -11,12 +11,12 @@
   <div class="lbtc-list">
     {% for o in options %}
       {% case o.kind %}
-        {% when "zhinan" %}{% assign tag = "直男" %}
-        {% when "gonglue" %}{% assign tag = "攻略" %}
-        {% when "lezi" %}{% assign tag = "乐子人" %}
-        {% else %}{% assign tag = "选择" %}
+        {% when "zhinan" %}{% assign tag = "直男" %}{% assign gain = "好感 −2～0" %}{% assign mood = "啊这……" %}
+        {% when "gonglue" %}{% assign tag = "攻略" %}{% assign gain = "好感 +1～+2" %}{% assign mood = "心动了！" %}
+        {% when "lezi" %}{% assign tag = "乐子人" %}{% assign gain = "好感 −3～+3" %}{% assign mood = "看她吃不吃这套" %}
+        {% else %}{% assign tag = "选择" %}{% assign gain = "" %}{% assign mood = "" %}
       {% endcase %}
-      <button type="button" class="lbtc-opt is-{{ o.kind }}" data-action-send="【{{ tag }}】{{ o.text | escape }}">
+      <button type="button" class="lbtc-opt lbtc-o{{ forloop.index }} is-{{ o.kind }}" data-action-send="【{{ tag }}】{{ o.text | escape }}" data-auto data-add-class="is-done pick-{{ forloop.index }}" data-target=".lbtc">
         <span class="lbtc-tag">
           {% case o.kind %}
             {% when "zhinan" %}<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3c3.5 4.6 6 8 6 11a6 6 0 0 1-12 0c0-3 2.5-6.4 6-11z"/></svg>
@@ -26,14 +26,19 @@
           {% endcase %}{{ tag }}
         </span>
         <span class="lbtc-text">{{ o.text }}</span>
+        <span class="lbtc-result">
+          <b class="lbtc-gain">{{ gain }}</b>
+          <span class="lbtc-react">{% if o.react %}{{ o.react }}{% else %}{{ mood }}{% endif %}</span>
+        </span>
       </button>
     {% endfor %}
   </div>
+  <p class="lbtc-done-tip">已经选好啦，等她的反应吧</p>
   <details class="lbtc-own">
     <summary><span class="lbtc-own-pill">都不想选？自己写一句</span></summary>
     <form class="lbtc-form">
       <input class="lbtc-input" type="text" name="action" data-label="我的行动" placeholder="比如：「你什么时候学会撬锁的？」">
-      <button type="button" class="lbtc-send" data-action-submit>就这么说</button>
+      <button type="button" class="lbtc-send" data-action-submit data-auto>就这么说</button>
     </form>
   </details>
 </section>
