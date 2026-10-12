@@ -56,18 +56,6 @@
   line-height: 1.5;
   box-shadow: 0 3px 0 #ffc6d8;
 }
-.lbtc-title::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  bottom: -6px;
-  width: 10px;
-  height: 10px;
-  background: #ffe3ec;
-  transform: translateX(-50%) rotate(45deg);
-  box-shadow: 3px 3px 0 #ffc6d8;
-  z-index: -1;
-}
 .lbtc-prompt {
   margin: 12px 0 0;
   font-size: 14px;
@@ -222,17 +210,6 @@
   background: var(--kb);
   box-shadow: 0 0 0 2px color-mix(in srgb, var(--k) 40%, transparent), 0 10px 22px color-mix(in srgb, var(--k) 22%, transparent);
 }
-.lbtc-res::before {
-  content: "";
-  position: absolute;
-  left: 50%;
-  top: -8px;
-  width: 14px;
-  height: 14px;
-  background: var(--kb);
-  box-shadow: -2px -2px 0 0 color-mix(in srgb, var(--k) 40%, transparent);
-  transform: translateX(-50%) rotate(45deg);
-}
 .lbtc-res.is-zhinan { --k: var(--zhinan); --kb: var(--zhinan-bg); }
 .lbtc-res.is-gonglue { --k: var(--gonglue); --kb: var(--gonglue-bg); }
 .lbtc-res.is-lezi { --k: var(--lezi); --kb: var(--lezi-bg); }
@@ -344,7 +321,6 @@
   box-shadow: 0 0 0 2px #4a3540, 0 10px 26px rgba(0, 0, 0, .35);
 }
 .markdown-body.markdown-dark .lbtc-title { background: #4a2e3b; color: #ffb3cb; box-shadow: 0 3px 0 #3a2430; }
-.markdown-body.markdown-dark .lbtc-title::after { background: #4a2e3b; box-shadow: 3px 3px 0 #3a2430; }
 .markdown-body.markdown-dark .lbtc.is-done .lbtc-opt.is-zhinan { --kl: color-mix(in srgb, var(--zhinan) 40%, #241c22); }
 .markdown-body.markdown-dark .lbtc.is-done .lbtc-opt.is-gonglue { --kl: color-mix(in srgb, var(--gonglue) 40%, #241c22); }
 .markdown-body.markdown-dark .lbtc.is-done .lbtc-opt.is-lezi { --kl: color-mix(in srgb, var(--lezi) 40%, #241c22); }
