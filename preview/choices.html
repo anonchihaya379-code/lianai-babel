@@ -11,10 +11,10 @@
   <div class="lbtc-list">
     {% for o in options %}
       {% case o.kind %}
-        {% when "zhinan" %}{% assign tag = "直男" %}{% assign gain = "好感 −2～0" %}{% assign mood = "啊这……" %}
-        {% when "gonglue" %}{% assign tag = "攻略" %}{% assign gain = "好感 +1～+2" %}{% assign mood = "心动了！" %}
-        {% when "lezi" %}{% assign tag = "乐子人" %}{% assign gain = "好感 −3～+3" %}{% assign mood = "看她吃不吃这套" %}
-        {% else %}{% assign tag = "选择" %}{% assign gain = "" %}{% assign mood = "" %}
+        {% when "zhinan" %}{% assign tag = "直男" %}
+        {% when "gonglue" %}{% assign tag = "攻略" %}
+        {% when "lezi" %}{% assign tag = "乐子人" %}
+        {% else %}{% assign tag = "选择" %}
       {% endcase %}
       <button type="button" class="lbtc-opt lbtc-o{{ forloop.index }} is-{{ o.kind }}" data-action-send="【{{ tag }}】{{ o.text | escape }}" data-auto data-add-class="is-done pick-{{ forloop.index }}" data-target=".lbtc">
         <span class="lbtc-tag">
@@ -26,14 +26,35 @@
           {% endcase %}{{ tag }}
         </span>
         <span class="lbtc-text">{{ o.text }}</span>
-        <span class="lbtc-result">
-          <b class="lbtc-gain">{{ gain }}</b>
-          <span class="lbtc-react">{% if o.react %}{{ o.react }}{% else %}{{ mood }}{% endif %}</span>
-        </span>
       </button>
     {% endfor %}
   </div>
-  <p class="lbtc-done-tip">已经选好啦，等她的反应吧</p>
+  <div class="lbtc-results">
+    {% for o in options %}
+      {% case o.kind %}
+        {% when "zhinan" %}{% assign tag = "直男" %}{% assign gain = "好感 −2～0" %}{% assign mood = "啊这……气氛好像冷了一点" %}
+        {% when "gonglue" %}{% assign tag = "攻略" %}{% assign gain = "好感 +1～+2" %}{% assign mood = "好像戳中她了" %}
+        {% when "lezi" %}{% assign tag = "乐子人" %}{% assign gain = "好感 −3～+3" %}{% assign mood = "就看她吃不吃这一套了" %}
+        {% else %}{% assign tag = "选择" %}{% assign gain = "" %}{% assign mood = "" %}
+      {% endcase %}
+      <div class="lbtc-res lbtc-r{{ forloop.index }} is-{{ o.kind }}" role="status">
+        <span class="lbtc-res-burst" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
+        <span class="lbtc-res-badge">
+          {% case o.kind %}
+            {% when "zhinan" %}<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3c3.5 4.6 6 8 6 11a6 6 0 0 1-12 0c0-3 2.5-6.4 6-11z"/></svg>
+            {% when "gonglue" %}<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-8-5-8-11a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 20 10c0 6-8 11-8 11z"/></svg>
+            {% when "lezi" %}<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.9 6.2 6.6.8-4.9 4.6 1.3 6.6L12 16.9l-5.9 3.3 1.3-6.6L2.5 9l6.6-.8z"/></svg>
+            {% else %}<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="6"/></svg>
+          {% endcase %}
+        </span>
+        <span class="lbtc-res-body">
+          <span class="lbtc-res-head">你选择了<b>{{ tag }}</b></span>
+          <span class="lbtc-res-react">{% if o.react %}{{ o.react }}{% else %}{{ mood }}{% endif %}</span>
+        </span>
+        {% if gain != "" %}<span class="lbtc-res-gain">{{ gain }}</span>{% endif %}
+      </div>
+    {% endfor %}
+  </div>
   <details class="lbtc-own">
     <summary><span class="lbtc-own-pill">都不想选？自己写一句</span></summary>
     <form class="lbtc-form">

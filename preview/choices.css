@@ -136,38 +136,6 @@
   pointer-events: none;
 }
 .lbtc-tag svg { width: 13px; height: 13px; fill: currentColor; }
-.lbtc-result {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  gap: 4px 10px;
-  max-height: 0;
-  overflow: hidden;
-  opacity: 0;
-  transition: max-height .45s ease, opacity .35s ease .1s, margin .45s ease;
-}
-.lbtc-gain {
-  padding: 0 10px;
-  border-radius: 999px;
-  background: var(--k);
-  color: #fff;
-  font-family: "KeinannMaruPOP", "寒蝉全圆体", sans-serif;
-  font-size: 13.5px;
-  font-weight: 400;
-  letter-spacing: .04em;
-}
-.lbtc-react {
-  font-size: 13.5px;
-  color: var(--soft);
-}
-.lbtc-done-tip {
-  display: none;
-  margin: 14px 0 0;
-  text-align: center;
-  font-size: 13px;
-  color: var(--soft);
-}
 /* 揭晓：点任意一项后，全部亮出类别，选中的那项弹出奖惩 */
 .lbtc.is-done .lbtc-opt { pointer-events: none; animation: none; }
 .lbtc.is-done .lbtc-opt.is-zhinan { --k: var(--zhinan); --kb: var(--zhinan-bg); --kl: color-mix(in srgb, var(--zhinan) 45%, #fff); }
@@ -183,17 +151,6 @@
   box-shadow: 0 0 0 2.5px var(--k), 0 6px 0 var(--kl), 0 12px 24px color-mix(in srgb, var(--k) 30%, transparent);
   animation: lbtc-chosen .6s cubic-bezier(.3, 1.6, .5, 1);
 }
-.lbtc.pick-1 .lbtc-o1 .lbtc-result,
-.lbtc.pick-2 .lbtc-o2 .lbtc-result,
-.lbtc.pick-3 .lbtc-o3 .lbtc-result {
-  max-height: 60px;
-  margin-top: 8px;
-  opacity: 1;
-}
-.lbtc.pick-1 .lbtc-o1 .lbtc-gain,
-.lbtc.pick-2 .lbtc-o2 .lbtc-gain,
-.lbtc.pick-3 .lbtc-o3 .lbtc-gain { animation: lbtc-gain .7s cubic-bezier(.3, 1.9, .5, 1) .15s both; }
-.lbtc.is-done .lbtc-done-tip { display: block; animation: lbtc-pop .5s ease both .3s; }
 .lbtc.is-done .lbtc-own { display: none; }
 .lbtc-own {
   margin-top: 16px;
@@ -250,10 +207,120 @@
 }
 .lbtc-send:hover { transform: translateY(-1px); }
 .lbtc-send:active { transform: translateY(3px); box-shadow: 0 1px 0 #e66d95; }
+/* 揭晓卡：选项下方弹出的结果 */
+.lbtc-results { position: relative; }
+.lbtc-res {
+  --k: var(--pink);
+  --kb: #fff;
+  position: relative;
+  display: none;
+  align-items: center;
+  gap: 12px;
+  margin-top: 18px;
+  padding: 12px 16px 12px 12px;
+  border-radius: 20px;
+  background: var(--kb);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--k) 40%, transparent), 0 10px 22px color-mix(in srgb, var(--k) 22%, transparent);
+}
+.lbtc-res::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: -8px;
+  width: 14px;
+  height: 14px;
+  background: var(--kb);
+  box-shadow: -2px -2px 0 0 color-mix(in srgb, var(--k) 40%, transparent);
+  transform: translateX(-50%) rotate(45deg);
+}
+.lbtc-res.is-zhinan { --k: var(--zhinan); --kb: var(--zhinan-bg); }
+.lbtc-res.is-gonglue { --k: var(--gonglue); --kb: var(--gonglue-bg); }
+.lbtc-res.is-lezi { --k: var(--lezi); --kb: var(--lezi-bg); }
+.lbtc.pick-1 .lbtc-r1,
+.lbtc.pick-2 .lbtc-r2,
+.lbtc.pick-3 .lbtc-r3 { display: flex; animation: lbtc-res .6s cubic-bezier(.3, 1.6, .5, 1) .15s both; }
+.lbtc-res-badge {
+  position: relative;
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: var(--k);
+  color: #fff;
+  box-shadow: 0 0 0 4px #fff, 0 0 0 6px color-mix(in srgb, var(--k) 35%, transparent);
+  animation: lbtc-beat 1.6s ease-in-out .8s infinite;
+}
+.lbtc-res-badge svg { width: 24px; height: 24px; fill: currentColor; }
+.lbtc-res-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  text-align: left;
+}
+.lbtc-res-head {
+  font-size: 13px;
+  color: var(--soft);
+}
+.lbtc-res-head b {
+  margin-left: 4px;
+  font-family: "KeinannMaruPOP", "寒蝉全圆体", sans-serif;
+  font-size: 17px;
+  font-weight: 400;
+  letter-spacing: .08em;
+  color: var(--k);
+}
+.lbtc-res-react {
+  font-size: 14.5px;
+  color: var(--ink);
+  word-break: break-word;
+}
+.lbtc-res-gain {
+  flex: none;
+  padding: 3px 12px 4px;
+  border-radius: 999px;
+  background: var(--k);
+  color: #fff;
+  font-family: "KeinannMaruPOP", "寒蝉全圆体", sans-serif;
+  font-size: 14px;
+  letter-spacing: .04em;
+  white-space: nowrap;
+  box-shadow: 0 3px 0 color-mix(in srgb, var(--k) 70%, #6a4b55);
+  transform: rotate(3deg);
+}
+.lbtc-res-burst {
+  position: absolute;
+  left: 35px;
+  top: 50%;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+.lbtc-res-burst i {
+  position: absolute;
+  left: -5px;
+  top: -5px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--k);
+  opacity: 0;
+}
+.lbtc.is-done .lbtc-res-burst i { animation: lbtc-burst .9s ease-out .3s both; }
+.lbtc-res-burst i:nth-child(1) { --dx: -30px; --dy: -26px; }
+.lbtc-res-burst i:nth-child(2) { --dx: 4px; --dy: -38px; width: 7px; height: 7px; }
+.lbtc-res-burst i:nth-child(3) { --dx: 34px; --dy: -22px; }
+.lbtc-res-burst i:nth-child(4) { --dx: -36px; --dy: 14px; width: 7px; height: 7px; }
+.lbtc-res-burst i:nth-child(5) { --dx: 30px; --dy: 24px; width: 8px; height: 8px; }
+@keyframes lbtc-res { from { opacity: 0; transform: translateY(16px) scale(.9); } }
+@keyframes lbtc-beat { 0%, 100% { transform: scale(1); } 15% { transform: scale(1.12); } 30% { transform: scale(.98); } 45% { transform: scale(1.06); } }
+@keyframes lbtc-burst { 0% { opacity: 1; transform: translate(0, 0) scale(.4); } 100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(1); } }
 @keyframes lbtc-pop { from { opacity: 0; transform: translateY(10px) scale(.92); } }
 @keyframes lbtc-float { 50% { translate: 0 -5px; } }
 @keyframes lbtc-chosen { 0% { transform: scale(.97); } 45% { transform: scale(1.07); } 100% { transform: scale(1.03); } }
-@keyframes lbtc-gain { from { transform: scale(0) rotate(-10deg); } }
 @media (max-width: 480px) {
   .lbtc { padding: 18px 12px 16px; border-radius: 22px; }
   .lbtc-opt { padding: 12px 14px; border-radius: 18px; }
@@ -262,8 +329,8 @@
   .lbtc-send { padding: 0 14px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .lbtc-float, .lbtc-opt { animation: none; }
-  .lbtc.is-done .lbtc-opt, .lbtc.is-done .lbtc-gain { animation: none; }
+  .lbtc-float, .lbtc-opt, .lbtc-res-badge { animation: none; }
+  .lbtc.is-done .lbtc-opt, .lbtc-res, .lbtc-res-burst i { animation: none; }
 }
 .markdown-body.markdown-dark .lbtc {
   --ink: #f6e4ea;
@@ -285,3 +352,5 @@
 .markdown-body.markdown-dark .lbtc-own summary:hover .lbtc-own-pill { background: #4a3540; }
 .markdown-body.markdown-dark .lbtc-input { background: #2f252c; border-color: #5a3f4c; }
 .markdown-body.markdown-dark .lbtc-input::placeholder { color: #8e7480; }
+.markdown-body.markdown-dark .lbtc-res-badge { box-shadow: 0 0 0 4px #2b2229, 0 0 0 6px color-mix(in srgb, var(--k) 35%, transparent); }
+.markdown-body.markdown-dark .lbtc-res-gain { box-shadow: 0 3px 0 rgba(0, 0, 0, .35); }
