@@ -26,6 +26,13 @@
   overflow: hidden;
   isolation: isolate;
 }
+.markdown-body .lbtc q {
+  padding: 0;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+  color: inherit;
+}
 .lbtc-float {
   position: absolute;
   z-index: -1;
