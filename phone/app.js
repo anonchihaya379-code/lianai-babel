@@ -126,7 +126,8 @@
   /* 壁纸：只存在本机浏览器（每位玩家自己的设置） */
   let WALL = ''; try { WALL = localStorage.getItem('lbp-wall') || ''; } catch (e) { }
   function setWall(src) { WALL = src || ''; try { src ? localStorage.setItem('lbp-wall', src) : localStorage.removeItem('lbp-wall'); } catch (e) { } }
-  const wallCss = () => WALL ? `background:#222 url('${encodeURI(WALL).replace(/'/g, '%27')}') center/cover no-repeat` : '';
+  const WALL_DEF = IMG + '3241781305822.jpg'; /* 默认壁纸：Unsplash 上海天际线 */
+  const wallCss = () => `background:#222 url('${encodeURI(WALL || WALL_DEF).replace(/'/g, '%27')}') center/cover no-repeat`;
 
   /* 角色当前位置：在场=当前场景；否则按时段推断（白天在学校，其余在公寓） */
   function locOf(id) {
@@ -302,7 +303,7 @@
     html(c) {
       const notes = latestNotes(); const tag = todayTag();
       const cal = c.cal;
-      return `<div class="wall" style="${wallCss()}">${WALL ? '' : `<div class="pol" style="--r:-5deg;left:14%;top:40%;width:44%"><div class="pic"></div><div class="cap">锦绣云湾 2001</div></div><div class="pol" style="--r:6deg;left:52%;top:47%;width:32%"><div class="pic"></div><div class="cap">${esc(g('time.date', ''))}</div></div>`}</div>
+      return `<div class="wall" style="${wallCss()}"></div>
         <div class="lk-top"><button type="button" class="date" data-act="cal">${esc(dateCN())} ${esc(weekCN())}${tag ? `<em>${esc(tag)}</em>` : ''}</button><b class="time">${clock()}</b><span class="wx">${wxIcon(null, 'wx-big')}<span>${esc(wxText())}${g('time.slot') ? ' · ' + esc(g('time.slot')) : ''}</span></span><span class="place">${esc(g('scene.place', ''))}</span></div>
         <div class="notif">${notes.slice(0, 4).map((n, i) => `<button type="button" class="n" data-note="${i}"><span class="ic ${n.ic}">${n.ic === 'qq' ? ICON.qq : ICON.album}</span><div><b>${esc(n.t)}<small>${esc(n.at)}</small></b><p>${esc(n.p)}</p></div></button>`).join('')}</div>
         <button type="button" class="unlock" data-act="unlock">${ICON.lock}<span>点这里解锁</span></button>

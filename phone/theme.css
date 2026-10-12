@@ -59,13 +59,8 @@
 
 
 /* ---------- 壁纸（锁屏与主屏共用） ---------- */
-.ph-lock .wall,.ph-home .wall{position:absolute;inset:0;background:
-  radial-gradient(120% 90% at 55% 45%,transparent 60%,rgba(120,90,50,.18) 100%),
-  linear-gradient(180deg,color-mix(in srgb,var(--w1) 14%,#fbf6ea),color-mix(in srgb,var(--w2) 18%,#eadfca))}
+.ph-lock .wall,.ph-home .wall{position:absolute;inset:0;background:#3a3f4a}
 .ph-lock .wall::after,.ph-home .wall::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.28),transparent 30%,transparent 62%,rgba(0,0,0,.32))}
-.ph-lock .pol{position:absolute;background:#fffdf8;padding:6% 6% 0;box-shadow:0 8px 20px rgba(70,50,30,.28);rotate:var(--r)}
-.ph-lock .pol .pic{aspect-ratio:3/4;background:radial-gradient(120% 90% at 30% 20%,#5e5045,#3d342d 70%)}
-.ph-lock .pol .cap{padding:8% 0 10%;font:400 12px var(--hand);color:var(--pencil);text-align:center;white-space:nowrap}
 
 /* ---------- 锁屏 ---------- */
 .ph-lock{background:#2a2430}
